@@ -331,7 +331,8 @@ body.locked .wrap{filter:blur(5px);pointer-events:none}
 .atable td.num,.atable th.num{text-align:right;font-variant-numeric:tabular-nums}
 .atable input{padding:5px 7px;font-size:13px;border:1px solid #d1d5db;border-radius:5px}
 .atable input.pricebox{width:105px;text-align:right;font-weight:700;font-variant-numeric:tabular-nums}
-.atable input.pricebox.set{border-color:var(--orange);background:#fff7ed;color:#c2410c}
+.atable input.pricebox.set,.atable input.addbox.set{border-color:var(--orange);background:#fff7ed;color:#c2410c}
+.atable input.addbox{width:105px;text-align:right;font-weight:700;font-variant-numeric:tabular-nums}
 .atable tr.flagged td{background:#fef2f2}
 .tag{display:inline-block;font-size:11px;font-weight:700;padding:2px 9px;border-radius:20px}
 .tag.on{background:#dcfce7;color:#15803d}.tag.off{background:#f3f4f6;color:#6b7280}
@@ -352,6 +353,7 @@ body.locked .wrap{filter:blur(5px);pointer-events:none}
 .syncnote.local{background:#fef3c7;color:#92400e;border:1px solid #fcd34d}
 @media print{#authGate,.role-bar,#adminPanel{display:none !important}body.locked .wrap{filter:none}}
 </style>
+<script type="application/json" id="shared-state">{"v": 2, "savedAt": 1787878265410, "users": [{"id": "admin1", "name": "Админ", "pin": "06232114", "role": "admin", "active": true}, {"id": "dist_nh", "name": "Нийслэл Хөшиг", "pin": "2000", "role": "dist", "active": true}], "prices": {}, "addPrices": {}, "activity": [], "quotes": []}</script>
 </head>
 <body>
 
@@ -366,7 +368,7 @@ body.locked .wrap{filter:blur(5px);pointer-events:none}
     <div class="err" id="authErr">ПИН буруу байна.</div>
     <input type="password" id="authPin" inputmode="numeric" maxlength="8" placeholder="••••" autocomplete="off" />
     <button class="go" id="authGo">Нэвтрэх</button>
-    <div class="note">Зөвхөн зөвшөөрөгдсөн дистрибьютор болон админ нэвтэрнэ. Админы анхны ПИН: <strong>1234</strong> — эхний удаад солино уу.</div>
+    <div class="note">Зөвхөн зөвшөөрөгдсөн дистрибьютор болон админ нэвтэрнэ.</div>
   </div>
 </div>
 
@@ -985,7 +987,7 @@ body.locked .wrap{filter:blur(5px);pointer-events:none}
     { icon: 'mc4', name: 'MC4 холбогч', desc: 'Rated current: 40A, Voltage: 1500VDC · 25 жил баталгаа', qty: 10, price: 0.92 },
     { icon: 'pvCable', name: 'PV кабель 4mm² (улаан/хар)', desc: 'Photovoltaic special cable · 10 жил баталгаа', qty: 500, price: 1.04, unit: 'м' },
     { icon: 'groundCable', name: 'Газардуулгын утас 6mm²', desc: 'Professional engineering cable · 10 жил баталгаа', qty: 20, price: 1.50, unit: 'м' },
-    { icon: 'matchingCable', name: 'Холбох кабель 25mm² (Battery↔Inverter)', desc: 'Battery-inverter connection cable.', qty: 1, price: 34.50 },
+    { icon: 'matchingCable', name: 'Холбох кабель 25mm² (Battery↔Inverter)', desc: 'Battery-inverter connection cable.', qty: 1, price: 42.00 },
     { icon: 'packaging', name: 'Сав баглаа', desc: 'Solar panel: wooden box · Battery: tray · Inverter / bracket / cable: carton', qty: 1, price: 180.00 },
     { icon: 'design', name: 'Mounting system design service', desc: 'Угсралтын зураг төсөл.', qty: 1, price: 0, freeLabel: true },
     { icon: 'concrete', name: 'Бэтон суурь', desc: 'Газрын системийн бэтон суурь.', qty: 0, price: 0 },
@@ -1446,6 +1448,15 @@ body.locked .wrap{filter:blur(5px);pointer-events:none}
     } catch(e) {}
     additionalItems = JSON.parse(JSON.stringify(ADDITIONAL_DEFAULTS));
   }
+  // Admin's price list wins over whatever this browser had cached.
+  function applyAdminAddPrices() {
+    if (typeof SHARED === 'undefined' || !SHARED.addPrices) return;
+    additionalItems.forEach(it => {
+      const d = ADDITIONAL_DEFAULTS.find(x => x.name === it.name);
+      if (SHARED.addPrices[it.name] != null) it.price = parseFloat(SHARED.addPrices[it.name]);
+      else if (d && it.priceLocked !== true) it.price = d.price;
+    });
+  }
 
   function resetQuote() {
     if (!confirm('Энэ үнийн саналыг шинээр эхлүүлэх үү? (Компанийн тохиргоо хадгалагдана.)')) return;
@@ -1902,6 +1913,7 @@ body.locked .wrap{filter:blur(5px);pointer-events:none}
 
   document.addEventListener('DOMContentLoaded', () => {
     loadAdditional();
+    applyAdminAddPrices();
     try { catalogPriceOverrides = JSON.parse(localStorage.getItem(OVERRIDES_KEY) || '{}'); } catch(_) { catalogPriceOverrides = {}; }
     loadOptions();
     buildCatalog();
@@ -1963,7 +1975,8 @@ body.locked .wrap{filter:blur(5px);pointer-events:none}
   const SHARED_KEY = 'meccSolar_v6_shared';
   let SHARED = {
     v: 2, savedAt: 0,
-    users: [{ id: 'admin1', name: 'Админ', pin: '1234', role: 'admin', active: true }],
+    users: [{ id: 'admin1', name: 'Админ', pin: '06232114', role: 'admin', active: true },
+            { id: 'dist_nh', name: 'Нийслэл Хөшиг', pin: '2000', role: 'dist', active: true }],
     prices: {},      // productIdx -> unit USD price set by admin
     addPrices: {},   // additional item name -> unit USD price set by admin
     activity: [],    // {t,u,a,r}
@@ -2107,6 +2120,18 @@ body.locked .wrap{filter:blur(5px);pointer-events:none}
       `<div class="apane on">${ATAB === 'prices' ? paneP() : ATAB === 'users' ? paneU() : ATAB === 'quotes' ? paneQ() : paneL()}</div>`;
     renderSyncNote();
     if (ATAB === 'prices') {
+      el.querySelectorAll('.addbox').forEach(inp => {
+        inp.addEventListener('change', e => {
+          const nm = e.target.dataset.aname, v = parseFloat(e.target.value);
+          const base = parseFloat(e.target.dataset.base);
+          if (isNaN(v) || v < 0 || Math.abs(v - base) < 0.005) delete SHARED.addPrices[nm];
+          else SHARED.addPrices[nm] = v;
+          logAct('Дагалдах хэрэгслийн үнэ шинэчилсэн', nm + ' → $' + (SHARED.addPrices[nm] != null ? SHARED.addPrices[nm] : base));
+          const it = additionalItems.find(x => x.name === nm);
+          if (it) it.price = SHARED.addPrices[nm] != null ? SHARED.addPrices[nm] : base;
+          saveShared(); saveAdditional(); buildAdditional(); recalc(); renderAdmin();
+        });
+      });
       el.querySelectorAll('.pricebox').forEach(inp => {
         inp.addEventListener('change', e => {
           const idx = e.target.dataset.pidx, v = parseFloat(e.target.value);
@@ -2135,17 +2160,39 @@ body.locked .wrap{filter:blur(5px);pointer-events:none}
         <td>${isSet ? '<span class="tag warn">Тогтоосон</span>' : '<span class="tag off">Анхдагч</span>'}</td>
       </tr>`;
     }).join('');
+    const arows = ADDITIONAL_DEFAULTS.map((d, i) => {
+      const base = (d.price || 0).toFixed(2);
+      const isSet = SHARED.addPrices[d.name] != null;
+      const cur = isSet ? parseFloat(SHARED.addPrices[d.name]).toFixed(2) : base;
+      return `<tr>
+        <td>${i + 1}</td>
+        <td><div style="font-weight:600">${esc2(d.name)}</div></td>
+        <td class="num small" style="color:#6b7280">$${base}</td>
+        <td class="num"><input type="number" step="0.01" min="0" class="addbox ${isSet ? 'set' : ''}" data-aname="${esc2(d.name)}" data-base="${base}" value="${cur}" /></td>
+        <td class="num small" style="color:#6b7280">${fmtMnt(parseFloat(cur) * getRate())}</td>
+        <td>${isSet ? '<span class="tag warn">Тогтоосон</span>' : '<span class="tag off">Анхдагч</span>'}</td>
+      </tr>`;
+    }).join('');
     return `<p class="small">Энд тогтоосон нэгж үнэ бүх дистрибьюторт ижилхэн харагдана. Ямар ч хувь нэмэгдэхгүй — оруулсан үнэ шууд эцсийн үнэ болно.</p>
       <div style="overflow-x:auto"><table class="atable"><thead><tr>
       <th>№</th><th>Бүтээгдэхүүн</th><th class="num">Анхдагч</th><th class="num">Тогтоосон үнэ (USD)</th><th class="num">₮</th><th>Төлөв</th>
       </tr></thead><tbody>${rows}</tbody></table></div>
+      <h3 style="margin:22px 0 8px;font-size:15px;color:var(--navy)">Дагалдах хэрэгсэл</h3>
+      <div style="overflow-x:auto"><table class="atable"><thead><tr>
+      <th>№</th><th>Нэр</th><th class="num">Анхдагч</th><th class="num">Тогтоосон үнэ (USD)</th><th class="num">₮</th><th>Төлөв</th>
+      </tr></thead><tbody>${arows}</tbody></table></div>
       <div style="margin-top:12px"><button class="btn-mini" onclick="resetAdminPrices()">↺ Бүх үнийг анхдагч руу буцаах</button></div>`;
   }
   function resetAdminPrices() {
-    if (!Object.keys(SHARED.prices).length) { alert('Тогтоосон үнэ алга байна.'); return; }
+    if (!Object.keys(SHARED.prices).length && !Object.keys(SHARED.addPrices).length) { alert('Тогтоосон үнэ алга байна.'); return; }
     if (!confirm('Бүх тогтоосон үнийг анхдагч руу буцаах уу?')) return;
-    SHARED.prices = {}; logAct('Бүх үнийг сэргээсэн', '');
-    saveShared(); buildCatalog(); recalc(); renderAdmin();
+    SHARED.prices = {}; SHARED.addPrices = {};
+    additionalItems.forEach(it => {
+      const d = ADDITIONAL_DEFAULTS.find(x => x.name === it.name);
+      if (d) it.price = d.price;
+    });
+    logAct('Бүх үнийг сэргээсэн', '');
+    saveShared(); saveAdditional(); buildCatalog(); buildAdditional(); recalc(); renderAdmin();
   }
 
   function paneU() {
@@ -2295,6 +2342,5 @@ body.locked .wrap{filter:blur(5px);pointer-events:none}
   });
 
 </script>
-<script type="application/json" id="shared-state">{"v":2,"savedAt":0,"users":[{"id":"admin1","name":"\u0410\u0434\u043c\u0438\u043d","pin":"1234","role":"admin","active":true}],"prices":{},"addPrices":{},"activity":[],"quotes":[]}</script>
 </body>
 </html>
