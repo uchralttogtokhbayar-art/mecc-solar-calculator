@@ -353,7 +353,7 @@ body.locked .wrap{filter:blur(5px);pointer-events:none}
 .syncnote.local{background:#fef3c7;color:#92400e;border:1px solid #fcd34d}
 @media print{#authGate,.role-bar,#adminPanel{display:none !important}body.locked .wrap{filter:none}}
 </style>
-<script type="application/json" id="shared-state">{"v": 2, "savedAt": 1787878265410, "users": [{"id": "admin1", "name": "Админ", "pin": "06232114", "role": "admin", "active": true}, {"id": "dist_nh", "name": "Нийслэл Хөшиг", "pin": "2000", "role": "dist", "active": true}], "prices": {}, "addPrices": {}, "activity": [], "quotes": []}</script>
+<script type="application/json" id="shared-state">{"v": 2, "savedAt": 1787878919545, "users": [{"id": "admin1", "name": "Админ", "pin": "06232114", "role": "admin", "active": true}, {"id": "dist_nh", "name": "Нийслэл Хөшиг", "pin": "2000", "role": "dist", "active": true}], "prices": {}, "addPrices": {}, "activity": [], "quotes": []}</script>
 </head>
 <body>
 
@@ -821,63 +821,63 @@ body.locked .wrap{filter:blur(5px);pointer-events:none}
   // ----------------- PRODUCT CATALOG -----------------
   const PRODUCTS = [
     // PANELS
-    { cat: 'panels', icon: 'panel', name: 'Нарны панель 590W', desc: 'N-type i-TOPCon Bifacial Dual-Glass Mono\nХэмжээ: 2279×1134×30mm\n30 жил баталгаа · CE/TUV/ISO', sample: 63.00, moq: 63.00 },
-    { cat: 'panels', icon: 'panel', name: 'Нарны панель 630W', desc: 'N-type i-TOPCon Bifacial Dual-Glass Mono\nХэмжээ: 2384×1139×30mm\n30 жил баталгаа · CE/TUV/ISO', sample: 68.00, moq: 68.00 },
-    { cat: 'panels', icon: 'panel', name: 'Нарны панель 650W', desc: 'N-type i-TOPCon Bifacial Dual-Glass Mono\nХэмжээ: 2384×1139×30mm\n30 жил баталгаа · CE/TUV/ISO', sample: 71.00, moq: 71.00 },
-    { cat: 'panels', icon: 'panel', name: 'Нарны панель 710W', desc: 'N-type i-TOPCon Bifacial Dual-Glass Mono\nХэмжээ: 2384×1303×30mm\n30 жил баталгаа · CE/TUV/ISO', sample: 77.80, moq: 77.80 },
+    { cat: 'panels', icon: 'panel', name: 'Нарны панель 590W', desc: 'N-type i-TOPCon Bifacial Dual-Glass Mono\nХэмжээ: 2279×1134×30mm\n30 жил баталгаа · CE/TUV/ISO', sample: 75.6, moq: 75.6 },
+    { cat: 'panels', icon: 'panel', name: 'Нарны панель 630W', desc: 'N-type i-TOPCon Bifacial Dual-Glass Mono\nХэмжээ: 2384×1139×30mm\n30 жил баталгаа · CE/TUV/ISO', sample: 81.6, moq: 81.6 },
+    { cat: 'panels', icon: 'panel', name: 'Нарны панель 650W', desc: 'N-type i-TOPCon Bifacial Dual-Glass Mono\nХэмжээ: 2384×1139×30mm\n30 жил баталгаа · CE/TUV/ISO', sample: 85.2, moq: 85.2 },
+    { cat: 'panels', icon: 'panel', name: 'Нарны панель 710W', desc: 'N-type i-TOPCon Bifacial Dual-Glass Mono\nХэмжээ: 2384×1303×30mm\n30 жил баталгаа · CE/TUV/ISO', sample: 93.36, moq: 93.36 },
 
     // BRACKETS
-    { cat: 'brackets', icon: 'bracketGround', name: 'Газрын суурь хүрээ', desc: 'Aluminum alloy ground mount\nWind 40m/s · Snow 70kg/m²\n25 жил баталгаа · CE/TUV', sample: 35.00, moq: 35.00 },
-    { cat: 'brackets', icon: 'bracketRoof', name: 'Дээврийн суурь хүрээ', desc: 'Aluminum alloy rooftop mount\nWind 40m/s · Snow 70kg/m²\n25 жил баталгаа · CE/TUV', sample: 28.00, moq: 28.00 },
+    { cat: 'brackets', icon: 'bracketGround', name: 'Газрын суурь хүрээ', desc: 'Aluminum alloy ground mount\nWind 40m/s · Snow 70kg/m²\n25 жил баталгаа · CE/TUV', sample: 42, moq: 42 },
+    { cat: 'brackets', icon: 'bracketRoof', name: 'Дээврийн суурь хүрээ', desc: 'Aluminum alloy rooftop mount\nWind 40m/s · Snow 70kg/m²\n25 жил баталгаа · CE/TUV', sample: 33.6, moq: 33.6 },
 
     // INVERTERS
-    { cat: 'inverters', icon: 'invHybridLV', name: 'Hybrid Inverter 6kW', desc: 'Гибрид · 220V · 40-60V аккум.\nIP65 · 5 жил баталгаа', sample: 699.00, moq: 699.00 },
-    { cat: 'inverters', icon: 'invHybridLV', name: 'Hybrid Inverter 8kW', desc: 'Гибрид · 220V · 40-60V аккум.\nIP65 · 5 жил баталгаа', sample: 988.00, moq: 988.00 },
-    { cat: 'inverters', icon: 'invHybridLV', name: 'Hybrid Inverter 10kW', desc: 'Гибрид · 220V · 40-60V аккум.\nIP65 · 5 жил баталгаа', sample: 1060.00, moq: 1060.00 },
-    { cat: 'inverters', icon: 'invHybridLV', name: 'Hybrid Inverter 12kW', desc: 'Гибрид · 220V · 40-60V аккум.\nIP65 · 5 жил баталгаа', sample: 1160.00, moq: 1160.00 },
-    { cat: 'inverters', icon: 'invHybridLV', name: 'Hybrid Inverter 12kW (3-phase)', desc: 'Гибрид · 220V/380V · 40-60V аккум.\nIP65 · 5 жил баталгаа', sample: 1360.00, moq: 1360.00 },
-    { cat: 'inverters', icon: 'invHybridLV', name: 'Hybrid Inverter 15kW (3-phase)', desc: 'Гибрид · 220V/380V · 40-60V аккум.\nIP65 · 5 жил баталгаа', sample: 1630.00, moq: 1630.00 },
-    { cat: 'inverters', icon: 'invHybridHV', name: 'Hybrid Inverter 15kW HV', desc: 'Гибрид · 380V · 100-700V аккум.\nIP66 · 5 жил баталгаа', sample: 1640.00, moq: 1640.00 },
-    { cat: 'inverters', icon: 'invHybridHV', name: 'Hybrid Inverter 20kW HV', desc: 'Гибрид · 380V · 100-700V аккум.\nIP66 · 5 жил баталгаа', sample: 1960.00, moq: 1960.00 },
-    { cat: 'inverters', icon: 'invHybridHV', name: 'Hybrid Inverter 25kW HV', desc: 'Гибрид · 380V · 100-700V аккум.\nIP66 · 5 жил баталгаа', sample: 2250.00, moq: 2250.00 },
-    { cat: 'inverters', icon: 'invHybridHV', name: 'Hybrid Inverter 30kW HV', desc: 'Гибрид · 380V · 100-700V аккум.\nIP66 · 5 жил баталгаа', sample: 2760.00, moq: 2760.00 },
-    { cat: 'inverters', icon: 'invOffgrid', name: 'Off-Grid Inverter 6.5kW', desc: 'Сүлжээгүй · 220V · 40-60V аккум.\nIP21 · 2 жил баталгаа', sample: 291.00, moq: 263.00 },
-    { cat: 'inverters', icon: 'invOffgrid', name: 'Off-Grid Inverter 12kW', desc: 'Сүлжээгүй · 220V · 40-60V аккум.\nIP21 · 2 жил баталгаа', sample: 496.00, moq: 449.00 },
-    { cat: 'inverters', icon: 'invLarge', name: 'Hybrid Inverter 40kW', desc: 'Гибрид · 220V/380V · 150-800V аккум.\nIP66 · 5 жил баталгаа', sample: 3600.00, moq: 3600.00 },
-    { cat: 'inverters', icon: 'invLarge', name: 'Hybrid Inverter 50kW', desc: 'Гибрид · 220V/380V · 150-800V аккум.\nIP66 · 5 жил баталгаа', sample: 4060.00, moq: 4060.00 },
-    { cat: 'inverters', icon: 'invLarge', name: 'Hybrid Inverter 60kW', desc: 'Гибрид · 220V/380V · 150-800V аккум.\nIP66 · 5 жил баталгаа', sample: 4520.00, moq: 4520.00 },
-    { cat: 'inverters', icon: 'invLarge', name: 'Hybrid Inverter 80kW', desc: 'Гибрид · 220V/380V · 300-950V аккум.\nIP66 · 5 жил баталгаа', sample: 6980.00, moq: 6980.00 },
-    { cat: 'inverters', icon: 'invLarge', name: 'Hybrid Inverter 100kW', desc: 'Гибрид · 220V/380V · 300-950V аккум.\nIP66 · 5 жил баталгаа', sample: 7780.00, moq: 7780.00 },
-    { cat: 'inverters', icon: 'invLarge', name: 'Hybrid Inverter 125kW', desc: 'Гибрид · 220V/380V · 300-950V аккум.\nIP66 · 5 жил баталгаа', sample: 8780.00, moq: 8780.00 },
+    { cat: 'inverters', icon: 'invHybridLV', name: 'Hybrid Inverter 6kW', desc: 'Гибрид · 220V · 40-60V аккум.\nIP65 · 5 жил баталгаа', sample: 838.8, moq: 838.8 },
+    { cat: 'inverters', icon: 'invHybridLV', name: 'Hybrid Inverter 8kW', desc: 'Гибрид · 220V · 40-60V аккум.\nIP65 · 5 жил баталгаа', sample: 1185.6, moq: 1185.6 },
+    { cat: 'inverters', icon: 'invHybridLV', name: 'Hybrid Inverter 10kW', desc: 'Гибрид · 220V · 40-60V аккум.\nIP65 · 5 жил баталгаа', sample: 1272, moq: 1272 },
+    { cat: 'inverters', icon: 'invHybridLV', name: 'Hybrid Inverter 12kW', desc: 'Гибрид · 220V · 40-60V аккум.\nIP65 · 5 жил баталгаа', sample: 1392, moq: 1392 },
+    { cat: 'inverters', icon: 'invHybridLV', name: 'Hybrid Inverter 12kW (3-phase)', desc: 'Гибрид · 220V/380V · 40-60V аккум.\nIP65 · 5 жил баталгаа', sample: 1632, moq: 1632 },
+    { cat: 'inverters', icon: 'invHybridLV', name: 'Hybrid Inverter 15kW (3-phase)', desc: 'Гибрид · 220V/380V · 40-60V аккум.\nIP65 · 5 жил баталгаа', sample: 1956, moq: 1956 },
+    { cat: 'inverters', icon: 'invHybridHV', name: 'Hybrid Inverter 15kW HV', desc: 'Гибрид · 380V · 100-700V аккум.\nIP66 · 5 жил баталгаа', sample: 1968, moq: 1968 },
+    { cat: 'inverters', icon: 'invHybridHV', name: 'Hybrid Inverter 20kW HV', desc: 'Гибрид · 380V · 100-700V аккум.\nIP66 · 5 жил баталгаа', sample: 2352, moq: 2352 },
+    { cat: 'inverters', icon: 'invHybridHV', name: 'Hybrid Inverter 25kW HV', desc: 'Гибрид · 380V · 100-700V аккум.\nIP66 · 5 жил баталгаа', sample: 2700, moq: 2700 },
+    { cat: 'inverters', icon: 'invHybridHV', name: 'Hybrid Inverter 30kW HV', desc: 'Гибрид · 380V · 100-700V аккум.\nIP66 · 5 жил баталгаа', sample: 3312, moq: 3312 },
+    { cat: 'inverters', icon: 'invOffgrid', name: 'Off-Grid Inverter 6.5kW', desc: 'Сүлжээгүй · 220V · 40-60V аккум.\nIP21 · 2 жил баталгаа', sample: 349.2, moq: 315.6 },
+    { cat: 'inverters', icon: 'invOffgrid', name: 'Off-Grid Inverter 12kW', desc: 'Сүлжээгүй · 220V · 40-60V аккум.\nIP21 · 2 жил баталгаа', sample: 595.2, moq: 538.8 },
+    { cat: 'inverters', icon: 'invLarge', name: 'Hybrid Inverter 40kW', desc: 'Гибрид · 220V/380V · 150-800V аккум.\nIP66 · 5 жил баталгаа', sample: 4320, moq: 4320 },
+    { cat: 'inverters', icon: 'invLarge', name: 'Hybrid Inverter 50kW', desc: 'Гибрид · 220V/380V · 150-800V аккум.\nIP66 · 5 жил баталгаа', sample: 4872, moq: 4872 },
+    { cat: 'inverters', icon: 'invLarge', name: 'Hybrid Inverter 60kW', desc: 'Гибрид · 220V/380V · 150-800V аккум.\nIP66 · 5 жил баталгаа', sample: 5424, moq: 5424 },
+    { cat: 'inverters', icon: 'invLarge', name: 'Hybrid Inverter 80kW', desc: 'Гибрид · 220V/380V · 300-950V аккум.\nIP66 · 5 жил баталгаа', sample: 8376, moq: 8376 },
+    { cat: 'inverters', icon: 'invLarge', name: 'Hybrid Inverter 100kW', desc: 'Гибрид · 220V/380V · 300-950V аккум.\nIP66 · 5 жил баталгаа', sample: 9336, moq: 9336 },
+    { cat: 'inverters', icon: 'invLarge', name: 'Hybrid Inverter 125kW', desc: 'Гибрид · 220V/380V · 300-950V аккум.\nIP66 · 5 жил баталгаа', sample: 10536, moq: 10536 },
 
     // BATTERIES
-    { cat: 'batteries', icon: 'batteryLV', name: 'Аккумулятор 5kWh', desc: 'LFP4 51.2V · 100Ah (нам хүчдэлт)\nCycle 6000+ · 10 жил баталгаа', sample: 599.00, moq: 599.00 },
-    { cat: 'batteries', icon: 'batteryLV', name: 'Аккумулятор 10kWh', desc: 'LFP4 51.2V · 205Ah (нам хүчдэлт)\nCycle 6000+ · 10 жил баталгаа', sample: 1020.00, moq: 1020.00 },
-    { cat: 'batteries', icon: 'batteryLVbig', name: 'Аккумулятор 15kWh', desc: 'LFP4 51.2V · 280/314Ah (нам хүчдэлт)\nCycle 6000+ · 10 жил баталгаа', sample: 1290.00, moq: 1290.00 },
-    { cat: 'batteries', icon: 'batteryLVbig', name: 'Аккумулятор 16kWh', desc: 'LFP4 51.2V · 280/314Ah (нам хүчдэлт)\nCycle 6000+ · 10 жил баталгаа', sample: 1380.00, moq: 1380.00 },
-    { cat: 'batteries', icon: 'batteryHV', name: 'HV Аккумулятор 31kWh', desc: 'LFP4 153-716V · 100Ah (өндөр хүчдэлт)\nCycle 6000+ · 10 жил баталгаа', sample: 4280.00, moq: 4280.00 },
-    { cat: 'batteries', icon: 'batteryHV', name: 'HV Аккумулятор 41kWh', desc: 'LFP4 153-716V · 100Ah\nCycle 6000+ · 10 жил баталгаа', sample: 5600.00, moq: 5600.00 },
-    { cat: 'batteries', icon: 'batteryHV', name: 'HV Аккумулятор 51kWh', desc: 'LFP4 153-716V · 100Ah\nCycle 6000+ · 10 жил баталгаа', sample: 7080.00, moq: 7080.00 },
-    { cat: 'batteries', icon: 'batteryHV', name: 'HV Аккумулятор 62kWh', desc: 'LFP4 153-716V · 100Ah\nCycle 6000+ · 10 жил баталгаа', sample: 8280.00, moq: 8280.00 },
-    { cat: 'batteries', icon: 'batteryHVbig', name: 'HV Аккумулятор 90kWh', desc: 'LFP4 288-691V · 314Ah\nCycle 6000+ · 10 жил баталгаа', sample: 8760.00, moq: 8760.00 },
-    { cat: 'batteries', icon: 'batteryHVbig', name: 'HV Аккумулятор 108kWh', desc: 'LFP4 288-691V · 314Ah\nCycle 6000+ · 10 жил баталгаа', sample: 10500.00, moq: 10500.00 },
-    { cat: 'batteries', icon: 'batteryHVbig', name: 'HV Аккумулятор 144kWh', desc: 'LFP4 288-691V · 314Ah\nCycle 6000+ · 10 жил баталгаа', sample: 14000.00, moq: 14000.00 },
-    { cat: 'batteries', icon: 'batteryHVbig', name: 'HV Аккумулятор 180kWh', desc: 'LFP4 288-691V · 314Ah\nCycle 6000+ · 10 жил баталгаа', sample: 17300.00, moq: 17300.00 },
-    { cat: 'batteries', icon: 'batteryHVbig', name: 'HV Аккумулятор 217kWh', desc: 'LFP4 288-691V · 314Ah\nCycle 6000+ · 10 жил баталгаа', sample: 21100.00, moq: 21100.00 },
-    { cat: 'batteries', icon: 'batteryHVbig', name: 'HV Аккумулятор 241kWh', desc: 'LFP4 288-691V · 314Ah\nCycle 6000+ · 10 жил баталгаа', sample: 25000.00, moq: 25000.00 },
+    { cat: 'batteries', icon: 'batteryLV', name: 'Аккумулятор 5kWh', desc: 'LFP4 51.2V · 100Ah (нам хүчдэлт)\nCycle 6000+ · 10 жил баталгаа', sample: 718.8, moq: 718.8 },
+    { cat: 'batteries', icon: 'batteryLV', name: 'Аккумулятор 10kWh', desc: 'LFP4 51.2V · 205Ah (нам хүчдэлт)\nCycle 6000+ · 10 жил баталгаа', sample: 1224, moq: 1224 },
+    { cat: 'batteries', icon: 'batteryLVbig', name: 'Аккумулятор 15kWh', desc: 'LFP4 51.2V · 280/314Ah (нам хүчдэлт)\nCycle 6000+ · 10 жил баталгаа', sample: 1548, moq: 1548 },
+    { cat: 'batteries', icon: 'batteryLVbig', name: 'Аккумулятор 16kWh', desc: 'LFP4 51.2V · 280/314Ah (нам хүчдэлт)\nCycle 6000+ · 10 жил баталгаа', sample: 1656, moq: 1656 },
+    { cat: 'batteries', icon: 'batteryHV', name: 'HV Аккумулятор 31kWh', desc: 'LFP4 153-716V · 100Ah (өндөр хүчдэлт)\nCycle 6000+ · 10 жил баталгаа', sample: 5136, moq: 5136 },
+    { cat: 'batteries', icon: 'batteryHV', name: 'HV Аккумулятор 41kWh', desc: 'LFP4 153-716V · 100Ah\nCycle 6000+ · 10 жил баталгаа', sample: 6720, moq: 6720 },
+    { cat: 'batteries', icon: 'batteryHV', name: 'HV Аккумулятор 51kWh', desc: 'LFP4 153-716V · 100Ah\nCycle 6000+ · 10 жил баталгаа', sample: 8496, moq: 8496 },
+    { cat: 'batteries', icon: 'batteryHV', name: 'HV Аккумулятор 62kWh', desc: 'LFP4 153-716V · 100Ah\nCycle 6000+ · 10 жил баталгаа', sample: 9936, moq: 9936 },
+    { cat: 'batteries', icon: 'batteryHVbig', name: 'HV Аккумулятор 90kWh', desc: 'LFP4 288-691V · 314Ah\nCycle 6000+ · 10 жил баталгаа', sample: 10512, moq: 10512 },
+    { cat: 'batteries', icon: 'batteryHVbig', name: 'HV Аккумулятор 108kWh', desc: 'LFP4 288-691V · 314Ah\nCycle 6000+ · 10 жил баталгаа', sample: 12600, moq: 12600 },
+    { cat: 'batteries', icon: 'batteryHVbig', name: 'HV Аккумулятор 144kWh', desc: 'LFP4 288-691V · 314Ah\nCycle 6000+ · 10 жил баталгаа', sample: 16800, moq: 16800 },
+    { cat: 'batteries', icon: 'batteryHVbig', name: 'HV Аккумулятор 180kWh', desc: 'LFP4 288-691V · 314Ah\nCycle 6000+ · 10 жил баталгаа', sample: 20760, moq: 20760 },
+    { cat: 'batteries', icon: 'batteryHVbig', name: 'HV Аккумулятор 217kWh', desc: 'LFP4 288-691V · 314Ah\nCycle 6000+ · 10 жил баталгаа', sample: 25320, moq: 25320 },
+    { cat: 'batteries', icon: 'batteryHVbig', name: 'HV Аккумулятор 241kWh', desc: 'LFP4 288-691V · 314Ah\nCycle 6000+ · 10 жил баталгаа', sample: 30000, moq: 30000 },
 
     // BESS
-    { cat: 'bess', icon: 'bessIndoor', name: 'BESS 3.6kW / 3.5kWh', desc: 'All-in-One · дотор · LFP4 · IP31', sample: 621.00, moq: 507.00 },
-    { cat: 'bess', icon: 'bessIndoor', name: 'BESS 3.6kW / 7.2kWh', desc: 'All-in-One · дотор · LFP4 · IP31', sample: 1013.00, moq: 826.00 },
-    { cat: 'bess', icon: 'bessIndoor', name: 'BESS 6kW / 15kWh', desc: 'All-in-One · дотор · LFP4 · IP31', sample: 1908.00, moq: 1556.00 },
-    { cat: 'bess', icon: 'bessOutdoor', name: 'BESS 30kW / 61kWh', desc: 'All-in-One · гадаа C&I · LFP4 · IP65/IP54', sample: 12552.00, moq: 12552.00 },
-    { cat: 'bess', icon: 'bessOutdoor', name: 'BESS 50kW / 108kWh', desc: 'All-in-One · гадаа C&I · LFP4 · IP65/IP54', sample: 16453.00, moq: 16453.00 },
-    { cat: 'bess', icon: 'bessOutdoor', name: 'BESS 50kW / 112kWh', desc: 'All-in-One · гадаа C&I · LFP4 · IP65/IP54', sample: 17560.00, moq: 17560.00 },
-    { cat: 'bess', icon: 'bessOutdoor', name: 'BESS 50kW / 241kWh', desc: 'All-in-One · гадаа C&I · LFP4 · IP65/IP54', sample: 30900.00, moq: 30900.00 },
-    { cat: 'bess', icon: 'bessOutdoor', name: 'BESS 100kW / 241kWh', desc: 'All-in-One · гадаа C&I · LFP4 · IP65/IP54', sample: 34700.00, moq: 34700.00 },
-    { cat: 'bess', icon: 'bessOutdoor', name: 'BESS 125kW / 241kWh', desc: 'All-in-One · гадаа C&I · LFP4 · IP65/IP54', sample: 35965.00, moq: 35965.00 },
-    { cat: 'bess', icon: 'bessOutdoor', name: 'BESS 500kW / 1MWh (PV+ESS)', desc: 'Container Energy Storage System · LFP4 · IP65/IP54', sample: 160000.00, moq: 149000.00 },
-    { cat: 'bess', icon: 'bessOutdoor', name: 'BESS 1MW / 2.4MWh (PV+ESS)', desc: 'Container Energy Storage System · LFP4 · IP65/IP54', sample: 378000.00, moq: 353000.00 },
+    { cat: 'bess', icon: 'bessIndoor', name: 'BESS 3.6kW / 3.5kWh', desc: 'All-in-One · дотор · LFP4 · IP31', sample: 745.2, moq: 608.4 },
+    { cat: 'bess', icon: 'bessIndoor', name: 'BESS 3.6kW / 7.2kWh', desc: 'All-in-One · дотор · LFP4 · IP31', sample: 1215.6, moq: 991.2 },
+    { cat: 'bess', icon: 'bessIndoor', name: 'BESS 6kW / 15kWh', desc: 'All-in-One · дотор · LFP4 · IP31', sample: 2289.6, moq: 1867.2 },
+    { cat: 'bess', icon: 'bessOutdoor', name: 'BESS 30kW / 61kWh', desc: 'All-in-One · гадаа C&I · LFP4 · IP65/IP54', sample: 15062.4, moq: 15062.4 },
+    { cat: 'bess', icon: 'bessOutdoor', name: 'BESS 50kW / 108kWh', desc: 'All-in-One · гадаа C&I · LFP4 · IP65/IP54', sample: 19743.6, moq: 19743.6 },
+    { cat: 'bess', icon: 'bessOutdoor', name: 'BESS 50kW / 112kWh', desc: 'All-in-One · гадаа C&I · LFP4 · IP65/IP54', sample: 21072, moq: 21072 },
+    { cat: 'bess', icon: 'bessOutdoor', name: 'BESS 50kW / 241kWh', desc: 'All-in-One · гадаа C&I · LFP4 · IP65/IP54', sample: 37080, moq: 37080 },
+    { cat: 'bess', icon: 'bessOutdoor', name: 'BESS 100kW / 241kWh', desc: 'All-in-One · гадаа C&I · LFP4 · IP65/IP54', sample: 41640, moq: 41640 },
+    { cat: 'bess', icon: 'bessOutdoor', name: 'BESS 125kW / 241kWh', desc: 'All-in-One · гадаа C&I · LFP4 · IP65/IP54', sample: 43158, moq: 43158 },
+    { cat: 'bess', icon: 'bessOutdoor', name: 'BESS 500kW / 1MWh (PV+ESS)', desc: 'Container Energy Storage System · LFP4 · IP65/IP54', sample: 192000, moq: 178800 },
+    { cat: 'bess', icon: 'bessOutdoor', name: 'BESS 1MW / 2.4MWh (PV+ESS)', desc: 'Container Energy Storage System · LFP4 · IP65/IP54', sample: 453600, moq: 423600 },
   ];
 
   const CATEGORY_LABELS = {
@@ -982,13 +982,13 @@ body.locked .wrap{filter:blur(5px);pointer-events:none}
 
   // ADDITIONAL PRODUCTS (defaults match 30kW quote)
   const ADDITIONAL_DEFAULTS = [
-    { icon: 'lightning', name: 'Аянгын саваа (Lightning rod)', desc: 'Нарны системийн аянгын хамгаалалт. Заавал орох.', qty: 1, price: 50.00, required: true },
-    { icon: 'combiner', name: 'PV нэгтгэгч хайрцаг 3 IN 3 OUT', desc: 'Anti-reverse circuit, Fuse Breaker, Surge protector · IP65 · 10 жил баталгаа', qty: 1, price: 158.70 },
-    { icon: 'mc4', name: 'MC4 холбогч', desc: 'Rated current: 40A, Voltage: 1500VDC · 25 жил баталгаа', qty: 10, price: 0.92 },
-    { icon: 'pvCable', name: 'PV кабель 4mm² (улаан/хар)', desc: 'Photovoltaic special cable · 10 жил баталгаа', qty: 500, price: 1.04, unit: 'м' },
-    { icon: 'groundCable', name: 'Газардуулгын утас 6mm²', desc: 'Professional engineering cable · 10 жил баталгаа', qty: 20, price: 1.50, unit: 'м' },
+    { icon: 'lightning', name: 'Аянгын саваа (Lightning rod)', desc: 'Нарны системийн аянгын хамгаалалт. Заавал орох.', qty: 1, price: 60, required: true },
+    { icon: 'combiner', name: 'PV нэгтгэгч хайрцаг 3 IN 3 OUT', desc: 'Anti-reverse circuit, Fuse Breaker, Surge protector · IP65 · 10 жил баталгаа', qty: 1, price: 190.44 },
+    { icon: 'mc4', name: 'MC4 холбогч', desc: 'Rated current: 40A, Voltage: 1500VDC · 25 жил баталгаа', qty: 10, price: 1.1 },
+    { icon: 'pvCable', name: 'PV кабель 4mm² (улаан/хар)', desc: 'Photovoltaic special cable · 10 жил баталгаа', qty: 500, price: 1.25, unit: 'м' },
+    { icon: 'groundCable', name: 'Газардуулгын утас 6mm²', desc: 'Professional engineering cable · 10 жил баталгаа', qty: 20, price: 1.8, unit: 'м' },
     { icon: 'matchingCable', name: 'Холбох кабель 25mm² (Battery↔Inverter)', desc: 'Battery-inverter connection cable.', qty: 1, price: 42.00 },
-    { icon: 'packaging', name: 'Сав баглаа', desc: 'Solar panel: wooden box · Battery: tray · Inverter / bracket / cable: carton', qty: 1, price: 180.00 },
+    { icon: 'packaging', name: 'Сав баглаа', desc: 'Solar panel: wooden box · Battery: tray · Inverter / bracket / cable: carton', qty: 1, price: 216 },
     { icon: 'design', name: 'Mounting system design service', desc: 'Угсралтын зураг төсөл.', qty: 1, price: 0, freeLabel: true },
     { icon: 'concrete', name: 'Бэтон суурь', desc: 'Газрын системийн бэтон суурь.', qty: 0, price: 0 },
     { icon: 'design', name: 'Суурийн зураг', desc: 'Суурийн зураг төсөл.', qty: 1, price: 0, freeLabel: true },
@@ -1013,8 +1013,8 @@ body.locked .wrap{filter:blur(5px);pointer-events:none}
     20:  { panelIdx: 0, panelQty: 34,  bracketIdx: 5, bracketQty: 34,  inverterIdx: 13, inverterQty: 1, batteryIdx: 29, batteryQty: 1, pvCable: 400, mc4: 14,  combinerName: 'PV нэгтгэгч хайрцаг 3 IN 3 OUT' },
     25:  { panelIdx: 0, panelQty: 43,  bracketIdx: 5, bracketQty: 43,  inverterIdx: 14, inverterQty: 1, batteryIdx: 30, batteryQty: 1, pvCable: 450, mc4: 16,  combinerName: 'PV нэгтгэгч хайрцаг 3 IN 3 OUT' },
     30:  { panelIdx: 0, panelQty: 52,  bracketIdx: 5, bracketQty: 52,  inverterIdx: 15, inverterQty: 1, batteryIdx: 30, batteryQty: 1, pvCable: 500, mc4: 10,  combinerName: 'PV нэгтгэгч хайрцаг 3 IN 3 OUT' },
-    50:  { panelIdx: 0, panelQty: 90,  bracketIdx: 5, bracketQty: 90,  inverterIdx: 19, inverterQty: 1, batteryIdx: 32, batteryQty: 1, pvCable: 800, mc4: 30,  combinerName: 'PV нэгтгэгч хайрцаг 4 IN 4 OUT', combinerPrice: 271.40 },
-    125: { panelIdx: 0, panelQty: 165, bracketIdx: 5, bracketQty: 165, inverterIdx: 23, inverterQty: 1, batteryIdx: 33, batteryQty: 1, pvCable: 1500, mc4: 100, combinerName: 'PV нэгтгэгч хайрцаг 4 IN 4 OUT', combinerPrice: 271.40 },
+    50:  { panelIdx: 0, panelQty: 90,  bracketIdx: 5, bracketQty: 90,  inverterIdx: 19, inverterQty: 1, batteryIdx: 32, batteryQty: 1, pvCable: 800, mc4: 30,  combinerName: 'PV нэгтгэгч хайрцаг 4 IN 4 OUT', combinerPrice: 325.68 },
+    125: { panelIdx: 0, panelQty: 165, bracketIdx: 5, bracketQty: 165, inverterIdx: 23, inverterQty: 1, batteryIdx: 33, batteryQty: 1, pvCable: 1500, mc4: 100, combinerName: 'PV нэгтгэгч хайрцаг 4 IN 4 OUT', combinerPrice: 325.68 },
   };
 
   let additionalItems = [];
