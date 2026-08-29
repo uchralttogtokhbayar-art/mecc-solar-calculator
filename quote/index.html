@@ -353,7 +353,7 @@ body.locked .wrap{filter:blur(5px);pointer-events:none}
 .syncnote.local{background:#fef3c7;color:#92400e;border:1px solid #fcd34d}
 @media print{#authGate,.role-bar,#adminPanel{display:none !important}body.locked .wrap{filter:none}}
 </style>
-<script type="application/json" id="shared-state">{"v": 2, "savedAt": 1787999978977, "users": [{"id": "admin1", "name": "Админ", "pin": "06232114", "role": "admin", "active": true}, {"id": "dist_nh", "name": "Нийслэл Хөшиг", "pin": "2000", "role": "dist", "active": true}], "prices": {}, "addPrices": {}, "activity": [], "quotes": []}</script>
+<script type="application/json" id="shared-state">{"v": 2, "savedAt": 1788000667098, "users": [{"id": "admin1", "name": "Админ", "pin": "06232114", "role": "admin", "active": true}, {"id": "dist_nh", "name": "Нийслэл Хөшиг", "pin": "2000", "role": "dist", "active": true}], "prices": {}, "addPrices": {}, "activity": [], "quotes": []}</script>
 </head>
 <body>
 
@@ -987,7 +987,7 @@ body.locked .wrap{filter:blur(5px);pointer-events:none}
     { icon: 'lightning', name: 'Аянгын саваа', desc: 'Нарны системийн аянгын хамгаалалт. Заавал орох.', qty: 1, price: 60, required: true },
     { icon: 'combiner', name: 'PV нэгтгэгч хайрцаг 3 IN 3 OUT', desc: 'Эсрэг гүйдлийн хамгаалалт, гал хамгаалагч, хэт хүчдэлийн хамгаалалт · IP65 · 10 жил баталгаа', qty: 1, price: 190.44 },
     { icon: 'mc4', name: 'MC4 холбогч', desc: 'Нэрлэсэн гүйдэл: 40A, хүчдэл: 1500VDC · 25 жил баталгаа', qty: 10, price: 1.1 },
-    { icon: 'pvCable', name: 'PV кабель 4mm² (улаан/хар)', desc: 'Нарны цахилгааны тусгай кабель · 10 жил баталгаа', qty: 500, price: 1.25, unit: 'м' },
+    { icon: 'pvCable', name: 'PV кабель 6mm² (улаан/хар)', desc: 'Нарны цахилгааны тусгай кабель · 10 жил баталгаа', qty: 500, price: 1.25, unit: 'м' },
     { icon: 'groundCable', name: 'Газардуулгын утас 6mm²', desc: 'Мэргэжлийн инженерийн кабель · 10 жил баталгаа', qty: 20, price: 1.8, unit: 'м' },
     { icon: 'matchingCable', name: 'Холбох кабель 25mm² (Баттэрей↔Хувиргагч)', desc: 'Баттэрей–хувиргагч холбох кабель.', qty: 1, price: 42.00 },
     { icon: 'packaging', name: 'Сав баглаа', desc: 'Нарны панель: модон хайрцаг · Баттэрей: тавиур · Хувиргагч / суурь / кабель: картон', qty: 1, price: 216 },
@@ -1439,7 +1439,8 @@ body.locked .wrap{filter:blur(5px);pointer-events:none}
   const ADDITIONAL_RENAMES = {
     'Аянгын саваа (Lightning rod)': 'Аянгын саваа',
     'Холбох кабель 25mm² (Battery↔Inverter)': 'Холбох кабель 25mm² (Баттэрей↔Хувиргагч)',
-    'Mounting system design service': 'Угсралтын системийн зураг төсөл'
+    'Mounting system design service': 'Угсралтын системийн зураг төсөл',
+    'PV кабель 4mm² (улаан/хар)': 'PV кабель 6mm² (улаан/хар)'
   };
   function migrateNames() {
     additionalItems.forEach(it => {
