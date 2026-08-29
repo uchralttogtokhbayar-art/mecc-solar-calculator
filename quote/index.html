@@ -353,7 +353,7 @@ body.locked .wrap{filter:blur(5px);pointer-events:none}
 .syncnote.local{background:#fef3c7;color:#92400e;border:1px solid #fcd34d}
 @media print{#authGate,.role-bar,#adminPanel{display:none !important}body.locked .wrap{filter:none}}
 </style>
-<script type="application/json" id="shared-state">{"v": 2, "savedAt": 1787919013993, "users": [{"id": "admin1", "name": "Админ", "pin": "06232114", "role": "admin", "active": true}, {"id": "dist_nh", "name": "Нийслэл Хөшиг", "pin": "2000", "role": "dist", "active": true}], "prices": {}, "addPrices": {}, "activity": [], "quotes": []}</script>
+<script type="application/json" id="shared-state">{"v": 2, "savedAt": 1787999978977, "users": [{"id": "admin1", "name": "Админ", "pin": "06232114", "role": "admin", "active": true}, {"id": "dist_nh", "name": "Нийслэл Хөшиг", "pin": "2000", "role": "dist", "active": true}], "prices": {}, "addPrices": {}, "activity": [], "quotes": []}</script>
 </head>
 <body>
 
@@ -519,7 +519,7 @@ body.locked .wrap{filter:blur(5px);pointer-events:none}
       </div>
       <div style="margin-top: 10px;">
         <label>Системийн гарчиг (хэвлэх хуудсанд гарна)</label>
-        <input type="text" id="systemTitle" placeholder="MECC - Нарны систем 30 кВт Hybrid + 46 кВт.ц Аккумулятор" />
+        <input type="text" id="systemTitle" placeholder="MECC - Нарны систем 30 кВт хайбрид + 46 кВт.ц баттэрей" />
       </div>
     </div>
 
@@ -537,7 +537,7 @@ body.locked .wrap{filter:blur(5px);pointer-events:none}
     <div class="card">
       <h2>Бүтээгдэхүүн <span class="pill" id="priceTierPill">Жишээ үнэ</span><span class="filter-pill" id="filterCount" style="display:none"></span></h2>
       <p class="small">Захиалагчид хэрэгтэй бүтээгдэхүүнийг сонгож тоо ширхэгийг бөглөнө үү. <strong>USD үнийг шууд засаж болно</strong> (онцгой тохиолдол).</p>
-      <input type="text" id="productSearch" class="search-bar" placeholder="Бүтээгдэхүүн хайх — жш. 30kw, 51kWh, panel, hybrid..." />
+      <input type="text" id="productSearch" class="search-bar" placeholder="Бүтээгдэхүүн хайх — жш. 30kw, 51kWh, панель, хайбрид..." />
       <div id="catalog"></div>
       <div style="margin-top: 8px;">
         <button class="ghost tiny" onclick="resetCatalogPrices()">↺ Засагдсан үнийг бүгдийг сэргээх</button>
@@ -823,71 +823,71 @@ body.locked .wrap{filter:blur(5px);pointer-events:none}
   // ----------------- PRODUCT CATALOG -----------------
   const PRODUCTS = [
     // PANELS
-    { cat: 'panels', icon: 'panel', name: 'Нарны панель 590W', desc: 'N-type i-TOPCon Bifacial Dual-Glass Mono\nХэмжээ: 2279×1134×30mm\n30 жил баталгаа · CE/TUV/ISO', sample: 75.6, moq: 75.6 },
-    { cat: 'panels', icon: 'panel', name: 'Нарны панель 630W', desc: 'N-type i-TOPCon Bifacial Dual-Glass Mono\nХэмжээ: 2384×1139×30mm\n30 жил баталгаа · CE/TUV/ISO', sample: 81.6, moq: 81.6 },
-    { cat: 'panels', icon: 'panel', name: 'Нарны панель 650W', desc: 'N-type i-TOPCon Bifacial Dual-Glass Mono\nХэмжээ: 2384×1139×30mm\n30 жил баталгаа · CE/TUV/ISO', sample: 85.2, moq: 85.2 },
-    { cat: 'panels', icon: 'panel', name: 'Нарны панель 710W', desc: 'N-type i-TOPCon Bifacial Dual-Glass Mono\nХэмжээ: 2384×1303×30mm\n30 жил баталгаа · CE/TUV/ISO', sample: 93.36, moq: 93.36 },
+    { cat: 'panels', icon: 'panel', name: 'Нарны панель 590W', desc: 'N-type i-TOPCon хоёр талт, давхар шилэн, моно\nХэмжээ: 2279×1134×30mm\n30 жил баталгаа · CE/TUV/ISO', sample: 75.6, moq: 75.6 },
+    { cat: 'panels', icon: 'panel', name: 'Нарны панель 630W', desc: 'N-type i-TOPCon хоёр талт, давхар шилэн, моно\nХэмжээ: 2384×1139×30mm\n30 жил баталгаа · CE/TUV/ISO', sample: 81.6, moq: 81.6 },
+    { cat: 'panels', icon: 'panel', name: 'Нарны панель 650W', desc: 'N-type i-TOPCon хоёр талт, давхар шилэн, моно\nХэмжээ: 2384×1139×30mm\n30 жил баталгаа · CE/TUV/ISO', sample: 85.2, moq: 85.2 },
+    { cat: 'panels', icon: 'panel', name: 'Нарны панель 710W', desc: 'N-type i-TOPCon хоёр талт, давхар шилэн, моно\nХэмжээ: 2384×1303×30mm\n30 жил баталгаа · CE/TUV/ISO', sample: 93.36, moq: 93.36 },
 
     // BRACKETS
-    { cat: 'brackets', icon: 'bracketGround', name: 'Газрын суурь хүрээ', desc: 'Aluminum alloy ground mount\nWind 40m/s · Snow 70kg/m²\n25 жил баталгаа · CE/TUV', sample: 42, moq: 42 },
-    { cat: 'brackets', icon: 'bracketRoof', name: 'Дээврийн суурь хүрээ', desc: 'Aluminum alloy rooftop mount\nWind 40m/s · Snow 70kg/m²\n25 жил баталгаа · CE/TUV', sample: 33.6, moq: 33.6 },
+    { cat: 'brackets', icon: 'bracketGround', name: 'Газрын суурь хүрээ', desc: 'Хөнгөн цагаан хайлш · газрын суурь\nСалхи 40m/s · Цас 70kg/m²\n25 жил баталгаа · CE/TUV', sample: 42, moq: 42 },
+    { cat: 'brackets', icon: 'bracketRoof', name: 'Дээврийн суурь хүрээ', desc: 'Хөнгөн цагаан хайлш · дээврийн суурь\nСалхи 40m/s · Цас 70kg/m²\n25 жил баталгаа · CE/TUV', sample: 33.6, moq: 33.6 },
 
     // INVERTERS
-    { cat: 'inverters', icon: 'invHybridLV', name: 'Hybrid Inverter 6kW', desc: 'Гибрид · 220V · 40-60V аккум.\nIP65 · 5 жил баталгаа', sample: 838.8, moq: 838.8 },
-    { cat: 'inverters', icon: 'invHybridLV', name: 'Hybrid Inverter 8kW', desc: 'Гибрид · 220V · 40-60V аккум.\nIP65 · 5 жил баталгаа', sample: 1185.6, moq: 1185.6 },
-    { cat: 'inverters', icon: 'invHybridLV', name: 'Hybrid Inverter 10kW', desc: 'Гибрид · 220V · 40-60V аккум.\nIP65 · 5 жил баталгаа', sample: 1272, moq: 1272 },
-    { cat: 'inverters', icon: 'invHybridLV', name: 'Hybrid Inverter 12kW', desc: 'Гибрид · 220V · 40-60V аккум.\nIP65 · 5 жил баталгаа', sample: 1392, moq: 1392 },
-    { cat: 'inverters', icon: 'invHybridLV', name: 'Hybrid Inverter 12kW (3-phase)', desc: 'Гибрид · 220V/380V · 40-60V аккум.\nIP65 · 5 жил баталгаа', sample: 1632, moq: 1632 },
-    { cat: 'inverters', icon: 'invHybridLV', name: 'Hybrid Inverter 15kW (3-phase)', desc: 'Гибрид · 220V/380V · 40-60V аккум.\nIP65 · 5 жил баталгаа', sample: 1956, moq: 1956 },
-    { cat: 'inverters', icon: 'invHybridHV', name: 'Hybrid Inverter 15kW HV', desc: 'Гибрид · 380V · 100-700V аккум.\nIP66 · 5 жил баталгаа', sample: 1968, moq: 1968 },
-    { cat: 'inverters', icon: 'invHybridHV', name: 'Hybrid Inverter 20kW HV', desc: 'Гибрид · 380V · 100-700V аккум.\nIP66 · 5 жил баталгаа', sample: 2352, moq: 2352 },
-    { cat: 'inverters', icon: 'invHybridHV', name: 'Hybrid Inverter 25kW HV', desc: 'Гибрид · 380V · 100-700V аккум.\nIP66 · 5 жил баталгаа', sample: 2700, moq: 2700 },
-    { cat: 'inverters', icon: 'invHybridHV', name: 'Hybrid Inverter 30kW HV', desc: 'Гибрид · 380V · 100-700V аккум.\nIP66 · 5 жил баталгаа', sample: 3312, moq: 3312 },
-    { cat: 'inverters', icon: 'invOffgrid', name: 'Off-Grid Inverter 6.5kW', desc: 'Сүлжээгүй · 220V · 40-60V аккум.\nIP21 · 2 жил баталгаа', sample: 349.2, moq: 315.6 },
-    { cat: 'inverters', icon: 'invOffgrid', name: 'Off-Grid Inverter 12kW', desc: 'Сүлжээгүй · 220V · 40-60V аккум.\nIP21 · 2 жил баталгаа', sample: 595.2, moq: 538.8 },
-    { cat: 'inverters', icon: 'invLarge', name: 'Hybrid Inverter 40kW', desc: 'Гибрид · 220V/380V · 150-800V аккум.\nIP66 · 5 жил баталгаа', sample: 4320, moq: 4320 },
-    { cat: 'inverters', icon: 'invLarge', name: 'Hybrid Inverter 50kW', desc: 'Гибрид · 220V/380V · 150-800V аккум.\nIP66 · 5 жил баталгаа', sample: 4872, moq: 4872 },
-    { cat: 'inverters', icon: 'invLarge', name: 'Hybrid Inverter 60kW', desc: 'Гибрид · 220V/380V · 150-800V аккум.\nIP66 · 5 жил баталгаа', sample: 5424, moq: 5424 },
-    { cat: 'inverters', icon: 'invLarge', name: 'Hybrid Inverter 80kW', desc: 'Гибрид · 220V/380V · 300-950V аккум.\nIP66 · 5 жил баталгаа', sample: 8376, moq: 8376 },
-    { cat: 'inverters', icon: 'invLarge', name: 'Hybrid Inverter 100kW', desc: 'Гибрид · 220V/380V · 300-950V аккум.\nIP66 · 5 жил баталгаа', sample: 9336, moq: 9336 },
-    { cat: 'inverters', icon: 'invLarge', name: 'Hybrid Inverter 125kW', desc: 'Гибрид · 220V/380V · 300-950V аккум.\nIP66 · 5 жил баталгаа', sample: 10536, moq: 10536 },
+    { cat: 'inverters', icon: 'invHybridLV', name: 'Хайбрид хувиргагч 6kW', desc: 'Хайбрид · 220V · 40-60V баттэрей\nIP65 · 5 жил баталгаа', sample: 838.8, moq: 838.8 },
+    { cat: 'inverters', icon: 'invHybridLV', name: 'Хайбрид хувиргагч 8kW', desc: 'Хайбрид · 220V · 40-60V баттэрей\nIP65 · 5 жил баталгаа', sample: 1185.6, moq: 1185.6 },
+    { cat: 'inverters', icon: 'invHybridLV', name: 'Хайбрид хувиргагч 10kW', desc: 'Хайбрид · 220V · 40-60V баттэрей\nIP65 · 5 жил баталгаа', sample: 1272, moq: 1272 },
+    { cat: 'inverters', icon: 'invHybridLV', name: 'Хайбрид хувиргагч 12kW', desc: 'Хайбрид · 220V · 40-60V баттэрей\nIP65 · 5 жил баталгаа', sample: 1392, moq: 1392 },
+    { cat: 'inverters', icon: 'invHybridLV', name: 'Хайбрид хувиргагч 12kW (3 фаз)', desc: 'Хайбрид · 220V/380V · 40-60V баттэрей\nIP65 · 5 жил баталгаа', sample: 1632, moq: 1632 },
+    { cat: 'inverters', icon: 'invHybridLV', name: 'Хайбрид хувиргагч 15kW (3 фаз)', desc: 'Хайбрид · 220V/380V · 40-60V баттэрей\nIP65 · 5 жил баталгаа', sample: 1956, moq: 1956 },
+    { cat: 'inverters', icon: 'invHybridHV', name: 'Хайбрид хувиргагч 15kW HV', desc: 'Хайбрид · 380V · 100-700V баттэрей\nIP66 · 5 жил баталгаа', sample: 1968, moq: 1968 },
+    { cat: 'inverters', icon: 'invHybridHV', name: 'Хайбрид хувиргагч 20kW HV', desc: 'Хайбрид · 380V · 100-700V баттэрей\nIP66 · 5 жил баталгаа', sample: 2352, moq: 2352 },
+    { cat: 'inverters', icon: 'invHybridHV', name: 'Хайбрид хувиргагч 25kW HV', desc: 'Хайбрид · 380V · 100-700V баттэрей\nIP66 · 5 жил баталгаа', sample: 2700, moq: 2700 },
+    { cat: 'inverters', icon: 'invHybridHV', name: 'Хайбрид хувиргагч 30kW HV', desc: 'Хайбрид · 380V · 100-700V баттэрей\nIP66 · 5 жил баталгаа', sample: 3312, moq: 3312 },
+    { cat: 'inverters', icon: 'invOffgrid', name: 'Сүлжээгүй хувиргагч 6.5kW', desc: 'Сүлжээгүй · 220V · 40-60V баттэрей\nIP21 · 2 жил баталгаа', sample: 349.2, moq: 315.6 },
+    { cat: 'inverters', icon: 'invOffgrid', name: 'Сүлжээгүй хувиргагч 12kW', desc: 'Сүлжээгүй · 220V · 40-60V баттэрей\nIP21 · 2 жил баталгаа', sample: 595.2, moq: 538.8 },
+    { cat: 'inverters', icon: 'invLarge', name: 'Хайбрид хувиргагч 40kW', desc: 'Хайбрид · 220V/380V · 150-800V баттэрей\nIP66 · 5 жил баталгаа', sample: 4320, moq: 4320 },
+    { cat: 'inverters', icon: 'invLarge', name: 'Хайбрид хувиргагч 50kW', desc: 'Хайбрид · 220V/380V · 150-800V баттэрей\nIP66 · 5 жил баталгаа', sample: 4872, moq: 4872 },
+    { cat: 'inverters', icon: 'invLarge', name: 'Хайбрид хувиргагч 60kW', desc: 'Хайбрид · 220V/380V · 150-800V баттэрей\nIP66 · 5 жил баталгаа', sample: 5424, moq: 5424 },
+    { cat: 'inverters', icon: 'invLarge', name: 'Хайбрид хувиргагч 80kW', desc: 'Хайбрид · 220V/380V · 300-950V баттэрей\nIP66 · 5 жил баталгаа', sample: 8376, moq: 8376 },
+    { cat: 'inverters', icon: 'invLarge', name: 'Хайбрид хувиргагч 100kW', desc: 'Хайбрид · 220V/380V · 300-950V баттэрей\nIP66 · 5 жил баталгаа', sample: 9336, moq: 9336 },
+    { cat: 'inverters', icon: 'invLarge', name: 'Хайбрид хувиргагч 125kW', desc: 'Хайбрид · 220V/380V · 300-950V баттэрей\nIP66 · 5 жил баталгаа', sample: 10536, moq: 10536 },
 
     // BATTERIES
-    { cat: 'batteries', icon: 'batteryLV', name: 'Аккумулятор 5kWh', desc: 'LFP4 51.2V · 100Ah (нам хүчдэлт)\nCycle 6000+ · 10 жил баталгаа', sample: 718.8, moq: 718.8 },
-    { cat: 'batteries', icon: 'batteryLV10', name: 'Аккумулятор 10kWh', desc: 'LFP4 51.2V · 205Ah (нам хүчдэлт)\nCycle 6000+ · 10 жил баталгаа', sample: 1224, moq: 1224 },
-    { cat: 'batteries', icon: 'batteryLVbig', name: 'Аккумулятор 15kWh', desc: 'LFP4 51.2V · 280/314Ah (нам хүчдэлт)\nCycle 6000+ · 10 жил баталгаа', sample: 1548, moq: 1548 },
-    { cat: 'batteries', icon: 'batteryLVbig', name: 'Аккумулятор 16kWh', desc: 'LFP4 51.2V · 280/314Ah (нам хүчдэлт)\nCycle 6000+ · 10 жил баталгаа', sample: 1656, moq: 1656 },
-    { cat: 'batteries', icon: 'batteryHV', name: 'HV Аккумулятор 31kWh', desc: 'LFP4 153-716V · 100Ah (өндөр хүчдэлт)\nCycle 6000+ · 10 жил баталгаа', sample: 5136, moq: 5136 },
-    { cat: 'batteries', icon: 'batteryHV', name: 'HV Аккумулятор 41kWh', desc: 'LFP4 153-716V · 100Ah\nCycle 6000+ · 10 жил баталгаа', sample: 6720, moq: 6720 },
-    { cat: 'batteries', icon: 'batteryHV', name: 'HV Аккумулятор 51kWh', desc: 'LFP4 153-716V · 100Ah\nCycle 6000+ · 10 жил баталгаа', sample: 8496, moq: 8496 },
-    { cat: 'batteries', icon: 'batteryHV', name: 'HV Аккумулятор 62kWh', desc: 'LFP4 153-716V · 100Ah\nCycle 6000+ · 10 жил баталгаа', sample: 9936, moq: 9936 },
-    { cat: 'batteries', icon: 'batteryHVbig', name: 'HV Аккумулятор 90kWh', desc: 'LFP4 288-691V · 314Ah\nCycle 6000+ · 10 жил баталгаа', sample: 10512, moq: 10512 },
-    { cat: 'batteries', icon: 'batteryHVbig', name: 'HV Аккумулятор 108kWh', desc: 'LFP4 288-691V · 314Ah\nCycle 6000+ · 10 жил баталгаа', sample: 12600, moq: 12600 },
-    { cat: 'batteries', icon: 'batteryHVbig', name: 'HV Аккумулятор 144kWh', desc: 'LFP4 288-691V · 314Ah\nCycle 6000+ · 10 жил баталгаа', sample: 16800, moq: 16800 },
-    { cat: 'batteries', icon: 'batteryHVbig', name: 'HV Аккумулятор 180kWh', desc: 'LFP4 288-691V · 314Ah\nCycle 6000+ · 10 жил баталгаа', sample: 20760, moq: 20760 },
-    { cat: 'batteries', icon: 'batteryHVbig', name: 'HV Аккумулятор 217kWh', desc: 'LFP4 288-691V · 314Ah\nCycle 6000+ · 10 жил баталгаа', sample: 25320, moq: 25320 },
-    { cat: 'batteries', icon: 'batteryHVbig', name: 'HV Аккумулятор 241kWh', desc: 'LFP4 288-691V · 314Ah\nCycle 6000+ · 10 жил баталгаа', sample: 30000, moq: 30000 },
+    { cat: 'batteries', icon: 'batteryLV', name: 'Баттэрей 5kWh', desc: 'LFP4 51.2V · 100Ah (нам хүчдэлт)\nЦикл 6000+ · 10 жил баталгаа', sample: 718.8, moq: 718.8 },
+    { cat: 'batteries', icon: 'batteryLV10', name: 'Баттэрей 10kWh', desc: 'LFP4 51.2V · 205Ah (нам хүчдэлт)\nЦикл 6000+ · 10 жил баталгаа', sample: 1224, moq: 1224 },
+    { cat: 'batteries', icon: 'batteryLVbig', name: 'Баттэрей 15kWh', desc: 'LFP4 51.2V · 280/314Ah (нам хүчдэлт)\nЦикл 6000+ · 10 жил баталгаа', sample: 1548, moq: 1548 },
+    { cat: 'batteries', icon: 'batteryLVbig', name: 'Баттэрей 16kWh', desc: 'LFP4 51.2V · 280/314Ah (нам хүчдэлт)\nЦикл 6000+ · 10 жил баталгаа', sample: 1656, moq: 1656 },
+    { cat: 'batteries', icon: 'batteryHV', name: 'HV Баттэрей 31kWh', desc: 'LFP4 153-716V · 100Ah (өндөр хүчдэлт)\nЦикл 6000+ · 10 жил баталгаа', sample: 5136, moq: 5136 },
+    { cat: 'batteries', icon: 'batteryHV', name: 'HV Баттэрей 41kWh', desc: 'LFP4 153-716V · 100Ah\nЦикл 6000+ · 10 жил баталгаа', sample: 6720, moq: 6720 },
+    { cat: 'batteries', icon: 'batteryHV', name: 'HV Баттэрей 51kWh', desc: 'LFP4 153-716V · 100Ah\nЦикл 6000+ · 10 жил баталгаа', sample: 8496, moq: 8496 },
+    { cat: 'batteries', icon: 'batteryHV', name: 'HV Баттэрей 62kWh', desc: 'LFP4 153-716V · 100Ah\nЦикл 6000+ · 10 жил баталгаа', sample: 9936, moq: 9936 },
+    { cat: 'batteries', icon: 'batteryHVbig', name: 'HV Баттэрей 90kWh', desc: 'LFP4 288-691V · 314Ah\nЦикл 6000+ · 10 жил баталгаа', sample: 10512, moq: 10512 },
+    { cat: 'batteries', icon: 'batteryHVbig', name: 'HV Баттэрей 108kWh', desc: 'LFP4 288-691V · 314Ah\nЦикл 6000+ · 10 жил баталгаа', sample: 12600, moq: 12600 },
+    { cat: 'batteries', icon: 'batteryHVbig', name: 'HV Баттэрей 144kWh', desc: 'LFP4 288-691V · 314Ah\nЦикл 6000+ · 10 жил баталгаа', sample: 16800, moq: 16800 },
+    { cat: 'batteries', icon: 'batteryHVbig', name: 'HV Баттэрей 180kWh', desc: 'LFP4 288-691V · 314Ah\nЦикл 6000+ · 10 жил баталгаа', sample: 20760, moq: 20760 },
+    { cat: 'batteries', icon: 'batteryHVbig', name: 'HV Баттэрей 217kWh', desc: 'LFP4 288-691V · 314Ah\nЦикл 6000+ · 10 жил баталгаа', sample: 25320, moq: 25320 },
+    { cat: 'batteries', icon: 'batteryHVbig', name: 'HV Баттэрей 241kWh', desc: 'LFP4 288-691V · 314Ah\nЦикл 6000+ · 10 жил баталгаа', sample: 30000, moq: 30000 },
 
     // BESS
-    { cat: 'bess', icon: 'bessIndoor', name: 'BESS 3.6kW / 3.5kWh', desc: 'All-in-One · дотор · LFP4 · IP31', sample: 745.2, moq: 608.4 },
-    { cat: 'bess', icon: 'bessIndoor', name: 'BESS 3.6kW / 7.2kWh', desc: 'All-in-One · дотор · LFP4 · IP31', sample: 1215.6, moq: 991.2 },
-    { cat: 'bess', icon: 'bessIndoor', name: 'BESS 6kW / 15kWh', desc: 'All-in-One · дотор · LFP4 · IP31', sample: 2289.6, moq: 1867.2 },
-    { cat: 'bess', icon: 'bessOutdoor', name: 'BESS 30kW / 61kWh', desc: 'All-in-One · гадаа C&I · LFP4 · IP65/IP54', sample: 15062.4, moq: 15062.4 },
-    { cat: 'bess', icon: 'bessOutdoor', name: 'BESS 50kW / 108kWh', desc: 'All-in-One · гадаа C&I · LFP4 · IP65/IP54', sample: 19743.6, moq: 19743.6 },
-    { cat: 'bess', icon: 'bessOutdoor', name: 'BESS 50kW / 112kWh', desc: 'All-in-One · гадаа C&I · LFP4 · IP65/IP54', sample: 21072, moq: 21072 },
-    { cat: 'bess', icon: 'bessOutdoor', name: 'BESS 50kW / 241kWh', desc: 'All-in-One · гадаа C&I · LFP4 · IP65/IP54', sample: 37080, moq: 37080 },
-    { cat: 'bess', icon: 'bessOutdoor', name: 'BESS 100kW / 241kWh', desc: 'All-in-One · гадаа C&I · LFP4 · IP65/IP54', sample: 41640, moq: 41640 },
-    { cat: 'bess', icon: 'bessOutdoor', name: 'BESS 125kW / 241kWh', desc: 'All-in-One · гадаа C&I · LFP4 · IP65/IP54', sample: 43158, moq: 43158 },
-    { cat: 'bess', icon: 'bessOutdoor', name: 'BESS 500kW / 1MWh (PV+ESS)', desc: 'Container Energy Storage System · LFP4 · IP65/IP54', sample: 192000, moq: 178800 },
-    { cat: 'bess', icon: 'bessOutdoor', name: 'BESS 1MW / 2.4MWh (PV+ESS)', desc: 'Container Energy Storage System · LFP4 · IP65/IP54', sample: 453600, moq: 423600 },
+    { cat: 'bess', icon: 'bessIndoor', name: 'BESS 3.6kW / 3.5kWh', desc: 'Нэгдсэн · дотор · LFP4 · IP31', sample: 745.2, moq: 608.4 },
+    { cat: 'bess', icon: 'bessIndoor', name: 'BESS 3.6kW / 7.2kWh', desc: 'Нэгдсэн · дотор · LFP4 · IP31', sample: 1215.6, moq: 991.2 },
+    { cat: 'bess', icon: 'bessIndoor', name: 'BESS 6kW / 15kWh', desc: 'Нэгдсэн · дотор · LFP4 · IP31', sample: 2289.6, moq: 1867.2 },
+    { cat: 'bess', icon: 'bessOutdoor', name: 'BESS 30kW / 61kWh', desc: 'Нэгдсэн · гадаа C&I · LFP4 · IP65/IP54', sample: 15062.4, moq: 15062.4 },
+    { cat: 'bess', icon: 'bessOutdoor', name: 'BESS 50kW / 108kWh', desc: 'Нэгдсэн · гадаа C&I · LFP4 · IP65/IP54', sample: 19743.6, moq: 19743.6 },
+    { cat: 'bess', icon: 'bessOutdoor', name: 'BESS 50kW / 112kWh', desc: 'Нэгдсэн · гадаа C&I · LFP4 · IP65/IP54', sample: 21072, moq: 21072 },
+    { cat: 'bess', icon: 'bessOutdoor', name: 'BESS 50kW / 241kWh', desc: 'Нэгдсэн · гадаа C&I · LFP4 · IP65/IP54', sample: 37080, moq: 37080 },
+    { cat: 'bess', icon: 'bessOutdoor', name: 'BESS 100kW / 241kWh', desc: 'Нэгдсэн · гадаа C&I · LFP4 · IP65/IP54', sample: 41640, moq: 41640 },
+    { cat: 'bess', icon: 'bessOutdoor', name: 'BESS 125kW / 241kWh', desc: 'Нэгдсэн · гадаа C&I · LFP4 · IP65/IP54', sample: 43158, moq: 43158 },
+    { cat: 'bess', icon: 'bessOutdoor', name: 'BESS 500kW / 1MWh (PV+ESS)', desc: 'Чингэлэгт эрчим хүч хадгалах систем · LFP4 · IP65/IP54', sample: 192000, moq: 178800 },
+    { cat: 'bess', icon: 'bessOutdoor', name: 'BESS 1MW / 2.4MWh (PV+ESS)', desc: 'Чингэлэгт эрчим хүч хадгалах систем · LFP4 · IP65/IP54', sample: 453600, moq: 423600 },
   ];
 
   const CATEGORY_LABELS = {
     panels: '☀️ Нарны панель',
     brackets: '🔧 Суурь хүрээ',
-    inverters: '⚡ Инвертер (Hybrid + Off-grid)',
-    batteries: '🔋 Аккумулятор',
-    bess: '📦 Цогц BESS (All-in-One)',
+    inverters: '⚡ Хувиргагч (Хайбрид + Сүлжээгүй)',
+    batteries: '🔋 Баттэрей',
+    bess: '📦 Цогц BESS (нэгдсэн систем)',
   };
 
   // ============ SHIPPING DATA (Package1.xlsx — gross / сав баглаатай) ============
@@ -899,39 +899,39 @@ body.locked .wrap{filter:blur(5px);pointer-events:none}
     'Нарны панель 650W': { d:[2390,1120,1260], kg:1210, per:36 },
     'Нарны панель 710W': { d:[2505,1135,1335], kg:1250, per:33 },
     // Инвертер
-    'Hybrid Inverter 6kW':  { d:[520,740,400], kg:35 },
-    'Hybrid Inverter 8kW':  { d:[520,740,400], kg:35 },
-    'Hybrid Inverter 10kW': { d:[520,740,400], kg:35 },
-    'Hybrid Inverter 12kW': { d:[520,740,400], kg:35 },
-    'Hybrid Inverter 12kW (3-phase)': { d:[530,760,420], kg:50 },
-    'Hybrid Inverter 15kW (3-phase)': { d:[530,760,420], kg:50 },
-    'Hybrid Inverter 15kW HV': { d:[640,570,400], kg:32, note:'HV хайрцаг (таамаг)' },
-    'Hybrid Inverter 20kW HV': { d:[640,570,400], kg:32, note:'HV хайрцаг (таамаг)' },
-    'Hybrid Inverter 25kW HV': { d:[640,570,400], kg:32, note:'HV хайрцаг (таамаг)' },
-    'Hybrid Inverter 30kW HV': { d:[640,570,400], kg:32, note:'HV хайрцаг (таамаг)' },
-    'Hybrid Inverter 40kW':  { d:[640,980,450], kg:80 },
-    'Hybrid Inverter 50kW':  { d:[640,980,450], kg:80 },
-    'Hybrid Inverter 60kW':  { d:[1350,960,600], kg:180, note:'75-125kW хайрцаг (таамаг)' },
-    'Hybrid Inverter 80kW':  { d:[1350,960,600], kg:180 },
-    'Hybrid Inverter 100kW': { d:[1350,960,600], kg:180 },
-    'Hybrid Inverter 125kW': { d:[1350,960,600], kg:180 },
+    'Хайбрид хувиргагч 6kW':  { d:[520,740,400], kg:35 },
+    'Хайбрид хувиргагч 8kW':  { d:[520,740,400], kg:35 },
+    'Хайбрид хувиргагч 10kW': { d:[520,740,400], kg:35 },
+    'Хайбрид хувиргагч 12kW': { d:[520,740,400], kg:35 },
+    'Хайбрид хувиргагч 12kW (3 фаз)': { d:[530,760,420], kg:50 },
+    'Хайбрид хувиргагч 15kW (3 фаз)': { d:[530,760,420], kg:50 },
+    'Хайбрид хувиргагч 15kW HV': { d:[640,570,400], kg:32, note:'HV хайрцаг (таамаг)' },
+    'Хайбрид хувиргагч 20kW HV': { d:[640,570,400], kg:32, note:'HV хайрцаг (таамаг)' },
+    'Хайбрид хувиргагч 25kW HV': { d:[640,570,400], kg:32, note:'HV хайрцаг (таамаг)' },
+    'Хайбрид хувиргагч 30kW HV': { d:[640,570,400], kg:32, note:'HV хайрцаг (таамаг)' },
+    'Хайбрид хувиргагч 40kW':  { d:[640,980,450], kg:80 },
+    'Хайбрид хувиргагч 50kW':  { d:[640,980,450], kg:80 },
+    'Хайбрид хувиргагч 60kW':  { d:[1350,960,600], kg:180, note:'75-125kW хайрцаг (таамаг)' },
+    'Хайбрид хувиргагч 80kW':  { d:[1350,960,600], kg:180 },
+    'Хайбрид хувиргагч 100kW': { d:[1350,960,600], kg:180 },
+    'Хайбрид хувиргагч 125kW': { d:[1350,960,600], kg:180 },
     // Аккумулятор LV
-    'Аккумулятор 5kWh':  { d:[670,520,250],  kg:52 },
-    'Аккумулятор 10kWh': { d:[1100,600,380], kg:105 },
-    'Аккумулятор 15kWh': { d:[1000,570,420], kg:150 },
-    'Аккумулятор 16kWh': { d:[1000,570,420], kg:150 },
+    'Баттэрей 5kWh':  { d:[670,520,250],  kg:52 },
+    'Баттэрей 10kWh': { d:[1100,600,380], kg:105 },
+    'Баттэрей 15kWh': { d:[1000,570,420], kg:150 },
+    'Баттэрей 16kWh': { d:[1000,570,420], kg:150 },
     // Аккумулятор HV — 100Ah модулиудаас бүрдэнэ (1 модуль ≈ 5.1kWh, 45kg)
-    'HV Аккумулятор 31kWh': { d:[580,570,230], kg:45, units:6,  note:'6 модуль' },
-    'HV Аккумулятор 41kWh': { d:[580,570,230], kg:45, units:8,  note:'8 модуль' },
-    'HV Аккумулятор 51kWh': { d:[580,570,230], kg:45, units:10, note:'10 модуль' },
-    'HV Аккумулятор 62kWh': { d:[580,570,230], kg:45, units:12, note:'12 модуль' },
+    'HV Баттэрей 31kWh': { d:[580,570,230], kg:45, units:6,  note:'6 модуль' },
+    'HV Баттэрей 41kWh': { d:[580,570,230], kg:45, units:8,  note:'8 модуль' },
+    'HV Баттэрей 51kWh': { d:[580,570,230], kg:45, units:10, note:'10 модуль' },
+    'HV Баттэрей 62kWh': { d:[580,570,230], kg:45, units:12, note:'12 модуль' },
     // Аккумулятор HV racked (ойролцоо багтаамжаар тааруулсан)
-    'HV Аккумулятор 90kWh':  { d:[1500,860,910], kg:951,  note:'96kWh rack' },
-    'HV Аккумулятор 108kWh': { d:[1500,860,910], kg:1081, note:'112kWh rack' },
-    'HV Аккумулятор 144kWh': { d:[1700,860,910], kg:1351, note:'145kWh rack' },
-    'HV Аккумулятор 180kWh': { d:[1900,860,910], kg:1626, note:'177kWh rack' },
-    'HV Аккумулятор 217kWh': { d:[2200,860,910], kg:2066, note:'225kWh rack' },
-    'HV Аккумулятор 241kWh': { d:[2200,860,910], kg:2196 },
+    'HV Баттэрей 90kWh':  { d:[1500,860,910], kg:951,  note:'96kWh rack' },
+    'HV Баттэрей 108kWh': { d:[1500,860,910], kg:1081, note:'112kWh rack' },
+    'HV Баттэрей 144kWh': { d:[1700,860,910], kg:1351, note:'145kWh rack' },
+    'HV Баттэрей 180kWh': { d:[1900,860,910], kg:1626, note:'177kWh rack' },
+    'HV Баттэрей 217kWh': { d:[2200,860,910], kg:2066, note:'225kWh rack' },
+    'HV Баттэрей 241kWh': { d:[2200,860,910], kg:2196 },
     // BESS кабинет / контейнер
     'BESS 30kW / 61kWh':   { d:[900,900,2430],   kg:825 },
     'BESS 50kW / 108kWh':  { d:[750,1380,2050],  kg:1200 },
@@ -984,17 +984,17 @@ body.locked .wrap{filter:blur(5px);pointer-events:none}
 
   // ADDITIONAL PRODUCTS (defaults match 30kW quote)
   const ADDITIONAL_DEFAULTS = [
-    { icon: 'lightning', name: 'Аянгын саваа (Lightning rod)', desc: 'Нарны системийн аянгын хамгаалалт. Заавал орох.', qty: 1, price: 60, required: true },
-    { icon: 'combiner', name: 'PV нэгтгэгч хайрцаг 3 IN 3 OUT', desc: 'Anti-reverse circuit, Fuse Breaker, Surge protector · IP65 · 10 жил баталгаа', qty: 1, price: 190.44 },
-    { icon: 'mc4', name: 'MC4 холбогч', desc: 'Rated current: 40A, Voltage: 1500VDC · 25 жил баталгаа', qty: 10, price: 1.1 },
-    { icon: 'pvCable', name: 'PV кабель 4mm² (улаан/хар)', desc: 'Photovoltaic special cable · 10 жил баталгаа', qty: 500, price: 1.25, unit: 'м' },
-    { icon: 'groundCable', name: 'Газардуулгын утас 6mm²', desc: 'Professional engineering cable · 10 жил баталгаа', qty: 20, price: 1.8, unit: 'м' },
-    { icon: 'matchingCable', name: 'Холбох кабель 25mm² (Battery↔Inverter)', desc: 'Battery-inverter connection cable.', qty: 1, price: 42.00 },
-    { icon: 'packaging', name: 'Сав баглаа', desc: 'Solar panel: wooden box · Battery: tray · Inverter / bracket / cable: carton', qty: 1, price: 216 },
-    { icon: 'design', name: 'Mounting system design service', desc: 'Угсралтын зураг төсөл.', qty: 1, price: 0, freeLabel: true },
+    { icon: 'lightning', name: 'Аянгын саваа', desc: 'Нарны системийн аянгын хамгаалалт. Заавал орох.', qty: 1, price: 60, required: true },
+    { icon: 'combiner', name: 'PV нэгтгэгч хайрцаг 3 IN 3 OUT', desc: 'Эсрэг гүйдлийн хамгаалалт, гал хамгаалагч, хэт хүчдэлийн хамгаалалт · IP65 · 10 жил баталгаа', qty: 1, price: 190.44 },
+    { icon: 'mc4', name: 'MC4 холбогч', desc: 'Нэрлэсэн гүйдэл: 40A, хүчдэл: 1500VDC · 25 жил баталгаа', qty: 10, price: 1.1 },
+    { icon: 'pvCable', name: 'PV кабель 4mm² (улаан/хар)', desc: 'Нарны цахилгааны тусгай кабель · 10 жил баталгаа', qty: 500, price: 1.25, unit: 'м' },
+    { icon: 'groundCable', name: 'Газардуулгын утас 6mm²', desc: 'Мэргэжлийн инженерийн кабель · 10 жил баталгаа', qty: 20, price: 1.8, unit: 'м' },
+    { icon: 'matchingCable', name: 'Холбох кабель 25mm² (Баттэрей↔Хувиргагч)', desc: 'Баттэрей–хувиргагч холбох кабель.', qty: 1, price: 42.00 },
+    { icon: 'packaging', name: 'Сав баглаа', desc: 'Нарны панель: модон хайрцаг · Баттэрей: тавиур · Хувиргагч / суурь / кабель: картон', qty: 1, price: 216 },
+    { icon: 'design', name: 'Угсралтын системийн зураг төсөл', desc: 'Угсралтын зураг төсөл.', qty: 1, price: 0, freeLabel: true },
     { icon: 'concrete', name: 'Бэтон суурь', desc: 'Газрын системийн бэтон суурь.', qty: 0, price: 0 },
     { icon: 'design', name: 'Суурийн зураг', desc: 'Суурийн зураг төсөл.', qty: 1, price: 0, freeLabel: true },
-    { icon: 'wifi', name: 'WiFi төхөөрөмж', desc: 'Инвертерийн WiFi мониторинг төхөөрөмж.', qty: 1, price: 0, freeLabel: true },
+    { icon: 'wifi', name: 'WiFi төхөөрөмж', desc: 'Хувиргагчийн WiFi хяналтын төхөөрөмж.', qty: 1, price: 0, freeLabel: true },
     { icon: 'phone', name: 'Утасны программ', desc: 'Утаснаас систем хянах аппликейшн.', qty: 1, price: 0, freeLabel: true },
   ];
 
@@ -1204,7 +1204,7 @@ body.locked .wrap{filter:blur(5px);pointer-events:none}
     const pvCableIdx = additionalItems.findIndex(x => x.icon === 'pvCable');
     if (pvCableIdx >= 0) additionalItems[pvCableIdx].qty = p.pvCable;
     // Auto-set system title
-    document.getElementById('systemTitle').value = `MECC - Нарны систем ${size}кВт Hybrid Inverter`;
+    document.getElementById('systemTitle').value = `MECC - Нарны систем ${size}кВт хайбрид хувиргагч`;
 
     buildAdditional();
     recalc();
@@ -1434,6 +1434,28 @@ body.locked .wrap{filter:blur(5px);pointer-events:none}
   }
   function saveAdditional() {
     try { localStorage.setItem(ADDITIONAL_KEY, JSON.stringify(additionalItems)); } catch(e) {}
+  }
+  // Accessories renamed in the Mongolian pass — migrate cached data instead of duplicating it.
+  const ADDITIONAL_RENAMES = {
+    'Аянгын саваа (Lightning rod)': 'Аянгын саваа',
+    'Холбох кабель 25mm² (Battery↔Inverter)': 'Холбох кабель 25mm² (Баттэрей↔Хувиргагч)',
+    'Mounting system design service': 'Угсралтын системийн зураг төсөл'
+  };
+  function migrateNames() {
+    additionalItems.forEach(it => {
+      if (ADDITIONAL_RENAMES[it.name]) it.name = ADDITIONAL_RENAMES[it.name];
+    });
+    // drop any duplicate left over from an older cached copy
+    const seen = {};
+    additionalItems = additionalItems.filter(it => seen[it.name] ? false : (seen[it.name] = true));
+    if (typeof SHARED !== 'undefined' && SHARED.addPrices) {
+      Object.keys(ADDITIONAL_RENAMES).forEach(oldN => {
+        if (SHARED.addPrices[oldN] != null && SHARED.addPrices[ADDITIONAL_RENAMES[oldN]] == null) {
+          SHARED.addPrices[ADDITIONAL_RENAMES[oldN]] = SHARED.addPrices[oldN];
+        }
+        delete SHARED.addPrices[oldN];
+      });
+    }
   }
   function loadAdditional() {
     try {
@@ -1915,6 +1937,7 @@ body.locked .wrap{filter:blur(5px);pointer-events:none}
 
   document.addEventListener('DOMContentLoaded', () => {
     loadAdditional();
+    migrateNames();
     applyAdminAddPrices();
     try { catalogPriceOverrides = JSON.parse(localStorage.getItem(OVERRIDES_KEY) || '{}'); } catch(_) { catalogPriceOverrides = {}; }
     loadOptions();
