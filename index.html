@@ -297,6 +297,45 @@
       margin-top: 16px; padding: 10px 14px; background: linear-gradient(90deg, var(--navy) 0%, #2952c8 100%); color: white; text-align: center; border-radius: 6px; font-size: 11px; letter-spacing: 0.6px; font-weight: 600;
     }
   }
+
+/* ===== Custom product modal ===== */
+.modal-backdrop{position:fixed;inset:0;background:rgba(15,23,42,.55);z-index:9999;display:none;align-items:flex-start;justify-content:center;padding:24px 16px;overflow-y:auto;}
+.modal-backdrop.open{display:flex;}
+.modal-box{background:#fff;border-radius:16px;max-width:840px;width:100%;box-shadow:0 24px 60px rgba(0,0,0,.35);overflow:hidden;animation:pmIn .16s ease-out;}
+@keyframes pmIn{from{transform:translateY(-14px);opacity:0}to{transform:none;opacity:1}}
+.modal-head{display:flex;align-items:center;justify-content:space-between;padding:15px 20px;background:linear-gradient(135deg,#1e3a8a,#2563eb);color:#fff;}
+.modal-head h3{margin:0;font-size:17px;font-weight:800;}
+.modal-x{background:rgba(255,255,255,.18);border:none;color:#fff;font-size:20px;line-height:1;width:32px;height:32px;border-radius:9px;cursor:pointer;}
+.modal-x:hover{background:rgba(255,255,255,.35);}
+.modal-body{padding:20px;}
+.modal-foot{display:flex;justify-content:flex-end;gap:10px;padding:14px 20px;background:#f8fafc;border-top:1px solid #e5e7eb;}
+.pm-grid{display:grid;grid-template-columns:210px 1fr;gap:22px;}
+.pm-fields label,.pm-photo label{display:block;font-size:12px;font-weight:800;color:#475569;margin:12px 0 5px;}
+.pm-fields label:first-child,.pm-photo label:first-child{margin-top:0;}
+.pm-fields input[type=text],.pm-fields input[type=number],.pm-fields select,.pm-fields textarea{width:100%;padding:9px 11px;border:1px solid #d1d5db;border-radius:9px;font-size:14px;font-family:inherit;box-sizing:border-box;background:#fff;}
+.pm-fields input:focus,.pm-fields select:focus,.pm-fields textarea:focus{outline:none;border-color:#2563eb;box-shadow:0 0 0 3px rgba(37,99,235,.12);}
+.pm-fields textarea{resize:vertical;line-height:1.5;}
+.pm-drop{border:2px dashed #cbd5e1;border-radius:12px;height:190px;display:flex;align-items:center;justify-content:center;cursor:pointer;background:#f8fafc;overflow:hidden;text-align:center;padding:6px;box-sizing:border-box;}
+.pm-drop:hover,.pm-drop.drag{border-color:#2563eb;background:#eff6ff;}
+.pm-drop img{max-width:100%;max-height:100%;object-fit:contain;}
+.pm-drop-hint{color:#94a3b8;font-size:13px;font-weight:700;line-height:1.7;}
+.pm-drop-hint span{font-size:11px;font-weight:400;}
+.pm-row3{display:grid;grid-template-columns:1.2fr .8fr .8fr;gap:10px;}
+.pm-row4{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;}
+.pm-check{display:flex!important;align-items:center;gap:8px;margin-top:14px!important;font-size:13px;color:#334155;font-weight:700;}
+.pm-check input{width:auto!important;}
+.pm-ship{margin-top:18px;border:1px solid #e5e7eb;border-radius:11px;padding:11px 14px;background:#f8fafc;}
+.pm-ship summary{cursor:pointer;font-weight:800;font-size:13px;color:#334155;}
+.pm-ship label{display:block;font-size:11px;font-weight:700;color:#64748b;margin:9px 0 3px;}
+.pm-ship input{width:100%;padding:7px 9px;border:1px solid #d1d5db;border-radius:8px;font-size:13px;box-sizing:border-box;}
+.pm-hint{font-size:11px;color:#94a3b8;margin-top:6px;line-height:1.5;}
+.pm-error{margin-top:14px;background:#fef2f2;border:1px solid #fecaca;color:#b91c1c;padding:9px 12px;border-radius:9px;font-size:13px;font-weight:700;}
+.cust-actions{display:flex;gap:6px;align-items:center;margin-top:6px;flex-wrap:wrap;}
+.cust-pill{background:#e0f2fe!important;color:#0369a1!important;}
+.btn-add-product{background:linear-gradient(135deg,#0284c7,#0ea5e9);color:#fff;border:none;padding:8px 15px;border-radius:9px;font-weight:800;font-size:13px;cursor:pointer;box-shadow:0 2px 6px rgba(2,132,199,.3);}
+.btn-add-product:hover{filter:brightness(1.08);}
+@media (max-width:768px){.pm-grid{grid-template-columns:1fr;}.pm-row3,.pm-row4{grid-template-columns:1fr 1fr;}.modal-backdrop{padding:10px;}}
+@media print{.modal-backdrop{display:none!important;}}
 </style>
 </head>
 <body>
@@ -464,6 +503,10 @@
       <h2>Бүтээгдэхүүн <span class="pill" id="priceTierPill">Жишээ үнэ</span><span class="filter-pill" id="filterCount" style="display:none"></span></h2>
       <p class="small">Захиалагчид хэрэгтэй бүтээгдэхүүнийг сонгож тоо ширхэгийг бөглөнө үү. <strong>USD үнийг шууд засаж болно</strong> (онцгой тохиолдол).</p>
       <input type="text" id="productSearch" class="search-bar" placeholder="Бүтээгдэхүүн хайх — жш. 30kw, 51kWh, panel, hybrid..." />
+      <div style="margin:10px 0 4px; display:flex; align-items:center; gap:10px; flex-wrap:wrap;">
+        <button class="btn-add-product" onclick="openProductModal(null,'panels')">➕ Жагсаалтад байхгүй бүтээгдэхүүн нэмэх</button>
+        <span style="font-size:12px;color:#94a3b8;">Зураг, тайлбар, үнэ, тээврийн жинтэйгээ хамт — үргэлж хадгалагдана.</span>
+      </div>
       <div id="catalog"></div>
       <div style="margin-top: 8px;">
         <button class="ghost tiny" onclick="resetCatalogPrices()">↺ Засагдсан үнийг бүгдийг сэргээх</button>
@@ -479,7 +522,7 @@
       </div>
       <div id="additional"></div>
       <div style="margin-top: 10px; display: flex; gap: 8px; flex-wrap: wrap;">
-        <button class="ghost tiny" onclick="addCustomItem()">+ Шинэ нэмэлт зүйл</button>
+        <button class="btn-add-product" onclick="openProductModal(null,'additional')">➕ Шинэ нэмэлт зүйл (зурагтай)</button>
         <button class="ghost tiny" onclick="resetAdditionalDefaults()">↺ 30 кВт анхдагч руу буцаах</button>
       </div>
     </div>
@@ -592,6 +635,81 @@
   </div>
 
   <!-- ============== PRINT QUOTE LAYOUT ============== -->
+
+  <!-- ===== Add / edit product modal ===== -->
+  <div class="modal-backdrop" id="prodModal" onclick="if(event.target===this)closeProductModal()">
+    <div class="modal-box">
+      <div class="modal-head">
+        <h3 id="pmTitle">➕ Шинэ бүтээгдэхүүн нэмэх</h3>
+        <button class="modal-x" onclick="closeProductModal()" title="Хаах">×</button>
+      </div>
+      <div class="modal-body">
+        <div class="pm-grid">
+          <div class="pm-photo">
+            <label>Зураг</label>
+            <div class="pm-drop" id="pmDrop">
+              <img id="pmPreview" style="display:none" alt="" />
+              <div class="pm-drop-hint" id="pmHint">📷<br>Зураг сонгох<br><span>эсвэл энд чирж оруулна уу</span></div>
+            </div>
+            <input type="file" id="pmFile" accept="image/*" style="display:none" />
+            <div style="margin-top:8px; display:flex; gap:6px;">
+              <button class="ghost tiny" type="button" onclick="document.getElementById('pmFile').click()">📁 Файл сонгох</button>
+              <button class="ghost tiny" type="button" onclick="pmSetImage(null)">× Арилгах</button>
+            </div>
+            <div class="pm-hint">JPG / PNG. Автоматаар багасгаж хадгална.</div>
+          </div>
+          <div class="pm-fields">
+            <label>Ангилал *</label>
+            <select id="pmCat">
+              <option value="panels">☀️ Нарны панель</option>
+              <option value="brackets">🔧 Суурь хүрээ</option>
+              <option value="inverters">⚡ Инвертер</option>
+              <option value="batteries">🔋 Аккумулятор</option>
+              <option value="bess">📦 Цогц BESS (All-in-One)</option>
+              <option value="additional">➕ Нэмэлт бүтээгдэхүүн ба дагалдах хэрэгсэл</option>
+            </select>
+            <label>Бүтээгдэхүүний нэр *</label>
+            <input type="text" id="pmName" placeholder="жш: Нарны панель 550W" />
+            <label>Тайлбар / үзүүлэлт <span style="font-weight:400;color:#94a3b8">(мөр бүрт нэг үзүүлэлт)</span></label>
+            <textarea id="pmDesc" rows="4" placeholder="N-type Mono&#10;Хэмжээ: 2278×1134×30mm&#10;25 жил баталгаа"></textarea>
+            <div class="pm-row3">
+              <div>
+                <label>Нэгжийн үнэ (USD) *</label>
+                <input type="number" id="pmPrice" step="0.01" min="0" placeholder="0.00" />
+              </div>
+              <div>
+                <label>Тоо ширхэг</label>
+                <input type="number" id="pmQty" step="1" min="0" value="1" />
+              </div>
+              <div>
+                <label>Хэмжих нэгж</label>
+                <input type="text" id="pmUnit" placeholder="ш / м / кг" />
+              </div>
+            </div>
+            <label class="pm-check"><input type="checkbox" id="pmGift" /> 🎁 Бэлэг болгож өгөх (үнэгүй)</label>
+          </div>
+        </div>
+        <details class="pm-ship">
+          <summary>🚚 Тээврийн мэдээлэл (заавал биш — оруулбал жин/эзлэхүүний тооцоонд орно)</summary>
+          <div class="pm-row4">
+            <div><label>Жин (кг)</label><input type="number" id="pmKg" step="0.1" min="0" placeholder="0" /></div>
+            <div><label>Урт (мм)</label><input type="number" id="pmL" step="1" min="0" placeholder="0" /></div>
+            <div><label>Өргөн (мм)</label><input type="number" id="pmW" step="1" min="0" placeholder="0" /></div>
+            <div><label>Өндөр (мм)</label><input type="number" id="pmH" step="1" min="0" placeholder="0" /></div>
+          </div>
+          <label>Нэг боодолд багтах тоо</label>
+          <input type="number" id="pmPer" step="1" min="1" placeholder="1" />
+          <div class="pm-hint">Жин, хэмжээ нь <strong>нэг боодлын</strong> дүн. Ганцаарчилсан савлагаатай бол "нэг боодолд багтах тоо" = 1.</div>
+        </details>
+        <div id="pmError" class="pm-error" style="display:none"></div>
+      </div>
+      <div class="modal-foot">
+        <button class="ghost" onclick="closeProductModal()">Болих</button>
+        <button class="primary" onclick="saveProductModal()">💾 Хадгалах</button>
+      </div>
+    </div>
+  </div>
+
   <div class="print-only" id="printArea">
     <div class="p-watermark" aria-hidden="true"><img id="p_watermarkImg" alt="" /></div>
     <div class="p-header">
@@ -737,6 +855,11 @@
     phone: '<svg viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg"><rect x="18" y="6" width="24" height="48" rx="4" fill="#1f2937"/><rect x="21" y="12" width="18" height="34" rx="1" fill="#e0f2fe"/><circle cx="30" cy="50" r="2.5" fill="#9ca3af"/><path d="M25 27 l4 4 l7 -9" stroke="#16a34a" stroke-width="2.5" fill="none"/></svg>',
   };
 
+  function renderProductIcon(p) {
+    if (p && p.img) return '<img src="' + p.img + '" alt="" />';
+    return renderIcon(p && p.icon);
+  }
+
   function renderIcon(key) {
     if (PRODUCT_IMAGES[key]) return `<img src="${PRODUCT_IMAGES[key]}" alt="${key}"/>`;
     if (SVG_FALLBACK[key]) return SVG_FALLBACK[key];
@@ -872,8 +995,9 @@
     document.querySelectorAll('#catalog tr[data-idx]').forEach(row => {
       const qty = parseFloat(row.querySelector('.qty-input').value) || 0;
       if (qty <= 0) return;
-      const p = PRODUCTS[parseInt(row.getAttribute('data-idx'))];
-      const s = SHIP[p.name];
+      const p = resolveProduct(row.getAttribute('data-idx'));
+      if (!p) return;
+      const s = p.ship || SHIP[p.name];
       if (!s) { missing.push(`${p.name} ×${qty}`); return; }
       const units = s.units || 1, per = s.per || 1;
       const boxCbm = s.d[0] * s.d[1] * s.d[2] / 1e9;
@@ -889,6 +1013,21 @@
         boxes += units * qty;
       }
       lines.push({ name: p.name, qty, kg: lineKg, cbm: lineCbm, info, note: s.note });
+    });
+
+    // additional items that carry their own shipping data
+    additionalItems.forEach(item => {
+      const qty = parseFloat(item.qty) || 0;
+      if (qty <= 0 || !item.ship || !(item.ship.kg > 0)) return;
+      const s = item.ship;
+      const per = s.per || 1;
+      const d = s.d || [0,0,0];
+      const boxCbm = (d[0] * d[1] * d[2]) / 1e9;
+      const lineKg = s.kg / per * qty;
+      const lineCbm = boxCbm / per * qty;
+      kg += lineKg; cbm += lineCbm;
+      boxes += Math.ceil(qty / per);
+      lines.push({ name: item.name, qty, kg: lineKg, cbm: lineCbm, info: '', note: '' });
     });
 
     const linesEl = document.getElementById('shipLines');
@@ -922,6 +1061,9 @@
   ];
 
   // SYSTEM PRESETS — quantities for catalog products by index when applied
+  // 2026-09-01: default panel switched 590W -> 710W (panelIdx 3). Panel/bracket counts
+  // recalculated so each preset's array kW stays the same as before (rounded up to stay
+  // at or above the nominal system size). e.g. 30 kW: 52x590W (30.7 kW) -> 43x710W (30.5 kW).
   // NEW INDICES (2026/6/8 catalog):
   //   panels: 590W=0, 630W=1, 650W=2, 710W=3 | brackets: ground=4, roof=5
   //   inverters LV: 6kW=6, 8kW=7, 10kW=8, 12kW=9, 12kW 3ph=10, 15kW 3ph=11
@@ -930,22 +1072,59 @@
   //   batteries LV: 5kWh=24, 10kWh=25, 15kWh=26, 16kWh=27
   //   batteries HV: 31kWh=28, 41kWh=29, 51kWh=30, 62kWh=31, 90kWh=32, 108kWh=33, 144kWh=34, 180kWh=35, 217kWh=36, 241kWh=37
   const PRESETS = {
-    5:   { panelIdx: 0, panelQty: 9,   bracketIdx: 5, bracketQty: 9,   inverterIdx: 6,  inverterQty: 1, batteryIdx: 24, batteryQty: 1, pvCable: 150, mc4: 6,   combinerName: 'PV нэгтгэгч хайрцаг 2 IN 2 OUT' },
-    8:   { panelIdx: 0, panelQty: 14,  bracketIdx: 5, bracketQty: 14,  inverterIdx: 7,  inverterQty: 1, batteryIdx: 25, batteryQty: 1, pvCable: 200, mc4: 8,   combinerName: 'PV нэгтгэгч хайрцаг 2 IN 2 OUT' },
-    10:  { panelIdx: 0, panelQty: 17,  bracketIdx: 5, bracketQty: 17,  inverterIdx: 8,  inverterQty: 1, batteryIdx: 26, batteryQty: 1, pvCable: 250, mc4: 10,  combinerName: 'PV нэгтгэгч хайрцаг 2 IN 2 OUT' },
-    12:  { panelIdx: 0, panelQty: 21,  bracketIdx: 5, bracketQty: 21,  inverterIdx: 9,  inverterQty: 1, batteryIdx: 27, batteryQty: 1, pvCable: 300, mc4: 10,  combinerName: 'PV нэгтгэгч хайрцаг 2 IN 2 OUT' },
-    15:  { panelIdx: 0, panelQty: 26,  bracketIdx: 5, bracketQty: 26,  inverterIdx: 12, inverterQty: 1, batteryIdx: 27, batteryQty: 2, pvCable: 200, mc4: 10,  combinerName: 'PV нэгтгэгч хайрцаг 2 IN 2 OUT' },
-    20:  { panelIdx: 0, panelQty: 34,  bracketIdx: 5, bracketQty: 34,  inverterIdx: 13, inverterQty: 1, batteryIdx: 29, batteryQty: 1, pvCable: 400, mc4: 14,  combinerName: 'PV нэгтгэгч хайрцаг 3 IN 3 OUT' },
-    25:  { panelIdx: 0, panelQty: 43,  bracketIdx: 5, bracketQty: 43,  inverterIdx: 14, inverterQty: 1, batteryIdx: 30, batteryQty: 1, pvCable: 450, mc4: 16,  combinerName: 'PV нэгтгэгч хайрцаг 3 IN 3 OUT' },
-    30:  { panelIdx: 0, panelQty: 52,  bracketIdx: 5, bracketQty: 52,  inverterIdx: 15, inverterQty: 1, batteryIdx: 30, batteryQty: 1, pvCable: 500, mc4: 10,  combinerName: 'PV нэгтгэгч хайрцаг 3 IN 3 OUT' },
-    50:  { panelIdx: 0, panelQty: 90,  bracketIdx: 5, bracketQty: 90,  inverterIdx: 19, inverterQty: 1, batteryIdx: 32, batteryQty: 1, pvCable: 800, mc4: 30,  combinerName: 'PV нэгтгэгч хайрцаг 4 IN 4 OUT', combinerPrice: 271.40 },
-    125: { panelIdx: 0, panelQty: 165, bracketIdx: 5, bracketQty: 165, inverterIdx: 23, inverterQty: 1, batteryIdx: 33, batteryQty: 1, pvCable: 1500, mc4: 100, combinerName: 'PV нэгтгэгч хайрцаг 4 IN 4 OUT', combinerPrice: 271.40 },
+    5:   { panelIdx: 3, panelQty: 8,   bracketIdx: 5, bracketQty: 8,   inverterIdx: 6,  inverterQty: 1, batteryIdx: 24, batteryQty: 1, pvCable: 150, mc4: 6,   combinerName: 'PV нэгтгэгч хайрцаг 2 IN 2 OUT' },
+    8:   { panelIdx: 3, panelQty: 12,  bracketIdx: 5, bracketQty: 12,  inverterIdx: 7,  inverterQty: 1, batteryIdx: 25, batteryQty: 1, pvCable: 200, mc4: 8,   combinerName: 'PV нэгтгэгч хайрцаг 2 IN 2 OUT' },
+    10:  { panelIdx: 3, panelQty: 15,  bracketIdx: 5, bracketQty: 15,  inverterIdx: 8,  inverterQty: 1, batteryIdx: 26, batteryQty: 1, pvCable: 250, mc4: 10,  combinerName: 'PV нэгтгэгч хайрцаг 2 IN 2 OUT' },
+    12:  { panelIdx: 3, panelQty: 17,  bracketIdx: 5, bracketQty: 17,  inverterIdx: 9,  inverterQty: 1, batteryIdx: 27, batteryQty: 1, pvCable: 300, mc4: 10,  combinerName: 'PV нэгтгэгч хайрцаг 2 IN 2 OUT' },
+    15:  { panelIdx: 3, panelQty: 22,  bracketIdx: 5, bracketQty: 22,  inverterIdx: 12, inverterQty: 1, batteryIdx: 27, batteryQty: 2, pvCable: 200, mc4: 10,  combinerName: 'PV нэгтгэгч хайрцаг 2 IN 2 OUT' },
+    20:  { panelIdx: 3, panelQty: 29,  bracketIdx: 5, bracketQty: 29,  inverterIdx: 13, inverterQty: 1, batteryIdx: 29, batteryQty: 1, pvCable: 400, mc4: 14,  combinerName: 'PV нэгтгэгч хайрцаг 3 IN 3 OUT' },
+    25:  { panelIdx: 3, panelQty: 36,  bracketIdx: 5, bracketQty: 36,  inverterIdx: 14, inverterQty: 1, batteryIdx: 30, batteryQty: 1, pvCable: 450, mc4: 16,  combinerName: 'PV нэгтгэгч хайрцаг 3 IN 3 OUT' },
+    30:  { panelIdx: 3, panelQty: 43,  bracketIdx: 5, bracketQty: 43,  inverterIdx: 15, inverterQty: 1, batteryIdx: 30, batteryQty: 1, pvCable: 500, mc4: 10,  combinerName: 'PV нэгтгэгч хайрцаг 3 IN 3 OUT' },
+    50:  { panelIdx: 3, panelQty: 75,  bracketIdx: 5, bracketQty: 75,  inverterIdx: 19, inverterQty: 1, batteryIdx: 32, batteryQty: 1, pvCable: 800, mc4: 30,  combinerName: 'PV нэгтгэгч хайрцаг 4 IN 4 OUT', combinerPrice: 271.40 },
+    125: { panelIdx: 3, panelQty: 137, bracketIdx: 5, bracketQty: 137, inverterIdx: 23, inverterQty: 1, batteryIdx: 33, batteryQty: 1, pvCable: 1500, mc4: 100, combinerName: 'PV нэгтгэгч хайрцаг 4 IN 4 OUT', combinerPrice: 271.40 },
   };
 
   let additionalItems = [];
 
   const SETTINGS_KEY = 'meccSolar_v4_settings';
   const ADDITIONAL_KEY = 'meccSolar_v4_additional';
+  const CUSTOM_KEY = 'meccSolar_v4_customProducts';
+
+  // ======== CUSTOM (user-added) PRODUCTS ========
+  let customProducts = [];
+  function loadCustomProducts() {
+    try { customProducts = JSON.parse(localStorage.getItem(CUSTOM_KEY) || '[]'); } catch(_) { customProducts = []; }
+    if (!Array.isArray(customProducts)) customProducts = [];
+  }
+  function saveCustomProducts() {
+    try { localStorage.setItem(CUSTOM_KEY, JSON.stringify(customProducts)); }
+    catch(e) { alert('Хадгалах зай дүүрлээ. Зургийг арай жижиг файлаар оруулна уу, эсвэл хуучин бүтээгдэхүүнээс устгана уу.'); }
+  }
+  function productKey(p) { return (p && p.cid) ? ('c:' + p.cid) : String(PRODUCTS.indexOf(p)); }
+  function resolveProduct(key) {
+    var k = String(key);
+    if (k.indexOf('c:') === 0) return customProducts.find(function(p){ return p.cid === k.slice(2); });
+    return PRODUCTS[parseInt(k)];
+  }
+  function allCatalogProducts() {
+    var out = PRODUCTS.map(function(p, i){ return { p: p, key: String(i) }; });
+    customProducts.forEach(function(c){ if (c.cat !== 'additional') out.push({ p: c, key: 'c:' + c.cid }); });
+    return out;
+  }
+  function captureCatalogQty() {
+    var m = {};
+    document.querySelectorAll('#catalog .qty-input').forEach(function(i){ var v = parseFloat(i.value) || 0; if (v) m[i.dataset.idx] = v; });
+    return m;
+  }
+  function restoreCatalogQty(m) {
+    Object.keys(m || {}).forEach(function(k){
+      var i = document.querySelector('#catalog .qty-input[data-idx="' + k + '"]');
+      if (i) i.value = m[k];
+    });
+  }
+  function rebuildCatalogKeepQty() {
+    var m = captureCatalogQty(); buildCatalog(); restoreCatalogQty(m);
+  }
 
   function fmtUsd(n) { return '$' + n.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }); }
   function fmtMnt(n) { return Math.round(n).toLocaleString('en-US') + ' ₮'; }
@@ -964,7 +1143,7 @@
     const container = document.getElementById('catalog');
     container.innerHTML = '';
     const groups = {};
-    PRODUCTS.forEach((p, i) => { (groups[p.cat] = groups[p.cat] || []).push({ ...p, idx: i }); });
+    allCatalogProducts().forEach(({ p, key }) => { (groups[p.cat] = groups[p.cat] || []).push({ ...p, idx: key }); });
 
     ['panels','brackets','inverters','batteries','bess'].forEach(catKey => {
       if (!groups[catKey]) return;
@@ -992,14 +1171,15 @@
         <tbody>
           ${groups[catKey].map(p => `
             <tr data-idx="${p.idx}">
-              <td class="img"><div class="icon-box">${renderIcon(p.icon)}</div></td>
+              <td class="img"><div class="icon-box">${renderProductIcon(p)}</div></td>
               <td>
-                <div class="name">${p.name}</div>
-                <div class="desc">${p.desc.replace(/\n/g, '<br>')}</div>
+                <div class="name">${p.name}${p.freeLabel ? ' <span class="pill" style="background:#dcfce7;color:#16a34a;">Бэлэг</span>' : ''}</div>
+                <div class="desc">${(p.desc || '').replace(/\n/g, '<br>')}</div>
+                ${p.cid ? `<div class="cust-actions"><span class="pill cust-pill">Миний нэмсэн</span><button class="ghost tiny" onclick="openProductModal('c:${p.cid}')" title="Засах">✎ Засах</button><button class="ghost tiny" onclick="deleteCustomProduct('${p.cid}')" title="Устгах">× Устгах</button></div>` : ''}
               </td>
               <td class="price" data-label="Нэгж (USD)"><input type="number" class="price-input-catalog catalog-price-input ${catalogPriceOverrides[p.idx] != null ? 'overridden' : ''}" data-idx="${p.idx}" value="${(catalogPriceOverrides[p.idx] != null ? catalogPriceOverrides[p.idx] : priceFor(p)).toFixed(2)}" step="0.01" min="0" /></td>
               <td class="price unit-mnt" data-label="Нэгж (₮)">${fmtMnt(getCatalogPrice(p) * getRate())}</td>
-              <td class="qty" data-label="Тоо"><input type="number" min="0" step="1" value="0" class="qty-input" data-idx="${p.idx}" /></td>
+              <td class="qty" data-label="Тоо"><input type="number" min="0" step="1" value="0" class="qty-input" data-idx="${p.idx}" />${p.unit ? `<div class="small">${p.unit}</div>` : ''}</td>
               <td class="price line-total" data-label="Нийт үнэ (₮)">0 ₮</td>
             </tr>
           `).join('')}
@@ -1011,6 +1191,10 @@
 
     container.querySelectorAll('.qty-input').forEach(input => {
       input.addEventListener('input', recalc);
+    });
+    // wire up the editable USD price boxes (was never bound before)
+    container.querySelectorAll('.catalog-price-input').forEach(input => {
+      input.addEventListener('input', onCatalogPriceInput);
     });
   }
 
@@ -1027,13 +1211,13 @@
           <th class="price">Нэгжийн үнэ (USD)</th>
           <th class="qty">Тоо</th>
           <th class="price">Нийт үнэ (₮)</th>
-          <th style="width:30px;"></th>
+          <th style="width:66px;"></th>
         </tr>
       </thead>
       <tbody>
         ${additionalItems.map((item, i) => `
           <tr data-add-idx="${i}" class="${item.qty > 0 ? 'has-qty' : ''}">
-            <td class="img"><div class="icon-box">${renderIcon(item.icon)}</div></td>
+            <td class="img"><div class="icon-box">${renderProductIcon(item)}</div></td>
             <td>
               <div class="name">${item.name}${item.required ? ' <span class="required-mark">*</span>' : ''}${item.freeLabel ? ' <span class="pill" style="background:#dcfce7;color:#16a34a;">Бэлэг</span>' : ''}</div>
               <div class="desc">${item.desc || ''}</div>
@@ -1044,7 +1228,7 @@
               ${item.unit ? `<div class="small">${item.unit}</div>` : ''}
             </td>
             <td class="price add-line-total" data-label="Нийт үнэ (₮)">0 ₮</td>
-            <td>${item.required ? '' : `<button class="ghost tiny" onclick="removeAdditional(${i})" title="Устгах">×</button>`}</td>
+            <td style="white-space:nowrap"><button class="ghost tiny" onclick="openProductModal('a:${i}')" title="Засах / зураг нэмэх">✎</button>${item.required ? '' : `<button class="ghost tiny" onclick="removeAdditional(${i})" title="Устгах">×</button>`}</td>
           </tr>
         `).join('')}
       </tbody>
@@ -1071,14 +1255,7 @@
     buildAdditional(); recalc(); saveAdditional();
   }
 
-  function addCustomItem() {
-    const name = prompt('Шинэ нэмэлт бүтээгдэхүүний нэр:');
-    if (!name) return;
-    const price = parseFloat(prompt('Нэгжийн үнэ (USD):', '0')) || 0;
-    const qty = parseFloat(prompt('Тоо ширхэг:', '1')) || 0;
-    additionalItems.push({ icon: 'custom', name: name, desc: '', qty: qty, price: price });
-    buildAdditional(); recalc(); saveAdditional();
-  }
+  function addCustomItem() { openProductModal(null, 'additional'); }
 
   function resetAdditionalDefaults() {
     if (!confirm('Нэмэлт бүтээгдэхүүний жагсаалтыг 30 кВт системийн анхдагч руу буцаах уу?')) return;
@@ -1133,9 +1310,10 @@
     let subtotalUsd = 0;
 
     document.querySelectorAll('#catalog tr[data-idx]').forEach(row => {
-      const idx = parseInt(row.getAttribute('data-idx'));
-      const p = PRODUCTS[idx];
-      const unitUsd = getCatalogPrice(p);
+      const idx = row.getAttribute('data-idx');
+      const p = resolveProduct(idx);
+      if (!p) return;
+      const unitUsd = getCatalogPrice(p, idx);
       const unitMnt = unitUsd * rate;
       const qty = parseFloat(row.querySelector('.qty-input').value) || 0;
       const lineMnt = unitMnt * qty;
@@ -1243,25 +1421,26 @@
     let lineNum = 1;
 
     document.querySelectorAll('#catalog tr[data-idx]').forEach(row => {
-      const idx = parseInt(row.getAttribute('data-idx'));
-      const p = PRODUCTS[idx];
+      const idx = row.getAttribute('data-idx');
+      const p = resolveProduct(idx);
+      if (!p) return;
       const qty = parseFloat(row.querySelector('.qty-input').value) || 0;
       if (qty <= 0) return;
-      const unitUsd = priceFor(p);
+      const unitUsd = getCatalogPrice(p, idx);
       const unitMnt = unitUsd * rate;
       const lineMnt = unitMnt * qty;
       subtotalUsd += unitUsd * qty;
       const tr = document.createElement('tr');
       tr.innerHTML = `
         <td>${lineNum++}</td>
-        <td class="img"><div class="item-icon-box">${renderIcon(p.icon)}</div></td>
+        <td class="img"><div class="item-icon-box">${renderProductIcon(p)}</div></td>
         <td>
           <div class="item-name">${p.name}</div>
-          <div class="item-desc">${p.desc}</div>
+          <div class="item-desc">${p.desc || ''}</div>
         </td>
-        <td class="qty">${qty}</td>
-        <td class="num">${fmtMnt(unitMnt)}</td>
-        <td class="num">${fmtMnt(lineMnt)}</td>
+        <td class="qty">${qty}${p.unit ? ' ' + p.unit : ''}</td>
+        <td class="num">${p.freeLabel ? `<span class="gift-pill">${printMode==='en'?'Gift':'Бэлэг'}</span>` : fmtMnt(unitMnt)}</td>
+        <td class="num">${p.freeLabel ? `<span class="gift-pill">${printMode==='en'?'Gift':'Бэлэг'}</span>` : fmtMnt(lineMnt)}</td>
       `;
       body.appendChild(tr);
     });
@@ -1276,7 +1455,7 @@
       const tr = document.createElement('tr');
       tr.innerHTML = `
         <td>${lineNum++}</td>
-        <td class="img"><div class="item-icon-box">${renderIcon(item.icon)}</div></td>
+        <td class="img"><div class="item-icon-box">${renderProductIcon(item)}</div></td>
         <td>
           <div class="item-name">${item.name}</div>
           <div class="item-desc">${item.desc || ''}</div>
@@ -1403,17 +1582,19 @@
   let savedOptions = {};  // {A: snapshot, B: snapshot, C: snapshot}
   let printMode = 'mn';   // 'mn' | 'en' | 'compare'
 
-  function getCatalogPrice(p) {
-    const idx = PRODUCTS.indexOf(p);
-    if (catalogPriceOverrides[idx] != null) return parseFloat(catalogPriceOverrides[idx]);
+  function getCatalogPrice(p, key) {
+    const k = (key != null) ? String(key) : ((p && p.idx != null) ? String(p.idx) : productKey(p));
+    if (catalogPriceOverrides[k] != null) return parseFloat(catalogPriceOverrides[k]);
     return priceFor(p);
   }
 
   // ---------- catalog price override ----------
   function onCatalogPriceInput(e) {
-    const idx = parseInt(e.target.dataset.idx);
+    const idx = e.target.dataset.idx;
     const val = parseFloat(e.target.value);
-    const base = priceFor(PRODUCTS[idx]);
+    const prod = resolveProduct(idx);
+    if (!prod) return;
+    const base = priceFor(prod);
     if (!isNaN(val) && Math.abs(val - base) > 0.005) {
       catalogPriceOverrides[idx] = val;
       e.target.classList.add('overridden');
@@ -1441,8 +1622,9 @@
     document.querySelectorAll('#catalog .category-block').forEach(block => {
       let anyVisible = false;
       block.querySelectorAll('tr[data-idx]').forEach(row => {
-        const p = PRODUCTS[parseInt(row.getAttribute('data-idx'))];
-        const hay = (p.name + ' ' + p.desc).toLowerCase();
+        const p = resolveProduct(row.getAttribute('data-idx'));
+        if (!p) { row.style.display = 'none'; return; }
+        const hay = (p.name + ' ' + (p.desc || '')).toLowerCase();
         const match = !q || hay.includes(q);
         row.style.display = match ? '' : 'none';
         if (match) { anyVisible = true; matchedTotal++; }
@@ -1488,11 +1670,6 @@
 
   function applySnapshot(snap) {
     if (!snap) return;
-    document.querySelectorAll('#catalog .qty-input').forEach(inp => inp.value = 0);
-    Object.entries(snap.catalogQty || {}).forEach(([idx, qty]) => {
-      const inp = document.querySelector(`#catalog .qty-input[data-idx="${idx}"]`);
-      if (inp) inp.value = qty;
-    });
     catalogPriceOverrides = snap.catalogOverrides || {};
     additionalItems = snap.additionalItems ? JSON.parse(JSON.stringify(snap.additionalItems)) : JSON.parse(JSON.stringify(ADDITIONAL_DEFAULTS));
     ['quoteNumber','systemTitle','customerName','customerPhone','customerAddress','projectDesc','quoteDate','installFee','transportFee','otherFee','discountPct','discountAmt','notes'].forEach(id => {
@@ -1502,6 +1679,12 @@
     if (snap.markup) document.getElementById('markupPct').value = snap.markup;
     buildCatalog();
     buildAdditional();
+    // set quantities AFTER the tables are rebuilt, otherwise they get wiped
+    document.querySelectorAll('#catalog .qty-input').forEach(inp => inp.value = 0);
+    Object.entries(snap.catalogQty || {}).forEach(([idx, qty]) => {
+      const inp = document.querySelector(`#catalog .qty-input[data-idx="${idx}"]`);
+      if (inp) inp.value = qty;
+    });
     recalc();
   }
 
@@ -1631,6 +1814,7 @@
       customers: localStorage.getItem(CUSTOMERS_KEY),
       options: localStorage.getItem(OPTIONS_KEY),
       overrides: localStorage.getItem(OVERRIDES_KEY),
+      custom: localStorage.getItem(CUSTOM_KEY),
     };
     const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
     const url = URL.createObjectURL(blob);
@@ -1657,6 +1841,7 @@
         if (data.customers) localStorage.setItem(CUSTOMERS_KEY, data.customers);
         if (data.options) localStorage.setItem(OPTIONS_KEY, data.options);
         if (data.overrides) localStorage.setItem(OVERRIDES_KEY, data.overrides);
+        if (data.custom) localStorage.setItem(CUSTOM_KEY, data.custom);
         alert('Backup амжилттай сэргээгдлээ. Хуудас дахин ачаалагдана.');
         location.reload();
       } catch(err) {
@@ -1746,8 +1931,9 @@
     const totals = {};
     stored.forEach(L => totals[L] = 0);
     // Catalog rows
-    Array.from(usedIdx).sort((a,b)=>parseInt(a)-parseInt(b)).forEach(idx => {
-      const p = PRODUCTS[parseInt(idx)];
+    Array.from(usedIdx).sort((a,b)=>String(a).localeCompare(String(b), undefined, {numeric:true})).forEach(idx => {
+      const p = resolveProduct(idx);
+      if (!p) return;
       const tr = document.createElement('tr');
       let cells = '';
       stored.forEach(L => {
@@ -1760,7 +1946,7 @@
       });
       tr.innerHTML = `
         <td>${n++}</td>
-        <td class="img"><div class="item-icon-box">${renderIcon(p.icon)}</div></td>
+        <td class="img"><div class="item-icon-box">${renderProductIcon(p)}</div></td>
         <td><div class="item-name">${p.name}</div><div class="item-desc">${p.desc}</div></td>
         ${cells}
       `;
@@ -1782,7 +1968,7 @@
       });
       tr.innerHTML = `
         <td>${n++}</td>
-        <td class="img"><div class="item-icon-box">${renderIcon(sample.icon)}</div></td>
+        <td class="img"><div class="item-icon-box">${renderProductIcon(sample)}</div></td>
         <td><div class="item-name">${name}</div></td>
         ${cells}
       `;
@@ -1810,8 +1996,181 @@
     }).join('');
   }
 
+
+  // ================= ADD / EDIT PRODUCT MODAL =================
+  let pmEditKey = null;   // null | 'c:<cid>' | 'a:<index>'
+  let pmImage = null;
+
+  function pmVal(id) { return document.getElementById(id).value; }
+  function pmNum(id) { const v = parseFloat(document.getElementById(id).value); return isNaN(v) ? 0 : v; }
+  function pmErr(msg) {
+    const e = document.getElementById('pmError');
+    e.textContent = msg; e.style.display = msg ? '' : 'none';
+  }
+
+  function pmSetImage(dataUrl) {
+    pmImage = dataUrl || null;
+    const img = document.getElementById('pmPreview');
+    const hint = document.getElementById('pmHint');
+    if (pmImage) { img.src = pmImage; img.style.display = ''; hint.style.display = 'none'; }
+    else { img.removeAttribute('src'); img.style.display = 'none'; hint.style.display = ''; }
+  }
+
+  function pmHandleFile(file) {
+    if (!file) return;
+    if (!/^image\//.test(file.type)) { pmErr('Зөвхөн зургийн файл оруулна уу (JPG, PNG).'); return; }
+    pmErr('');
+    const reader = new FileReader();
+    reader.onload = ev => {
+      const im = new Image();
+      im.onload = () => {
+        const MAX = 560;
+        let w = im.width, h = im.height;
+        if (w > MAX || h > MAX) { const r = Math.min(MAX / w, MAX / h); w = Math.round(w * r); h = Math.round(h * r); }
+        const c = document.createElement('canvas');
+        c.width = w; c.height = h;
+        const ctx = c.getContext('2d');
+        ctx.fillStyle = '#ffffff'; ctx.fillRect(0, 0, w, h);
+        ctx.drawImage(im, 0, 0, w, h);
+        pmSetImage(c.toDataURL('image/jpeg', 0.82));
+      };
+      im.onerror = () => pmErr('Зургийг уншиж чадсангүй.');
+      im.src = ev.target.result;
+    };
+    reader.readAsDataURL(file);
+  }
+
+  function openProductModal(key, presetCat) {
+    pmEditKey = key || null;
+    let src = null, curQty = null;
+    if (key && key.indexOf('c:') === 0) {
+      src = customProducts.find(p => p.cid === key.slice(2));
+      const inp = document.querySelector('#catalog .qty-input[data-idx="' + key + '"]');
+      if (inp) curQty = parseFloat(inp.value) || 0;
+    } else if (key && key.indexOf('a:') === 0) {
+      src = additionalItems[parseInt(key.slice(2))];
+    }
+    document.getElementById('pmTitle').textContent = src ? '✎ Бүтээгдэхүүн засах' : '➕ Шинэ бүтээгдэхүүн нэмэх';
+    document.getElementById('pmCat').value = src ? (src.cid ? src.cat : 'additional') : (presetCat || 'panels');
+    document.getElementById('pmName').value = src ? (src.name || '') : '';
+    document.getElementById('pmDesc').value = src ? (src.desc || '') : '';
+    document.getElementById('pmPrice').value = src ? (src.cid ? (src.sample != null ? src.sample : 0) : (src.price != null ? src.price : 0)) : '';
+    document.getElementById('pmQty').value = src ? (curQty != null ? curQty : (src.qty != null ? src.qty : 1)) : 1;
+    document.getElementById('pmUnit').value = src ? (src.unit || '') : '';
+    document.getElementById('pmGift').checked = !!(src && src.freeLabel);
+    const sh = (src && src.ship) || {};
+    const d = sh.d || [];
+    document.getElementById('pmKg').value = sh.kg || '';
+    document.getElementById('pmL').value = d[0] || '';
+    document.getElementById('pmW').value = d[1] || '';
+    document.getElementById('pmH').value = d[2] || '';
+    document.getElementById('pmPer').value = sh.per || '';
+    pmSetImage(src && src.img ? src.img : null);
+    pmErr('');
+    document.getElementById('prodModal').classList.add('open');
+    setTimeout(() => document.getElementById('pmName').focus(), 60);
+  }
+
+  function closeProductModal() {
+    document.getElementById('prodModal').classList.remove('open');
+    pmEditKey = null; pmImage = null;
+  }
+
+  function saveProductModal() {
+    const name = pmVal('pmName').trim();
+    if (!name) { pmErr('Бүтээгдэхүүний нэрийг заавал бичнэ үү.'); document.getElementById('pmName').focus(); return; }
+    const cat = pmVal('pmCat');
+    const gift = document.getElementById('pmGift').checked;
+    const price = gift ? 0 : pmNum('pmPrice');
+    const qty = pmNum('pmQty');
+    const unit = pmVal('pmUnit').trim();
+    const desc = pmVal('pmDesc').trim();
+    const kg = pmNum('pmKg');
+    const ship = kg > 0 ? { kg: kg, d: [pmNum('pmL'), pmNum('pmW'), pmNum('pmH')], per: Math.max(1, pmNum('pmPer') || 1) } : null;
+
+    const wasCustom = pmEditKey && pmEditKey.indexOf('c:') === 0;
+    const wasAdd = pmEditKey && pmEditKey.indexOf('a:') === 0;
+
+    if (cat === 'additional') {
+      const item = { icon: 'custom', img: pmImage || null, name: name, desc: desc, qty: qty,
+                     price: price, unit: unit || '', freeLabel: gift, ship: ship, custom: true };
+      if (wasAdd) {
+        const i = parseInt(pmEditKey.slice(2));
+        const old = additionalItems[i] || {};
+        item.required = old.required;
+        if (!item.img && old.icon && !old.custom) item.icon = old.icon;
+        additionalItems[i] = item;
+      } else {
+        if (wasCustom) {
+          const cid = pmEditKey.slice(2);
+          customProducts = customProducts.filter(x => x.cid !== cid);
+          delete catalogPriceOverrides['c:' + cid];
+          saveCustomProducts();
+        }
+        additionalItems.push(item);
+      }
+      saveAdditional();
+      rebuildCatalogKeepQty();
+      buildAdditional();
+    } else {
+      const cid = wasCustom ? pmEditKey.slice(2) : ('p' + Date.now().toString(36) + Math.random().toString(36).slice(2, 6));
+      const obj = { cid: cid, cat: cat, name: name, desc: desc, unit: unit || '', img: pmImage || null,
+                    sample: price, moq: price, freeLabel: gift, ship: ship, icon: 'custom', custom: true };
+      const at = customProducts.findIndex(p => p.cid === cid);
+      if (at >= 0) customProducts[at] = obj; else customProducts.push(obj);
+      saveCustomProducts();
+      if (wasAdd) { additionalItems.splice(parseInt(pmEditKey.slice(2)), 1); saveAdditional(); }
+      rebuildCatalogKeepQty();
+      buildAdditional();
+      const inp = document.querySelector('#catalog .qty-input[data-idx="c:' + cid + '"]');
+      if (inp) inp.value = qty;
+    }
+    closeProductModal();
+    filterCatalog();
+    recalc();
+  }
+
+  function deleteCustomProduct(cid) {
+    const p = customProducts.find(x => x.cid === cid);
+    if (!p) return;
+    if (!confirm('"' + p.name + '"-г каталогоос бүр мөсөн устгах уу?')) return;
+    customProducts = customProducts.filter(x => x.cid !== cid);
+    delete catalogPriceOverrides['c:' + cid];
+    saveCustomProducts();
+    try { localStorage.setItem(OVERRIDES_KEY, JSON.stringify(catalogPriceOverrides)); } catch(_) {}
+    rebuildCatalogKeepQty();
+    filterCatalog();
+    recalc();
+  }
+
+  function initProductModal() {
+    const drop = document.getElementById('pmDrop');
+    const file = document.getElementById('pmFile');
+    drop.addEventListener('click', () => file.click());
+    file.addEventListener('change', e => { pmHandleFile(e.target.files[0]); e.target.value = ''; });
+    ['dragenter','dragover'].forEach(ev => drop.addEventListener(ev, e => { e.preventDefault(); drop.classList.add('drag'); }));
+    ['dragleave','drop'].forEach(ev => drop.addEventListener(ev, e => { e.preventDefault(); drop.classList.remove('drag'); }));
+    drop.addEventListener('drop', e => { if (e.dataTransfer.files && e.dataTransfer.files[0]) pmHandleFile(e.dataTransfer.files[0]); });
+    document.addEventListener('paste', e => {
+      if (!document.getElementById('prodModal').classList.contains('open')) return;
+      const items = (e.clipboardData || {}).items || [];
+      for (const it of items) { if (it.type && it.type.indexOf('image') === 0) { pmHandleFile(it.getAsFile()); break; } }
+    });
+    document.addEventListener('keydown', e => {
+      if (e.key === 'Escape' && document.getElementById('prodModal').classList.contains('open')) closeProductModal();
+    });
+    document.getElementById('pmGift').addEventListener('change', e => {
+      const pr = document.getElementById('pmPrice');
+      pr.disabled = e.target.checked;
+      pr.style.background = e.target.checked ? '#f1f5f9' : '';
+      if (e.target.checked) pr.value = 0;
+    });
+  }
+
   document.addEventListener('DOMContentLoaded', () => {
     loadAdditional();
+    loadCustomProducts();
+    initProductModal();
     try { catalogPriceOverrides = JSON.parse(localStorage.getItem(OVERRIDES_KEY) || '{}'); } catch(_) { catalogPriceOverrides = {}; }
     loadOptions();
     buildCatalog();
@@ -1840,7 +2199,7 @@
         if (id === 'exchangeRate' || id === 'markupPct') {
           // Changing markup resets all catalog overrides
           if (id !== 'exchangeRate') catalogPriceOverrides = {};
-          buildCatalog();
+          rebuildCatalogKeepQty();
         }
         recalc();
       });
