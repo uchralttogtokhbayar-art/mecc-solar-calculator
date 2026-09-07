@@ -336,6 +336,32 @@
 .btn-add-product:hover{filter:brightness(1.08);}
 @media (max-width:768px){.pm-grid{grid-template-columns:1fr;}.pm-row3,.pm-row4{grid-template-columns:1fr 1fr;}.modal-backdrop{padding:10px;}}
 @media print{.modal-backdrop{display:none!important;}}
+
+/* ===== compact list view + badges ===== */
+.pill-lv, .pill-hv { font-variant-numeric: tabular-nums; font-weight: 800 !important; letter-spacing: .2px; border: 1px solid transparent; }
+.pill-lv { background:#dbeafe !important; color:#1d4ed8 !important; border-color:#bfdbfe; }
+.pill-hv { background:#ede9fe !important; color:#6d28d9 !important; border-color:#ddd6fe; }
+#catalog.compact .pill-lv, #catalog.compact .pill-hv { font-size:10.5px; padding:1px 7px; }
+.cat-toggle { display:inline-flex; align-items:center; gap:6px; font-size:12px; font-weight:700; color:#475569; cursor:pointer; user-select:none; }
+.cat-toggle input { cursor:pointer; }
+.d-sep { display:none; }
+#catalog.compact .d-sep { display:inline; color:#cbd5e1; }
+#catalog.compact .d-br { display:none; }
+#catalog.compact .product-table th.img, #catalog.compact .product-table td.img { width:56px; }
+#catalog.compact .icon-box { width:44px; height:44px; padding:2px; border-radius:5px; }
+#catalog.compact .product-table td { padding:4px 8px; }
+#catalog.compact .product-table th { padding:6px 8px; }
+#catalog.compact .product-table .name { font-size:13px; }
+#catalog.compact .product-table .desc { font-size:11px; margin-top:1px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; max-width:560px; }
+#catalog.compact .cust-actions { margin-top:2px; gap:4px; }
+#catalog.compact .cust-actions button { padding:0 5px; font-size:10px; line-height:16px; }
+#catalog.compact .cust-actions .pill { font-size:9px; padding:0 5px; }
+#catalog.compact .category-block { margin-bottom:16px; }
+#catalog.compact .product-table td input[type="number"] { padding:3px 6px; font-size:12px; }
+@media (max-width:768px){ #catalog.compact .product-table .desc { white-space:normal; max-width:none; } }
+
+.icon-box.clickable { cursor:pointer; transition:border-color .12s, box-shadow .12s; }
+.icon-box.clickable:hover { border-color:#2563eb; box-shadow:0 0 0 2px rgba(37,99,235,.18); }
 </style>
 </head>
 <body>
@@ -503,11 +529,13 @@
       <h2>Бүтээгдэхүүн <span class="pill" id="priceTierPill">Жишээ үнэ</span><span class="filter-pill" id="filterCount" style="display:none"></span></h2>
       <p class="small">Захиалагчид хэрэгтэй бүтээгдэхүүнийг сонгож тоо ширхэгийг бөглөнө үү. <strong>USD үнийг шууд засаж болно</strong> (онцгой тохиолдол).</p>
       <input type="text" id="productSearch" class="search-bar" placeholder="Бүтээгдэхүүн хайх — жш. 30kw, 51kWh, panel, hybrid..." />
-      <div style="margin:10px 0 4px; display:flex; align-items:center; gap:10px; flex-wrap:wrap;">
+      <div style="margin:10px 0 4px; display:flex; align-items:center; gap:14px; flex-wrap:wrap;">
         <button class="btn-add-product" onclick="openProductModal(null,'panels')">➕ Жагсаалтад байхгүй бүтээгдэхүүн нэмэх</button>
-        <span style="font-size:12px;color:#94a3b8;">Зураг, тайлбар, үнэ, тээврийн жинтэйгээ хамт — үргэлж хадгалагдана.</span>
+        <label class="cat-toggle"><input type="checkbox" id="compactMode" checked onchange="toggleCompact()" /> Жагсаалт хэлбэрээр</label>
+        <label class="cat-toggle"><input type="checkbox" id="show1ph" onchange="toggleShow1ph()" /> Нуусан бүтээгдэхүүнийг харуулах</label>
+        <span style="font-size:12px;color:#94a3b8;">📷 Зураг нэмэхийн тулд зургийн нүдэн дээр дарна уу.</span>
       </div>
-      <div id="catalog"></div>
+      <div id="catalog" class="compact"></div>
       <div style="margin-top: 8px;">
         <button class="ghost tiny" onclick="resetCatalogPrices()">↺ Засагдсан үнийг бүгдийг сэргээх</button>
       </div>
@@ -606,6 +634,32 @@
       <span class="lbl" id="optStatus" style="margin-left:auto"></span>
     </div>
 
+    <!-- ==== Гаалийн горим ==== -->
+    <div class="card" id="customsCard" style="border-left:4px solid #b45309">
+      <h2>🛃 Гаалийн горим — дагалдах хэрэгсэл нэгтгэх</h2>
+      <p class="small">Зөвхөн гаалийн мэдүүлэгт зориулсан тусдаа хэвлэлт. Панель / инвертер / аккумулятороос бусад бүх зүйл (суурь хүрээ, кабель, MC4, щит г.м.) нэг мөр болж нэгтгэнэ. Ердийн үнийн санал, нийт дүн, түүх өөрчлөгдөхгүй.</p>
+      <label style="display:flex; align-items:center; gap:8px; cursor:pointer"><input type="checkbox" id="customsEnabled" onchange="onCustomsToggle()"> <strong>Гаалийн горим асаах</strong></label>
+      <div id="customsOpts" style="display:none; margin-top:14px">
+        <div style="display:flex; flex-wrap:wrap; gap:12px">
+          <div style="flex:1 1 220px"><label class="small">Нэгтгэсэн мөрийн нэр</label><input type="text" id="customsLabel" oninput="onCustomsChange()" style="width:100%"></div>
+          <div style="flex:1 1 180px"><label class="small">English name</label><input type="text" id="customsLabelEn" oninput="onCustomsChange()" style="width:100%"></div>
+          <div style="flex:0 1 140px"><label class="small">Хэмжих нэгж</label><input type="text" id="customsUnit" oninput="onCustomsChange()" style="width:100%"></div>
+        </div>
+        <div style="margin-top:12px">
+          <div class="small" style="font-weight:700">Тусдаа мөр болж үлдэх ангилал (бусад нь нэгтгэнэ):</div>
+          <div id="customsCats" style="display:flex; flex-wrap:wrap; gap:12px; margin-top:6px"></div>
+        </div>
+        <div style="margin-top:12px; display:flex; flex-wrap:wrap; gap:18px">
+          <label class="small" style="display:flex; align-items:center; gap:6px; cursor:pointer"><input type="checkbox" id="customsShowList" onchange="onCustomsChange()"> Нэгтгэсэн мөрийн доор багтсан барааны жагсаалт харуулах</label>
+          <label class="small" style="display:flex; align-items:center; gap:6px; cursor:pointer"><input type="checkbox" id="customsEn" onchange="onCustomsChange()"> Англи хэлээр хэвлэх</label>
+        </div>
+        <div id="customsPreview" style="margin-top:14px"></div>
+        <div class="actions" style="margin-top:12px">
+          <button onclick="printQuote('customs')">🛃 Гаалийн хэвлэлт (PDF)</button>
+        </div>
+      </div>
+    </div>
+
     <div class="actions">
       <button onclick="printQuote('mn')">📄 Үнийн санал хэвлэх (МОНГОЛ)</button>
       <button onclick="printQuote('en')" class="primary-navy">📄 Print Quote (ENGLISH)</button>
@@ -664,8 +718,12 @@
               <option value="panels">☀️ Нарны панель</option>
               <option value="brackets">🔧 Суурь хүрээ</option>
               <option value="inverters">⚡ Инвертер</option>
-              <option value="batteries">🔋 Аккумулятор</option>
+              <option value="batteriesLV">🔋 Аккумулятор — нам хүчдэл (48V)</option>
+              <option value="batteriesHV">🔋 Аккумулятор — өндөр хүчдэл (HV)</option>
               <option value="bess">📦 Цогц BESS (All-in-One)</option>
+              <option value="containers">🚢 Контейнер ESS</option>
+              <option value="chargers">⚡ Цэнэглэх станц (EV)</option>
+              <option value="wind">💨 Салхин савлуур</option>
               <option value="additional">➕ Нэмэлт бүтээгдэхүүн ба дагалдах хэрэгсэл</option>
             </select>
             <label>Бүтээгдэхүүний нэр *</label>
@@ -849,15 +907,91 @@
     mc4: '<svg viewBox="0 0 60 30" xmlns="http://www.w3.org/2000/svg"><rect x="2" y="10" width="22" height="10" rx="3" fill="#1f2937"/><rect x="24" y="12" width="4" height="6" fill="#9ca3af"/><rect x="32" y="10" width="22" height="10" rx="3" fill="#1f2937"/><rect x="28" y="12" width="4" height="6" fill="#9ca3af"/><circle cx="10" cy="15" r="2" fill="#fbbf24"/><circle cx="46" cy="15" r="2" fill="#fbbf24"/></svg>',
     lightning: '<svg viewBox="0 0 40 70" xmlns="http://www.w3.org/2000/svg"><polygon points="20,4 17,18 23,18" fill="#fde68a" stroke="#b45309" stroke-width="1"/><rect x="18.5" y="18" width="3" height="40" fill="#9ca3af" stroke="#374151" stroke-width="0.5"/><rect x="10" y="58" width="20" height="6" rx="1" fill="#7c2d12"/><path d="M 20 64 Q 12 67 8 68" fill="none" stroke="#16a34a" stroke-width="2"/><path d="M 20 64 Q 28 67 32 68" fill="none" stroke="#fbbf24" stroke-width="2"/><g fill="#fbbf24"><polygon points="25,30 28,30 26,34 29,34 24,42 26,36 23,36" /></g></svg>',
     design: '<svg viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg"><rect x="6" y="6" width="48" height="48" rx="2" fill="#fef3c7" stroke="#92400e" stroke-width="1.5"/><line x1="12" y1="14" x2="48" y2="14" stroke="#92400e"/><line x1="12" y1="20" x2="44" y2="20" stroke="#92400e"/><line x1="12" y1="26" x2="48" y2="26" stroke="#92400e"/><polygon points="20,40 30,40 35,50 15,50" fill="none" stroke="#dc2626" stroke-width="1"/></svg>',
+    nophoto: '<svg viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg"><rect x="4" y="4" width="52" height="52" rx="6" fill="#f8fafc" stroke="#cbd5e1" stroke-width="1.5" stroke-dasharray="4 3"/><rect x="16" y="24" width="28" height="19" rx="3" fill="none" stroke="#94a3b8" stroke-width="2"/><path d="M23 24 l2.5 -4 h9 l2.5 4" fill="none" stroke="#94a3b8" stroke-width="2" stroke-linejoin="round"/><circle cx="30" cy="33.5" r="5" fill="none" stroke="#94a3b8" stroke-width="2"/><text x="30" y="16" text-anchor="middle" font-size="9" fill="#94a3b8" font-weight="700">ЗУРАГГҮЙ</text></svg>',
+    charger: '<svg viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg"><rect x="14" y="6" width="26" height="42" rx="4" fill="#1e3a8a"/><rect x="18" y="11" width="18" height="14" rx="2" fill="#bfdbfe"/><polygon points="28,29 24,38 27,38 25,45 31,36 28,36 30,29" fill="#fbbf24"/><rect x="12" y="48" width="30" height="5" rx="2" fill="#475569"/><path d="M40 16 h7 a3 3 0 0 1 3 3 v20 a4 4 0 0 1 -8 0 v-8" fill="none" stroke="#64748b" stroke-width="2.5" stroke-linecap="round"/></svg>',
+    wind: '<svg viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg"><rect x="27" y="8" width="6" height="44" rx="1" fill="#94a3b8"/><rect x="20" y="50" width="20" height="4" rx="2" fill="#475569"/><path d="M27 12 C12 18 12 40 27 46 Z" fill="#38bdf8" opacity="0.85"/><path d="M33 12 C48 18 48 40 33 46 Z" fill="#0284c7" opacity="0.85"/><circle cx="30" cy="10" r="3.5" fill="#334155"/></svg>',
+    container: '<svg viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg"><rect x="5" y="18" width="50" height="26" rx="2" fill="#0f766e"/><g stroke="#0d5f5a" stroke-width="2"><line x1="12" y1="18" x2="12" y2="44"/><line x1="20" y1="18" x2="20" y2="44"/><line x1="28" y1="18" x2="28" y2="44"/><line x1="36" y1="18" x2="36" y2="44"/><line x1="44" y1="18" x2="44" y2="44"/></g><rect x="5" y="18" width="50" height="4" fill="#115e59"/><rect x="9" y="44" width="6" height="4" fill="#334155"/><rect x="45" y="44" width="6" height="4" fill="#334155"/></svg>',
     custom: '<svg viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg"><rect x="8" y="8" width="44" height="44" rx="4" fill="#e0f2fe" stroke="#0284c7" stroke-width="1.5" stroke-dasharray="3 2"/><text x="30" y="40" text-anchor="middle" font-size="22" fill="#0284c7" font-weight="700">+</text></svg>',
     concrete: '<svg viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg"><rect x="8" y="36" width="44" height="16" rx="2" fill="#9ca3af"/><rect x="14" y="40" width="32" height="8" fill="#6b7280"/><rect x="26" y="10" width="8" height="26" fill="#d1d5db"/><rect x="23" y="7" width="14" height="6" fill="#9ca3af"/></svg>',
     wifi: '<svg viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg"><path d="M10 26 A28 28 0 0 1 50 26" fill="none" stroke="#0284c7" stroke-width="4" stroke-linecap="round"/><path d="M17 34 A19 19 0 0 1 43 34" fill="none" stroke="#0284c7" stroke-width="4" stroke-linecap="round"/><path d="M24 42 A10 10 0 0 1 36 42" fill="none" stroke="#0284c7" stroke-width="4" stroke-linecap="round"/><circle cx="30" cy="50" r="4" fill="#0284c7"/></svg>',
     phone: '<svg viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg"><rect x="18" y="6" width="24" height="48" rx="4" fill="#1f2937"/><rect x="21" y="12" width="18" height="34" rx="1" fill="#e0f2fe"/><circle cx="30" cy="50" r="2.5" fill="#9ca3af"/><path d="M25 27 l4 4 l7 -9" stroke="#16a34a" stroke-width="2.5" fill="none"/></svg>',
   };
 
-  function renderProductIcon(p) {
+  const PHOTOS_KEY = 'meccSolar_v4_productPhotos';
+  let photoOverrides = {};
+  function loadPhotoOverrides() {
+    try { photoOverrides = JSON.parse(localStorage.getItem(PHOTOS_KEY) || '{}'); } catch(_) { photoOverrides = {}; }
+  }
+  function savePhotoOverrides() {
+    try { localStorage.setItem(PHOTOS_KEY, JSON.stringify(photoOverrides)); }
+    catch(e) { alert('Хадгалах зай дүүрлээ. Зарим зургийг арилгана уу.'); }
+  }
+  function pickProductPhoto(key) {
+    const inp = document.createElement('input');
+    inp.type = 'file'; inp.accept = 'image/*';
+    inp.onchange = e => {
+      const f = e.target.files && e.target.files[0];
+      if (!f) return;
+      resizeImageFile(f, url => {
+        photoOverrides[String(key)] = url;
+        savePhotoOverrides(); rebuildCatalogKeepQty(); filterCatalog(); recalc();
+      });
+    };
+    inp.click();
+  }
+  function clearProductPhoto(key) {
+    delete photoOverrides[String(key)];
+    savePhotoOverrides(); rebuildCatalogKeepQty(); filterCatalog(); recalc();
+  }
+
+  function renderProductIcon(p, key) {
+    const k = (key != null) ? String(key) : ((p && p.idx != null) ? String(p.idx) : '');
+    if (k && photoOverrides[k]) return '<img src="' + photoOverrides[k] + '" alt="" />';
     if (p && p.img) return '<img src="' + p.img + '" alt="" />';
     return renderIcon(p && p.icon);
+  }
+
+  // shared image downscaler (modal + per-product photos)
+  function resizeImageFile(file, cb) {
+    if (!file || !/^image\//.test(file.type)) { alert('Зөвхөн зургийн файл (JPG, PNG).'); return; }
+    const reader = new FileReader();
+    reader.onload = ev => {
+      const im = new Image();
+      im.onload = () => {
+        const MAX = 560;
+        let w = im.width, h = im.height;
+        if (w > MAX || h > MAX) { const r = Math.min(MAX / w, MAX / h); w = Math.round(w * r); h = Math.round(h * r); }
+        const c = document.createElement('canvas');
+        c.width = w; c.height = h;
+        const ctx = c.getContext('2d');
+        ctx.fillStyle = '#ffffff'; ctx.fillRect(0, 0, w, h);
+        ctx.drawImage(im, 0, 0, w, h);
+        cb(c.toDataURL('image/jpeg', 0.82));
+      };
+      im.onerror = () => alert('Зургийг уншиж чадсангүй.');
+      im.src = ev.target.result;
+    };
+    reader.readAsDataURL(file);
+  }
+
+  // battery-voltage badge colour: high voltage = purple, 48V class = blue
+  function bvClass(bv) {
+    const n = parseFloat(String(bv).replace(/[^\d.]/g, '')) || 0;
+    return (/HV/i.test(bv) || n >= 100) ? 'pill-hv' : 'pill-lv';
+  }
+
+  // sort helper — pulls kW / kWh / MW / W out of a product name
+  function sortValue(name) {
+    const re = /(\d+(?:[.,]\d+)?)\s*(MWh|kWh|MW|kW|Wh|W)\b/gi;
+    const vals = []; let m;
+    while ((m = re.exec(name)) !== null) {
+      let v = parseFloat(m[1].replace(',', '.'));
+      const u = m[2].toLowerCase();
+      if (u === 'mwh' || u === 'mw') v *= 1000;
+      else if (u === 'w' || u === 'wh') v /= 1000;
+      vals.push(v);
+    }
+    return [vals.length ? vals[0] : 1e9, vals.length > 1 ? vals[1] : 0];
   }
 
   function renderIcon(key) {
@@ -869,71 +1003,158 @@
   // ----------------- PRODUCT CATALOG -----------------
   const PRODUCTS = [
     // PANELS
-    { cat: 'panels', icon: 'panel', name: 'Нарны панель 590W', desc: 'N-type i-TOPCon Bifacial Dual-Glass Mono\nХэмжээ: 2279×1134×30mm\n30 жил баталгаа · CE/TUV/ISO', sample: 63.00, moq: 63.00 },
-    { cat: 'panels', icon: 'panel', name: 'Нарны панель 630W', desc: 'N-type i-TOPCon Bifacial Dual-Glass Mono\nХэмжээ: 2384×1139×30mm\n30 жил баталгаа · CE/TUV/ISO', sample: 68.00, moq: 68.00 },
-    { cat: 'panels', icon: 'panel', name: 'Нарны панель 650W', desc: 'N-type i-TOPCon Bifacial Dual-Glass Mono\nХэмжээ: 2384×1139×30mm\n30 жил баталгаа · CE/TUV/ISO', sample: 71.00, moq: 71.00 },
-    { cat: 'panels', icon: 'panel', name: 'Нарны панель 710W', desc: 'N-type i-TOPCon Bifacial Dual-Glass Mono\nХэмжээ: 2384×1303×30mm\n30 жил баталгаа · CE/TUV/ISO', sample: 77.80, moq: 77.80 },
+    { cat: 'panels', icon: 'panel', name: 'Нарны панель 590W', desc: 'HS590TC-MHO-D · N-type TOPCon Bifacial\n144 хагас эс · 2279×1134×30mm · 31.5кг\nҮр ашиг 22.80% · 30 жил баталгаа', sample: 63, moq: 63.0 },
+    { cat: 'panels', icon: 'panel', name: 'Нарны панель 630W', desc: 'MECC132N-PRO · N-type TOPCon Bifacial\n132 эс (6×22) · 2382×1134×30mm\n30 жил баталгаа · CE/TUV/ISO', sample: 68, moq: 68.0 },
+    { cat: 'panels', icon: 'panel', name: 'Нарны панель 650W', desc: 'MECC132N-PRO · N-type TOPCon Bifacial\n132 эс (6×22) · 2382×1134×30mm\n30 жил баталгаа · CE/TUV/ISO', sample: 71, moq: 71.0 },
+    { cat: 'panels', icon: 'panel', name: 'Нарны панель 710W', desc: 'MECC210N132 · N-type TOPCon Bifacial\n132 эс (6×22) · 2384×1303×35mm · 38.7кг\n30 жил баталгаа · CE/TUV/ISO', sample: 77.8, moq: 77.8 },
 
     // BRACKETS
-    { cat: 'brackets', icon: 'bracketGround', name: 'Газрын суурь хүрээ', desc: 'Aluminum alloy ground mount\nWind 40m/s · Snow 70kg/m²\n25 жил баталгаа · CE/TUV', sample: 35.00, moq: 35.00 },
-    { cat: 'brackets', icon: 'bracketRoof', name: 'Дээврийн суурь хүрээ', desc: 'Aluminum alloy rooftop mount\nWind 40m/s · Snow 70kg/m²\n25 жил баталгаа · CE/TUV', sample: 28.00, moq: 28.00 },
+    { cat: 'brackets', icon: 'bracketGround', name: 'Газрын суурь хүрээ', desc: 'Aluminum alloy ground mount\nWind 40m/s · Snow 70kg/m²\n25 жил баталгаа · CE/TUV', sample: 35, moq: 35.0 },
+    { cat: 'brackets', icon: 'bracketRoof', name: 'Дээврийн суурь хүрээ', desc: 'Aluminum alloy rooftop mount\nWind 40m/s · Snow 70kg/m²\n25 жил баталгаа · CE/TUV', sample: 28, moq: 28.0 },
 
     // INVERTERS
-    { cat: 'inverters', icon: 'invHybridLV', name: 'Hybrid Inverter 6kW', desc: 'Гибрид · 220V · 40-60V аккум.\nIP65 · 5 жил баталгаа', sample: 699.00, moq: 699.00 },
-    { cat: 'inverters', icon: 'invHybridLV', name: 'Hybrid Inverter 8kW', desc: 'Гибрид · 220V · 40-60V аккум.\nIP65 · 5 жил баталгаа', sample: 988.00, moq: 988.00 },
-    { cat: 'inverters', icon: 'invHybridLV', name: 'Hybrid Inverter 10kW', desc: 'Гибрид · 220V · 40-60V аккум.\nIP65 · 5 жил баталгаа', sample: 1060.00, moq: 1060.00 },
-    { cat: 'inverters', icon: 'invHybridLV', name: 'Hybrid Inverter 12kW', desc: 'Гибрид · 220V · 40-60V аккум.\nIP65 · 5 жил баталгаа', sample: 1160.00, moq: 1160.00 },
-    { cat: 'inverters', icon: 'invHybridLV', name: 'Hybrid Inverter 12kW (3-phase)', desc: 'Гибрид · 220V/380V · 40-60V аккум.\nIP65 · 5 жил баталгаа', sample: 1360.00, moq: 1360.00 },
-    { cat: 'inverters', icon: 'invHybridLV', name: 'Hybrid Inverter 15kW (3-phase)', desc: 'Гибрид · 220V/380V · 40-60V аккум.\nIP65 · 5 жил баталгаа', sample: 1630.00, moq: 1630.00 },
-    { cat: 'inverters', icon: 'invHybridHV', name: 'Hybrid Inverter 15kW HV', desc: 'Гибрид · 380V · 100-700V аккум.\nIP66 · 5 жил баталгаа', sample: 1640.00, moq: 1640.00 },
-    { cat: 'inverters', icon: 'invHybridHV', name: 'Hybrid Inverter 20kW HV', desc: 'Гибрид · 380V · 100-700V аккум.\nIP66 · 5 жил баталгаа', sample: 1960.00, moq: 1960.00 },
-    { cat: 'inverters', icon: 'invHybridHV', name: 'Hybrid Inverter 25kW HV', desc: 'Гибрид · 380V · 100-700V аккум.\nIP66 · 5 жил баталгаа', sample: 2250.00, moq: 2250.00 },
-    { cat: 'inverters', icon: 'invHybridHV', name: 'Hybrid Inverter 30kW HV', desc: 'Гибрид · 380V · 100-700V аккум.\nIP66 · 5 жил баталгаа', sample: 2760.00, moq: 2760.00 },
-    { cat: 'inverters', icon: 'invOffgrid', name: 'Off-Grid Inverter 6.5kW', desc: 'Сүлжээгүй · 220V · 40-60V аккум.\nIP21 · 2 жил баталгаа', sample: 291.00, moq: 263.00 },
-    { cat: 'inverters', icon: 'invOffgrid', name: 'Off-Grid Inverter 12kW', desc: 'Сүлжээгүй · 220V · 40-60V аккум.\nIP21 · 2 жил баталгаа', sample: 496.00, moq: 449.00 },
-    { cat: 'inverters', icon: 'invLarge', name: 'Hybrid Inverter 40kW', desc: 'Гибрид · 220V/380V · 150-800V аккум.\nIP66 · 5 жил баталгаа', sample: 3600.00, moq: 3600.00 },
-    { cat: 'inverters', icon: 'invLarge', name: 'Hybrid Inverter 50kW', desc: 'Гибрид · 220V/380V · 150-800V аккум.\nIP66 · 5 жил баталгаа', sample: 4060.00, moq: 4060.00 },
-    { cat: 'inverters', icon: 'invLarge', name: 'Hybrid Inverter 60kW', desc: 'Гибрид · 220V/380V · 150-800V аккум.\nIP66 · 5 жил баталгаа', sample: 4520.00, moq: 4520.00 },
-    { cat: 'inverters', icon: 'invLarge', name: 'Hybrid Inverter 80kW', desc: 'Гибрид · 220V/380V · 300-950V аккум.\nIP66 · 5 жил баталгаа', sample: 6980.00, moq: 6980.00 },
-    { cat: 'inverters', icon: 'invLarge', name: 'Hybrid Inverter 100kW', desc: 'Гибрид · 220V/380V · 300-950V аккум.\nIP66 · 5 жил баталгаа', sample: 7780.00, moq: 7780.00 },
-    { cat: 'inverters', icon: 'invLarge', name: 'Hybrid Inverter 125kW', desc: 'Гибрид · 220V/380V · 300-950V аккум.\nIP66 · 5 жил баталгаа', sample: 8780.00, moq: 8780.00 },
+    { cat: 'inverters', icon: 'invHybridLV', name: 'Hybrid Inverter 6kW', bv: 'LV 48V', hidden: true, desc: 'HI-IP6K-LV · Гибрид 1 фаз · 230V AC\nАккум. 40–60V (ном. 48V)\nIP65 · 5 жил баталгаа', sample: 699, moq: 699.0 },
+    { cat: 'inverters', icon: 'invHybridLV', name: 'Hybrid Inverter 8kW', bv: 'LV 48V', hidden: true, desc: 'HI-IP8K-LV · Гибрид 1 фаз · 230V AC\nАккум. 40–60V (ном. 48V)\nIP65 · 5 жил баталгаа', sample: 988, moq: 988.0 },
+    { cat: 'inverters', icon: 'invHybridLV', name: 'Hybrid Inverter 10kW', bv: 'LV 48V', hidden: true, desc: 'HI-IP10K-LV · Гибрид 1 фаз · 230V AC\nАккум. 40–60V (ном. 48V)\nIP65 · 5 жил баталгаа', sample: 1060, moq: 1060.0 },
+    { cat: 'inverters', icon: 'invHybridLV', name: 'Hybrid Inverter 12kW', bv: 'LV 48V', hidden: true, desc: 'HI-IP12K-LV · Гибрид 1 фаз · 230V AC\nАккум. 40–60V (ном. 48V)\nIP65 · 5 жил баталгаа', sample: 1160, moq: 1160.0 },
+    { cat: 'inverters', icon: 'invHybridLV', name: 'Hybrid Inverter 12kW (3-phase)', bv: 'LV 48V', desc: 'HI-3P12K-LV · Гибрид 3 фаз · 380/400V\nАккум. 40–60V (ном. 48V)\nIP65 · 5 жил баталгаа', sample: 1360, moq: 1360.0 },
+    { cat: 'inverters', icon: 'invHybridLV', name: 'Hybrid Inverter 15kW (3-phase)', bv: 'LV 48V', desc: 'HI-3P15K-LV · Гибрид 3 фаз · 380/400V\nАккум. 40–60V (ном. 48V)\nIP65 · 5 жил баталгаа', sample: 1630, moq: 1630.0 },
+    { cat: 'inverters', icon: 'invHybridHV', name: 'Hybrid Inverter 15kW HV', bv: 'HV 100–700V', desc: 'Гибрид · 380V · 100-700V аккум.\nIP66 · 5 жил баталгаа', sample: 1640.00, moq: 1640.00 },
+    { cat: 'inverters', icon: 'invHybridHV', name: 'Hybrid Inverter 20kW HV', bv: 'HV 100–700V', desc: 'Гибрид · 380V · 100-700V аккум.\nIP66 · 5 жил баталгаа', sample: 1960.00, moq: 1960.00 },
+    { cat: 'inverters', icon: 'invHybridHV', name: 'Hybrid Inverter 25kW HV', bv: 'HV 100–700V', desc: 'Гибрид · 380V · 100-700V аккум.\nIP66 · 5 жил баталгаа', sample: 2250.00, moq: 2250.00 },
+    { cat: 'inverters', icon: 'invHybridHV', name: 'Hybrid Inverter 30kW HV', bv: 'HV 150–800V', desc: 'S6-EH3P30K-H · Гибрид 3 фаз\n220/380V · 230/400V · Аккум. 150–800V\n2 аккум. порт · IP66 · 5 жил баталгаа', sample: 2760, moq: 2760.0 },
+    { cat: 'inverters', icon: 'invOffgrid', name: 'Off-Grid Inverter 6.5kW', hidden: true, desc: 'MECC-OG-IP6K5-DT · Сүлжээгүй 1 фаз\n6500W / 8120VA · Аккум. 48V (4×12V)\nIP21 · 2 жил баталгаа', sample: 291, moq: 263.0 },
+    { cat: 'inverters', icon: 'invOffgrid', name: 'Off-Grid Inverter 12kW', hidden: true, desc: 'MECC-FG12K-E · Сүлжээгүй 1 фаз\n12000VA / 12000W · Аккум. 51.2V (40–60V)\nPV + AC хосолсон цэнэглэлт · 2 жил баталгаа', sample: 496, moq: 449.0 },
+    { cat: 'inverters', icon: 'invLarge', name: 'Hybrid Inverter 40kW', bv: 'HV 150–800V', desc: 'S6-EH3P40K-H · Гибрид 3 фаз\n220/380V · 230/400V · Аккум. 150–800V\n2 аккум. порт · IP66 · 5 жил баталгаа', sample: 3600, moq: 3600.0 },
+    { cat: 'inverters', icon: 'invLarge', name: 'Hybrid Inverter 50kW', bv: 'HV 150–800V', desc: 'S6-EH3P50K-H · Гибрид 3 фаз\n220/380V · 230/400V · Аккум. 150–800V\n2 аккум. порт · IP66 · 5 жил баталгаа', sample: 4060, moq: 4060.0 },
+    { cat: 'inverters', icon: 'invLarge', name: 'Hybrid Inverter 60kW', bv: 'HV 150–800V', desc: 'S6-EH3P60K-H · Гибрид 3 фаз\n220/380V · 230/400V · Аккум. 150–800V\n2 аккум. порт · IP66 · 5 жил баталгаа', sample: 4520, moq: 4520.0 },
+    { cat: 'inverters', icon: 'invLarge', name: 'Hybrid Inverter 80kW', bv: 'HV 300–950V', desc: 'S6-EH3P80K10-NV-YD-H · Гибрид 3 фаз\n220/380V · 230/400V · Аккум. 300–950V\n100–314Ah модультой нийцнэ · IP66', sample: 6980, moq: 6980.0 },
+    { cat: 'inverters', icon: 'invLarge', name: 'Hybrid Inverter 100kW', bv: 'HV 300–950V', desc: 'S6-EH3P100K10-NV-YD-H · Гибрид 3 фаз\n220/380V · 230/400V · Аккум. 300–950V\n100–314Ah модультой нийцнэ · IP66', sample: 7780, moq: 7780.0 },
+    { cat: 'inverters', icon: 'invLarge', name: 'Hybrid Inverter 125kW', bv: 'HV 300–950V', desc: 'S6-EH3P125K10-NV-YD-H · Гибрид 3 фаз\n220/380V · 230/400V · Аккум. 300–950V\n100–314Ah модультой нийцнэ · IP66', sample: 8780, moq: 8780.0 },
 
     // BATTERIES
-    { cat: 'batteries', icon: 'batteryLV', name: 'Аккумулятор 5kWh', desc: 'LFP4 51.2V · 100Ah (нам хүчдэлт)\nCycle 6000+ · 10 жил баталгаа', sample: 599.00, moq: 599.00 },
-    { cat: 'batteries', icon: 'batteryLV', name: 'Аккумулятор 10kWh', desc: 'LFP4 51.2V · 205Ah (нам хүчдэлт)\nCycle 6000+ · 10 жил баталгаа', sample: 1020.00, moq: 1020.00 },
-    { cat: 'batteries', icon: 'batteryLVbig', name: 'Аккумулятор 15kWh', desc: 'LFP4 51.2V · 280/314Ah (нам хүчдэлт)\nCycle 6000+ · 10 жил баталгаа', sample: 1290.00, moq: 1290.00 },
-    { cat: 'batteries', icon: 'batteryLVbig', name: 'Аккумулятор 16kWh', desc: 'LFP4 51.2V · 280/314Ah (нам хүчдэлт)\nCycle 6000+ · 10 жил баталгаа', sample: 1380.00, moq: 1380.00 },
-    { cat: 'batteries', icon: 'batteryHV', name: 'HV Аккумулятор 31kWh', desc: 'LFP4 153-716V · 100Ah (өндөр хүчдэлт)\nCycle 6000+ · 10 жил баталгаа', sample: 4280.00, moq: 4280.00 },
-    { cat: 'batteries', icon: 'batteryHV', name: 'HV Аккумулятор 41kWh', desc: 'LFP4 153-716V · 100Ah\nCycle 6000+ · 10 жил баталгаа', sample: 5600.00, moq: 5600.00 },
-    { cat: 'batteries', icon: 'batteryHV', name: 'HV Аккумулятор 51kWh', desc: 'LFP4 153-716V · 100Ah\nCycle 6000+ · 10 жил баталгаа', sample: 7080.00, moq: 7080.00 },
-    { cat: 'batteries', icon: 'batteryHV', name: 'HV Аккумулятор 62kWh', desc: 'LFP4 153-716V · 100Ah\nCycle 6000+ · 10 жил баталгаа', sample: 8280.00, moq: 8280.00 },
-    { cat: 'batteries', icon: 'batteryHVbig', name: 'HV Аккумулятор 90kWh', desc: 'LFP4 288-691V · 314Ah\nCycle 6000+ · 10 жил баталгаа', sample: 8760.00, moq: 8760.00 },
-    { cat: 'batteries', icon: 'batteryHVbig', name: 'HV Аккумулятор 108kWh', desc: 'LFP4 288-691V · 314Ah\nCycle 6000+ · 10 жил баталгаа', sample: 10500.00, moq: 10500.00 },
-    { cat: 'batteries', icon: 'batteryHVbig', name: 'HV Аккумулятор 144kWh', desc: 'LFP4 288-691V · 314Ah\nCycle 6000+ · 10 жил баталгаа', sample: 14000.00, moq: 14000.00 },
-    { cat: 'batteries', icon: 'batteryHVbig', name: 'HV Аккумулятор 180kWh', desc: 'LFP4 288-691V · 314Ah\nCycle 6000+ · 10 жил баталгаа', sample: 17300.00, moq: 17300.00 },
-    { cat: 'batteries', icon: 'batteryHVbig', name: 'HV Аккумулятор 217kWh', desc: 'LFP4 288-691V · 314Ah\nCycle 6000+ · 10 жил баталгаа', sample: 21100.00, moq: 21100.00 },
-    { cat: 'batteries', icon: 'batteryHVbig', name: 'HV Аккумулятор 241kWh', desc: 'LFP4 288-691V · 314Ah\nCycle 6000+ · 10 жил баталгаа', sample: 25000.00, moq: 25000.00 },
+    { cat: 'batteriesLV', icon: 'batteryLV', name: 'Аккумулятор 5kWh', bv: '51.2V', desc: 'MECC48104-LV · LFP 51.2V · 100Ah\n5.12 кВт.ц (ашиглах 4.86) · ханын суурилуулалт\n480×645×155mm · 48кг · 5 жил баталгаа', sample: 599, moq: 599.0 },
+    { cat: 'batteriesLV', icon: 'batteryLV', name: 'Аккумулятор 10kWh', bv: '51.2V', desc: 'MECC48208-LV · LFP 51.2V · 206Ah\n10.5 кВт.ц (ашиглах 10.0) · ханын суурилуулалт\n440×743×232mm · 100кг · 5 жил баталгаа', sample: 1020, moq: 1020.0 },
+    { cat: 'batteriesLV', icon: 'batteryLVbig', name: 'Аккумулятор 15kWh', bv: '51.2V', desc: 'LFP4 51.2V · 280/314Ah (нам хүчдэлт)\nCycle 6000+ · 10 жил баталгаа', sample: 1290, moq: 1290.0 },
+    { cat: 'batteriesLV', icon: 'batteryLVbig', name: 'Аккумулятор 16kWh', bv: '51.2V', desc: 'MECC48314-LV · LFP 51.2V · 314Ah\n16 кВт.ц · 460×217×850mm · 125кг\n6000 цикл @90% DOD · 5 жил баталгаа', sample: 1380, moq: 1380.0 },
+    { cat: 'batteriesHV', icon: 'batteryHV', name: 'HV Аккумулятор 31kWh', bv: '307.2V', desc: 'MECC48100-HV · LFP 51.2V модуль (5.12 кВт.ц)\n6 модуль · систем 307.2V · 30.72 кВт.ц\n≥6000 цикл (EOL 70%) · 5 жил баталгаа', sample: 4280, moq: 4280.0 },
+    { cat: 'batteriesHV', icon: 'batteryHV', name: 'HV Аккумулятор 41kWh', bv: '409.6V', desc: 'MECC48100-HV · LFP 51.2V модуль (5.12 кВт.ц)\n8 модуль · систем 409.6V · 40.96 кВт.ц\n589×590×2240mm · 434кг · 5 жил баталгаа', sample: 5600, moq: 5600.0 },
+    { cat: 'batteriesHV', icon: 'batteryHV', name: 'HV Аккумулятор 51kWh', bv: '512V', desc: 'MECC48100-HV · LFP 51.2V модуль (5.12 кВт.ц)\n10 модуль · систем 512V · 51.2 кВт.ц\n≥6000 цикл (EOL 70%) · 5 жил баталгаа', sample: 7080, moq: 7080.0 },
+    { cat: 'batteriesHV', icon: 'batteryHV', name: 'HV Аккумулятор 62kWh', bv: '614.4V', desc: 'MECC48100-HV · LFP 51.2V модуль (5.12 кВт.ц)\n12 модуль · систем 614.4V · 61.44 кВт.ц\n628кг · ≥6000 цикл (EOL 70%) · 5 жил баталгаа', sample: 8280, moq: 8280.0 },
+    { cat: 'batteriesHV', icon: 'batteryHVbig', name: 'HV Аккумулятор 90kWh', bv: '288V', desc: 'MECC314-HV-B/C · LFP 57.6V модуль (18.09 кВт.ц)\n5 модуль · систем 288V · 90.43 кВт.ц (ашиглах 81.4)\n582×838×1736mm · 755кг · ≥8000 цикл · 10 жил', sample: 8760, moq: 8760.0 },
+    { cat: 'batteriesHV', icon: 'batteryHVbig', name: 'HV Аккумулятор 108kWh', bv: '345.6V', desc: 'MECC314-HV-B/C · LFP 57.6V модуль (18.09 кВт.ц)\n6 модуль · систем 345.6V · 108.5 кВт.ц (ашиглах 97.7)\n582×838×1992mm · 900кг · ≥8000 цикл · 10 жил', sample: 10500, moq: 10500.0 },
+    { cat: 'batteriesHV', icon: 'batteryHVbig', name: 'HV Аккумулятор 144kWh', bv: '460.8V', desc: 'MECC314-HV-B/C · LFP 57.6V модуль (18.09 кВт.ц)\n8 модуль · систем 460.8V · 144.7 кВт.ц (ашиглах 130.2)\n1184×838×1480mm · 1198кг · ≥8000 цикл · 10 жил', sample: 14000, moq: 14000.0 },
+    { cat: 'batteriesHV', icon: 'batteryHVbig', name: 'HV Аккумулятор 180kWh', bv: '576V', desc: 'MECC314-HV-B/C · LFP 57.6V модуль (18.09 кВт.ц)\n10 модуль · систем 576V · 180.9 кВт.ц (ашиглах 162.8)\n1184×838×1480mm · 1485кг · ≥8000 цикл · 10 жил', sample: 17300, moq: 17300.0 },
+    { cat: 'batteriesHV', icon: 'batteryHVbig', name: 'HV Аккумулятор 217kWh', bv: '691.2V', desc: 'MECC314-HV-B/C · LFP 57.6V модуль (18.09 кВт.ц)\n12 модуль · систем 691.2V · 217.0 кВт.ц (ашиглах 195.3)\n1184×838×1992mm · 1773кг · ≥8000 цикл · 10 жил', sample: 21100, moq: 21100.0 },
+    { cat: 'batteriesHV', icon: 'batteryHVbig', name: 'HV Аккумулятор 241kWh', bv: '768V', desc: 'MECC48314-HV2 · LFP 51.2V модуль (16.08 кВт.ц)\n15 модуль · систем 768V · 241.2 кВт.ц (ашиглах 217.0)\n1184×838×2248mm · 1895кг · ≥8000 цикл · 10 жил', sample: 25000, moq: 25000.0 },
 
     // BESS
-    { cat: 'bess', icon: 'bessIndoor', name: 'BESS 3.6kW / 3.5kWh', desc: 'All-in-One · дотор · LFP4 · IP31', sample: 621.00, moq: 507.00 },
-    { cat: 'bess', icon: 'bessIndoor', name: 'BESS 3.6kW / 7.2kWh', desc: 'All-in-One · дотор · LFP4 · IP31', sample: 1013.00, moq: 826.00 },
-    { cat: 'bess', icon: 'bessIndoor', name: 'BESS 6kW / 15kWh', desc: 'All-in-One · дотор · LFP4 · IP31', sample: 1908.00, moq: 1556.00 },
-    { cat: 'bess', icon: 'bessOutdoor', name: 'BESS 30kW / 61kWh', desc: 'All-in-One · гадаа C&I · LFP4 · IP65/IP54', sample: 12552.00, moq: 12552.00 },
-    { cat: 'bess', icon: 'bessOutdoor', name: 'BESS 50kW / 108kWh', desc: 'All-in-One · гадаа C&I · LFP4 · IP65/IP54', sample: 16453.00, moq: 16453.00 },
-    { cat: 'bess', icon: 'bessOutdoor', name: 'BESS 50kW / 112kWh', desc: 'All-in-One · гадаа C&I · LFP4 · IP65/IP54', sample: 17560.00, moq: 17560.00 },
-    { cat: 'bess', icon: 'bessOutdoor', name: 'BESS 50kW / 241kWh', desc: 'All-in-One · гадаа C&I · LFP4 · IP65/IP54', sample: 30900.00, moq: 30900.00 },
-    { cat: 'bess', icon: 'bessOutdoor', name: 'BESS 100kW / 241kWh', desc: 'All-in-One · гадаа C&I · LFP4 · IP65/IP54', sample: 34700.00, moq: 34700.00 },
-    { cat: 'bess', icon: 'bessOutdoor', name: 'BESS 125kW / 241kWh', desc: 'All-in-One · гадаа C&I · LFP4 · IP65/IP54', sample: 35965.00, moq: 35965.00 },
-    { cat: 'bess', icon: 'bessOutdoor', name: 'BESS 500kW / 1MWh (PV+ESS)', desc: 'Container Energy Storage System · LFP4 · IP65/IP54', sample: 160000.00, moq: 149000.00 },
-    { cat: 'bess', icon: 'bessOutdoor', name: 'BESS 1MW / 2.4MWh (PV+ESS)', desc: 'Container Energy Storage System · LFP4 · IP65/IP54', sample: 378000.00, moq: 353000.00 },
+    { cat: 'bess', icon: 'bessIndoor', name: 'BESS 3.6kW / 3.5kWh', bv: 'Аккум. 25.6V', desc: 'MECC-3.6ESS · 3600VA/3600W · 1 фаз 230V\nАккум. 25.6V 127Ah · 3.25 кВт.ц\nPV 5000W · IP31', sample: 621, moq: 507.0 },
+    { cat: 'bess', icon: 'bessIndoor', name: 'BESS 3.6kW / 7.2kWh', bv: 'Аккум. 25.6V', desc: 'MECC-7ESS · 4200VA/4200W · 1 фаз 230V\nАккум. 25.6V 314Ah · 8.04 кВт.ц\nPV 5000W · IP31', sample: 1013, moq: 826.0 },
+    { cat: 'bess', icon: 'bessIndoor', name: 'BESS 6kW / 15kWh', bv: 'Аккум. 51.2V', desc: 'MECC-15ESS · 6000VA/6000W · 1 фаз 230V\nАккум. 51.2V 280Ah · 14.34 кВт.ц\nPV 9000W · IP31', sample: 1908, moq: 1556.0 },
+    { cat: 'bess', icon: 'bessOutdoor', name: 'BESS 30kW / 61kWh', desc: 'All-in-One · гадаа C&I · LFP4 · IP65/IP54', sample: 12100, moq: 12552.0 },
+    { cat: 'bess', icon: 'bessOutdoor', name: 'BESS 50kW / 108kWh', bv: 'Аккум. 345.6V', desc: 'MECC-AIO-108 · 50kW/50kVA · 3 фаз 380/400V\nАккум. 108 кВт.ц · 314Ah · 345.6V\nPV 100kWp · 4 MPPT · IP55 (инвертер IP66)\n1000×2100×1100mm · <1500кг', sample: 16450, moq: 16453.0 },
+    { cat: 'bess', icon: 'bessOutdoor', name: 'BESS 50kW / 112kWh', bv: 'Аккум. 358.4V', desc: 'MECC-AIO-112 · 50kW/50kVA · 3 фаз 380/400V\nАккум. 112 кВт.ц · 314Ah · 358.4V\nPV 100kWp · 4 MPPT · IP55 (инвертер IP66)\n1000×2100×1100mm · <1500кг', sample: 17560, moq: 17560.0 },
+    { cat: 'bess', icon: 'bessOutdoor', name: 'BESS 50kW / 241kWh', desc: 'All-in-One · гадаа C&I · LFP4 · IP65/IP54', sample: 30900, moq: 30900.0 },
+    { cat: 'bess', icon: 'bessOutdoor', name: 'BESS 100kW / 241kWh', desc: 'All-in-One · гадаа C&I · LFP4 · IP65/IP54', sample: 34700, moq: 34700.0 },
+    { cat: 'bess', icon: 'bessOutdoor', name: 'BESS 125kW / 241kWh', bv: 'Аккум. 768V', desc: 'MECC-AIO-241 · 125kW/125kVA · 3 фаз 380/400V\nАккум. 241 кВт.ц · 314Ah · 768V\nPV 250kWp · 10 MPPT · IP55 (инвертер IP66)\n1626×2175×1245mm · <2500кг', sample: 35780, moq: 35965.0 },
+    { cat: 'containers', icon: 'bessOutdoor', name: 'BESS 500kW / 1MWh (PV+ESS)', bv: 'Аккум. 768V', desc: 'MECC-20FT-1075 · 500kW · 400V · 722A\nАккум. 1075.2 кВт.ц · LFP 3.2V/280Ah · 768V\nPV 600–720kW · агаар хөргөлт · IP54\n20ft 6058×2438×2896mm · 21000кг', sample: 160000, moq: 149000.0 },
+    { cat: 'containers', icon: 'bessOutdoor', name: 'BESS 1MW / 2.4MWh (PV+ESS)', bv: 'Аккум. 768V', desc: 'MECC-40FT-2150 · 1000kW · 400V · 1445A\nАккум. 2150.4 кВт.ц · LFP 3.2V/280Ah · 768V\nPV 1200–1440kW · агаар хөргөлт · IP54\n40ft 12192×2438×2896mm · 38000кг', sample: 378000, moq: 353000.0 },
+
+    // ===== 2026-09-03: added from the MECC product manual (prices still 0) =====
+    // --- panels ---
+    { cat: 'panels', icon: 'nophoto', name: 'Нарны панель 440W', hidden: true, desc: 'MECC96N · N-type TOPCon Bifacial\n96 эс (6×16) · 1762×1134×30mm\nNOCT 45°C · 30 жил баталгаа · CE/TUV', sample: 0, moq: 0 },
+    { cat: 'panels', icon: 'nophoto', name: 'Нарны панель 450W', hidden: true, desc: 'MECC96N · N-type TOPCon Bifacial\n96 эс (6×16) · 1762×1134×30mm\nNOCT 45°C · 30 жил баталгаа · CE/TUV', sample: 0, moq: 0 },
+    { cat: 'panels', icon: 'nophoto', name: 'Нарны панель 460W', hidden: true, desc: 'MECC96N · N-type TOPCon Bifacial\n96 эс (6×16) · 1762×1134×30mm\nNOCT 45°C · 30 жил баталгаа · CE/TUV', sample: 0, moq: 0 },
+    { cat: 'panels', icon: 'nophoto', name: 'Нарны панель 570W', hidden: true, desc: 'HS570TC-MHO-D · N-type TOPCon Bifacial\n144 хагас эс · 2279×1134×30mm · 31.5кг\n30 жил баталгаа · CE/TUV/ISO', sample: 0, moq: 0 },
+    { cat: 'panels', icon: 'nophoto', name: 'Нарны панель 575W', hidden: true, desc: 'HS575TC-MHO-D · N-type TOPCon Bifacial\n144 хагас эс · 2279×1134×30mm · 31.5кг\n30 жил баталгаа · CE/TUV/ISO', sample: 0, moq: 0 },
+    { cat: 'panels', icon: 'nophoto', name: 'Нарны панель 580W', hidden: true, desc: 'HS580TC-MHO-D · N-type TOPCon Bifacial\n144 хагас эс · 2279×1134×30mm · 31.5кг\n30 жил баталгаа · CE/TUV/ISO', sample: 0, moq: 0 },
+    { cat: 'panels', icon: 'nophoto', name: 'Нарны панель 585W', hidden: true, desc: 'HS585TC-MHO-D · N-type TOPCon Bifacial\n144 хагас эс · 2279×1134×30mm · 31.5кг\n30 жил баталгаа · CE/TUV/ISO', sample: 0, moq: 0 },
+    { cat: 'panels', icon: 'nophoto', name: 'Нарны панель 640W', hidden: true, desc: 'MECC132N-PRO · N-type TOPCon Bifacial\n132 эс (6×22) · 2382×1134×30mm\n30 жил баталгаа · CE/TUV/ISO', sample: 0, moq: 0 },
+    { cat: 'panels', icon: 'nophoto', name: 'Нарны панель 700W', hidden: true, desc: 'MECC210N132 · N-type TOPCon Bifacial\n132 эс (6×22) · 2384×1303×35mm · 38.7кг\n30 жил баталгаа · CE/TUV/ISO', sample: 0, moq: 0 },
+    { cat: 'panels', icon: 'nophoto', name: 'Нарны панель 720W', hidden: true, desc: 'MECC210N132 · N-type TOPCon Bifacial\n132 эс (6×22) · 2384×1303×35mm · 38.7кг\n30 жил баталгаа · CE/TUV/ISO', sample: 0, moq: 0 },
+    { cat: 'panels', icon: 'nophoto', name: 'Нарны панель 730W', hidden: true, desc: 'MECC210N132 · N-type TOPCon Bifacial\n132 эс (6×22) · 2384×1303×35mm · 38.7кг\n30 жил баталгаа · CE/TUV/ISO', sample: 0, moq: 0 },
+    // --- inverters ---
+    { cat: 'inverters', icon: 'nophoto', name: 'Hybrid Inverter 5kW (3-phase)', bv: 'LV 48V', desc: 'HI-3P5K-LV · Гибрид 3 фаз · 380/400V\nАккум. 40–60V (ном. 48V)\nIP65 · 5 жил баталгаа', sample: 0, moq: 0 },
+    { cat: 'inverters', icon: 'nophoto', name: 'Hybrid Inverter 6kW (3-phase)', bv: 'LV 48V', desc: 'HI-3P6K-LV · Гибрид 3 фаз · 380/400V\nАккум. 40–60V (ном. 48V)\nIP65 · 5 жил баталгаа', sample: 0, moq: 0 },
+    { cat: 'inverters', icon: 'nophoto', name: 'Hybrid Inverter 8kW (3-phase)', bv: 'LV 48V', desc: 'HI-3P8K-LV · Гибрид 3 фаз · 380/400V\nАккум. 40–60V (ном. 48V)\nIP65 · 5 жил баталгаа', sample: 0, moq: 0 },
+    { cat: 'inverters', icon: 'nophoto', name: 'Hybrid Inverter 10kW (3-phase)', bv: 'LV 48V', desc: 'HI-3P10K-LV · Гибрид 3 фаз · 380/400V\nАккум. 40–60V (ном. 48V)\nIP65 · 5 жил баталгаа', sample: 0, moq: 0 },
+    { cat: 'inverters', icon: 'nophoto', name: 'Hybrid Inverter 18kW (3-phase)', bv: 'LV 48V', desc: 'SSE-HL18K-P3EU-S · Гибрид 3 фаз · 380/400V\nАккум. 40–60V (ном. 51.2V) · 2 MPPT\n8 хүртэл параллель · IP66 · 45кг', sample: 0, moq: 0 },
+    { cat: 'inverters', icon: 'nophoto', name: 'Hybrid Inverter 20kW (3-phase)', bv: 'LV 48V', desc: 'SSE-HL20K-P3EU-S · Гибрид 3 фаз · 380/400V\nАккум. 40–60V (ном. 51.2V) · 2 MPPT\n8 хүртэл параллель · IP66 · 45кг', sample: 2050, moq: 2050 },
+    { cat: 'inverters', icon: 'nophoto', name: 'Hybrid Inverter 24kW (3-phase)', bv: 'LV 48V', desc: 'SSE-HL24K-P3EU-S · Гибрид 3 фаз · 380/400V\nАккум. 40–60V (ном. 51.2V) · 2 MPPT\n8 хүртэл параллель · IP66 · 45кг', sample: 2250, moq: 2250 },
+    { cat: 'inverters', icon: 'nophoto', name: 'Off-Grid Inverter 1.2kW', hidden: true, desc: 'MECC-OG-IP1K2-T · Сүлжээгүй 1 фаз\n1200W / 1500VA · Аккум. 12V\nIP21 · 2 жил баталгаа', sample: 0, moq: 0 },
+    { cat: 'inverters', icon: 'nophoto', name: 'Off-Grid Inverter 3.6kW', hidden: true, desc: 'MECC-OG-IP3K6-DT · Сүлжээгүй 1 фаз\n3600W / 4500VA · Аккум. 24V (2×12V)\nIP21 · 2 жил баталгаа', sample: 0, moq: 0 },
+    { cat: 'inverters', icon: 'nophoto', name: 'Off-Grid Inverter 5kW', hidden: true, desc: 'MECC-OG-IP5K-DT · Сүлжээгүй 1 фаз\n5000W / 6250VA · Аккум. 24V (2×12V)\nIP21 · 2 жил баталгаа', sample: 0, moq: 0 },
+    { cat: 'inverters', icon: 'nophoto', name: 'Off-Grid Inverter 5kW (PDT)', hidden: true, desc: 'MECC-OG-IP5K-PDT · Сүлжээгүй 1 фаз\n5000W / 6250VA · Аккум. 24V (2×12V)\nIP21 · 2 жил баталгаа', sample: 0, moq: 0 },
+    { cat: 'inverters', icon: 'nophoto', name: 'Off-Grid Inverter 6.2kW', hidden: true, desc: 'MECC-FG6.2K-E · Сүлжээгүй 1 фаз\n6200VA / 6200W · Аккум. 51.2V (40–60V)\nPV + AC хосолсон цэнэглэлт · 2 жил баталгаа', sample: 0, moq: 0 },
+    // --- batteries ---
+    { cat: 'batteriesLV', icon: 'nophoto', name: 'Аккумулятор 5kWh (Stack модуль)', bv: '51.2V', desc: 'MECC48100-LV-S · LFP 51.2V · 100Ah (16S1P)\n5.12 кВт.ц · 3U өрөөстэй · 15 хүртэл параллель\n400×230×585mm · 47кг · 6000 цикл · 10 жил', sample: 0, moq: 0 },
+    { cat: 'batteriesHV', icon: 'nophoto', name: 'HV Аккумулятор 20kWh', bv: '204.8V', desc: 'MECC48100-HV · LFP 51.2V модуль (5.12 кВт.ц)\n4 модуль · систем 204.8V · 20.48 кВт.ц\n589×590×1640mm · 258кг · 5 жил баталгаа', sample: 0, moq: 0 },
+    { cat: 'batteriesHV', icon: 'nophoto', name: 'HV Аккумулятор 126kWh (314-B)', bv: '403.2V', desc: 'MECC314-HV-B/C · LFP 57.6V модуль (18.09 кВт.ц)\n7 модуль · систем 403.2V · 126.6 кВт.ц (ашиглах 113.2)\n582×838×2248mm · 1043кг · ≥8000 цикл · 10 жил', sample: 0, moq: 0 },
+    { cat: 'batteriesHV', icon: 'nophoto', name: 'HV Аккумулятор 162kWh (314-B)', bv: '518.4V', desc: 'MECC314-HV-B/C · LFP 57.6V модуль (18.09 кВт.ц)\n9 модуль · систем 518.4V · 162.8 кВт.ц (ашиглах 146.5)\n1184×838×1480mm · 1332кг · ≥8000 цикл · 10 жил', sample: 0, moq: 0 },
+    { cat: 'batteriesHV', icon: 'nophoto', name: 'HV Аккумулятор 199kWh (314-B)', bv: '633.6V', desc: 'MECC314-HV-B/C · LFP 57.6V модуль (18.09 кВт.ц)\n11 модуль · систем 633.6V · 199.0 кВт.ц (ашиглах 175.1)\n1184×838×1736mm · 1620кг · ≥8000 цикл · 10 жил', sample: 0, moq: 0 },
+    { cat: 'batteriesHV', icon: 'nophoto', name: 'HV Аккумулятор 64kWh (48314-HV2)', bv: '204.8V', desc: 'MECC48314-HV2 · LFP 51.2V модуль (16.08 кВт.ц)\n4 модуль · систем 204.8V · 64.3 кВт.ц (ашиглах 57.9)\n582×838×1480mm · 534кг · ≥8000 цикл · 10 жил', sample: 0, moq: 0 },
+    { cat: 'batteriesHV', icon: 'nophoto', name: 'HV Аккумулятор 80kWh (48314-HV2)', bv: '256.0V', desc: 'MECC48314-HV2 · LFP 51.2V модуль (16.08 кВт.ц)\n5 модуль · систем 256.0V · 80.4 кВт.ц (ашиглах 72.4)\n582×838×1736mm · 655кг · ≥8000 цикл · 10 жил', sample: 0, moq: 0 },
+    { cat: 'batteriesHV', icon: 'nophoto', name: 'HV Аккумулятор 96kWh (48314-HV2)', bv: '307.2V', desc: 'MECC48314-HV2 · LFP 51.2V модуль (16.08 кВт.ц)\n6 модуль · систем 307.2V · 96.5 кВт.ц (ашиглах 86.8)\n582×838×1992mm · 799кг · ≥8000 цикл · 10 жил', sample: 0, moq: 0 },
+    { cat: 'batteriesHV', icon: 'nophoto', name: 'HV Аккумулятор 112kWh (48314-HV2)', bv: '358.4V', desc: 'MECC48314-HV2 · LFP 51.2V модуль (16.08 кВт.ц)\n7 модуль · систем 358.4V · 112.5 кВт.ц (ашиглах 101.3)\n582×838×2248mm · 903кг · ≥8000 цикл · 10 жил', sample: 0, moq: 0 },
+    { cat: 'batteriesHV', icon: 'nophoto', name: 'HV Аккумулятор 128kWh (48314-HV2)', bv: '409.6V', desc: 'MECC48314-HV2 · LFP 51.2V модуль (16.08 кВт.ц)\n8 модуль · систем 409.6V · 128.6 кВт.ц (ашиглах 115.8)\n1184×838×1480mm · 1037кг · ≥8000 цикл · 10 жил', sample: 0, moq: 0 },
+    { cat: 'batteriesHV', icon: 'nophoto', name: 'HV Аккумулятор 160kWh (48314-HV2)', bv: '512.0V', desc: 'MECC48314-HV2 · LFP 51.2V модуль (16.08 кВт.ц)\n10 модуль · систем 512.0V · 160.8 кВт.ц (ашиглах 144.7)\n1184×838×1480mm · 1285кг · ≥8000 цикл · 10 жил', sample: 0, moq: 0 },
+    { cat: 'batteriesHV', icon: 'nophoto', name: 'HV Аккумулятор 176kWh (48314-HV2)', bv: '563.2V', desc: 'MECC48314-HV2 · LFP 51.2V модуль (16.08 кВт.ц)\n11 модуль · систем 563.2V · 176.8 кВт.ц (ашиглах 159.2)\n1184×838×1736mm · 1400кг · ≥8000 цикл · 10 жил', sample: 0, moq: 0 },
+    { cat: 'batteriesHV', icon: 'nophoto', name: 'HV Аккумулятор 192kWh (48314-HV2)', bv: '614.4V', desc: 'MECC48314-HV2 · LFP 51.2V модуль (16.08 кВт.ц)\n12 модуль · систем 614.4V · 192.9 кВт.ц (ашиглах 173.6)\n1184×838×1736mm · 1533кг · ≥8000 цикл · 10 жил', sample: 0, moq: 0 },
+    { cat: 'batteriesHV', icon: 'nophoto', name: 'HV Аккумулятор 209kWh (48314-HV2)', bv: '665.6V', desc: 'MECC48314-HV2 · LFP 51.2V модуль (16.08 кВт.ц)\n13 модуль · систем 665.6V · 209.0 кВт.ц (ашиглах 188.1)\n1184×838×1992mm · 1647кг · ≥8000 цикл · 10 жил', sample: 0, moq: 0 },
+    { cat: 'batteriesHV', icon: 'nophoto', name: 'HV Аккумулятор 225kWh (48314-HV2)', bv: '716.8V', desc: 'MECC48314-HV2 · LFP 51.2V модуль (16.08 кВт.ц)\n14 модуль · систем 716.8V · 225.1 кВт.ц (ашиглах 202.6)\n1184×838×2248mm · 1781кг · ≥8000 цикл · 10 жил', sample: 0, moq: 0 },
+    { cat: 'batteriesHV', icon: 'nophoto', name: 'HV Аккумулятор 43kWh (Stack)', bv: '153.6V', desc: 'MECC48314-HV1 · LFP 314Ah · өрөөстэй (stack)\nСистем 153.6V · 43.0 кВт.ц\n>6000 цикл @80% DOD · 15 жил зохиомжийн нас', sample: 0, moq: 0 },
+    { cat: 'batteriesHV', icon: 'nophoto', name: 'HV Аккумулятор 57kWh (Stack)', bv: '204.8V', desc: 'MECC48314-HV1 · LFP 314Ah · өрөөстэй (stack)\nСистем 204.8V · 57.3 кВт.ц\n>6000 цикл @80% DOD · 15 жил зохиомжийн нас', sample: 0, moq: 0 },
+    { cat: 'batteriesHV', icon: 'nophoto', name: 'HV Аккумулятор 71kWh (Stack)', bv: '256.0V', desc: 'MECC48314-HV1 · LFP 314Ah · өрөөстэй (stack)\nСистем 256.0V · 71.6 кВт.ц\n>6000 цикл @80% DOD · 15 жил зохиомжийн нас', sample: 0, moq: 0 },
+    { cat: 'batteriesHV', icon: 'nophoto', name: 'HV Аккумулятор 86kWh (Stack)', bv: '307.2V', desc: 'MECC48314-HV1 · LFP 314Ah · өрөөстэй (stack)\nСистем 307.2V · 86.0 кВт.ц\n>6000 цикл @80% DOD · 15 жил зохиомжийн нас', sample: 0, moq: 0 },
+    { cat: 'batteriesHV', icon: 'nophoto', name: 'HV Аккумулятор 100kWh (Stack)', bv: '358.4V', desc: 'MECC48314-HV1 · LFP 314Ah · өрөөстэй (stack)\nСистем 358.4V · 100.3 кВт.ц\n>6000 цикл @80% DOD · 15 жил зохиомжийн нас', sample: 0, moq: 0 },
+    { cat: 'batteriesHV', icon: 'nophoto', name: 'HV Аккумулятор 114kWh (Stack)', bv: '409.6V', desc: 'MECC48314-HV1 · LFP 314Ah · өрөөстэй (stack)\nСистем 409.6V · 114.6 кВт.ц\n>6000 цикл @80% DOD · 15 жил зохиомжийн нас', sample: 0, moq: 0 },
+    { cat: 'batteriesHV', icon: 'nophoto', name: 'HV Аккумулятор 129kWh (Stack)', bv: '460.8V', desc: 'MECC48314-HV1 · LFP 314Ah · өрөөстэй (stack)\nСистем 460.8V · 129.0 кВт.ц\n>6000 цикл @80% DOD · 15 жил зохиомжийн нас', sample: 0, moq: 0 },
+    { cat: 'batteriesHV', icon: 'nophoto', name: 'HV Аккумулятор 143kWh (Stack)', bv: '512.0V', desc: 'MECC48314-HV1 · LFP 314Ah · өрөөстэй (stack)\nСистем 512.0V · 143.3 кВт.ц\n>6000 цикл @80% DOD · 15 жил зохиомжийн нас', sample: 0, moq: 0 },
+    { cat: 'batteriesHV', icon: 'nophoto', name: 'HV Аккумулятор 157kWh (Stack)', bv: '563.2V', desc: 'MECC48314-HV1 · LFP 314Ah · өрөөстэй (stack)\nСистем 563.2V · 157.6 кВт.ц\n>6000 цикл @80% DOD · 15 жил зохиомжийн нас', sample: 0, moq: 0 },
+    { cat: 'batteriesHV', icon: 'nophoto', name: 'HV Аккумулятор 172kWh (Stack)', bv: '614.4V', desc: 'MECC48314-HV1 · LFP 314Ah · өрөөстэй (stack)\nСистем 614.4V · 172.0 кВт.ц\n>6000 цикл @80% DOD · 15 жил зохиомжийн нас', sample: 0, moq: 0 },
+    { cat: 'batteriesHV', icon: 'nophoto', name: 'HV Аккумулятор 186kWh (Stack)', bv: '665.6V', desc: 'MECC48314-HV1 · LFP 314Ah · өрөөстэй (stack)\nСистем 665.6V · 186.3 кВт.ц\n>6000 цикл @80% DOD · 15 жил зохиомжийн нас', sample: 0, moq: 0 },
+    { cat: 'batteriesHV', icon: 'nophoto', name: 'HV Аккумулятор 200kWh (Stack)', bv: '716.8V', desc: 'MECC48314-HV1 · LFP 314Ah · өрөөстэй (stack)\nСистем 716.8V · 200.7 кВт.ц\n>6000 цикл @80% DOD · 15 жил зохиомжийн нас', sample: 0, moq: 0 },
+    // --- BESS / all-in-one ---
+    { cat: 'bess', icon: 'nophoto', name: 'BESS 1kW / 2kWh (Portable)', bv: 'Аккум. 6.4V', desc: 'MECC-2000ESS · 1000W · 1 фаз 220–240V\nАккум. LFP 2.009 кВт.ц · >8000 цикл\nPV 550W (MPPT 12–55V) · USB-A/C · IP21\n160×400×250mm · 18.7кг', sample: 0, moq: 0 },
+    { cat: 'bess', icon: 'nophoto', name: 'BESS 3.6kW / 5kWh (US 120V)', bv: 'Аккум. 51.2V', desc: 'MECC-4836-5-Y · 3600W · 1 фаз 120V\nАккум. 51.2V 102Ah · ~5.2 кВт.ц\nPV 4500W · 1 MPPT · 550×240×760mm', sample: 0, moq: 0 },
+    { cat: 'bess', icon: 'nophoto', name: 'BESS 6.5kW / 16kWh (US 120V)', bv: 'Аккум. 51.2V', desc: 'MECC-4865-16-Y · 6500W · 1 фаз 120V\nАккум. 51.2V 314Ah · ~16 кВт.ц\nPV 4500W×2 · 2 MPPT · 600×280×1082mm', sample: 0, moq: 0 },
+    { cat: 'bess', icon: 'nophoto', name: 'BESS 7.2kW / 16kWh (Split-phase)', bv: 'Аккум. 51.2V', desc: 'MECC-4872S-16-Y · 7200W (split) / 6000W (1 фаз)\n120/240V L1-L2 · Аккум. 51.2V 314Ah\nPV 4500W×2 · Bypass 50A/50A · 660×298×1132mm', sample: 0, moq: 0 },
+    { cat: 'bess', icon: 'nophoto', name: 'BESS 12kW / 16kWh (Split-phase)', bv: 'Аккум. 51.2V', desc: 'MECC-48120S-16-Y · 12000W (split) / 7200W (1 фаз)\n120/240V L1-L2 · Аккум. 51.2V 314Ah\nPV 6000W×2 · Bypass 60A/60A · 660×298×1182mm', sample: 0, moq: 0 },
+    { cat: 'bess', icon: 'nophoto', name: 'BESS 12kW / 20kWh (Split-phase)', bv: 'Аккум. 51.2V', desc: 'MECC-48120S-20-Y · 12000W (split) / 7200W (1 фаз)\n120/240V L1-L2 · Аккум. 51.2V 410Ah\nPV 6000W×2 · Bypass 60A/60A · 660×298×1322mm', sample: 0, moq: 0 },
+    { cat: 'bess', icon: 'nophoto', name: 'BESS 12kW / 16kWh (EU)', bv: 'Аккум. 51.2V', desc: 'MECC-48120-16-Y · 12000VA/12000W · 1 фаз 230V\nАккум. 51.2V · ~16 кВт.ц\nBypass 60A · >95% цэнэглэх үр ашиг', sample: 0, moq: 0 },
+    { cat: 'bess', icon: 'nophoto', name: 'BESS 12kW / 20kWh (EU)', bv: 'Аккум. 51.2V', desc: 'MECC-48120-20-Y · 12000VA/12000W · 1 фаз 230V\nАккум. 51.2V · ~20 кВт.ц\nBypass 60A · >95% цэнэглэх үр ашиг', sample: 0, moq: 0 },
+    { cat: 'bess', icon: 'nophoto', name: 'BESS 125kW / 261kWh (Liquid PCS)', bv: 'Аккум. 832V', desc: 'MECC-AIO-261 · 125kW (хэт ачаалал 135.5kW)\n3 фаз 380/400V · Аккум. 261 кВт.ц · 314Ah · 832V\nШингэн хөргөлт · аккум. IP65 / цахилгаан IP54\n1000×1300×2500mm · ~2.6 тонн · PV оролтгүй', sample: 27000, moq: 27000 },
+    // --- containers ---
+    { cat: 'containers', icon: 'nophoto', name: 'Контейнер ESS 1MW / 2.17MWh (Liquid)', bv: 'Аккум. 768V', desc: 'MECC-20FT-2170 · 1000kW · 400V ±15% · 3 фаз\nАккум. 2170 кВт.ц (9P240S) · 314Ah · 768V\nШингэн хөргөлт · үр ашиг 89% · ≥8000 цикл · IP55\n20ft 6058×2438×2591mm · 28 тонн', sample: 0, moq: 0 },
+    // --- EV chargers ---
+    { cat: 'chargers', icon: 'nophoto', name: 'EV цэнэглэгч 60kW DC', desc: 'MD-EU-60KW · DC хурдан цэнэглэгч\nГаралт 150–1000Vdc · хамгийн их 200A · 2 холбогч\nCCS1/CCS2/GB-T/NACS/CHAdeMO · OCPP 1.6/2.0\nОролт 380Vac ±15% 3P+N+PE · 92A · IP54', sample: 5160, moq: 5160 },
+    { cat: 'chargers', icon: 'nophoto', name: 'EV цэнэглэгч 90kW DC', desc: 'MD-EU-90KW · DC хурдан цэнэглэгч\nГаралт 150–1000Vdc · хамгийн их 250A · 2 холбогч\nCCS1/CCS2/GB-T/NACS/CHAdeMO · OCPP 1.6/2.0\nОролт 380Vac ±15% 3P+N+PE · 137A · IP54', sample: 0, moq: 0 },
+    { cat: 'chargers', icon: 'nophoto', name: 'EV цэнэглэгч 120kW DC', desc: 'MD-EU-120KW · DC хурдан цэнэглэгч\nГаралт 150–1000Vdc · хамгийн их 250A · 2 холбогч\nCCS1/CCS2/GB-T/NACS/CHAdeMO · OCPP 1.6/2.0\nОролт 380Vac ±15% 3P+N+PE · 183A · IP54', sample: 6700, moq: 6700 },
+    // --- wind turbines ---
+    { cat: 'wind', icon: 'nophoto', name: 'Салхин савлуур 400W', desc: 'RX-TL400 · босоо тэнхлэгт салхин сэнс\nДалавч 0.68M · дугуй 0.38M · 12–24V\nЭхлэх хурд 1.2m/s · нэрлэсэн 12m/s', sample: 0, moq: 0 },
+    { cat: 'wind', icon: 'nophoto', name: 'Салхин савлуур 600W', desc: 'RX-TL600 · босоо тэнхлэгт салхин сэнс\nДалавч 1.1M · дугуй 0.52M · 12–24V\nЭхлэх хурд 1.2m/s · нэрлэсэн 12m/s', sample: 0, moq: 0 },
+    { cat: 'wind', icon: 'nophoto', name: 'Салхин савлуур 1kW', desc: 'RX-TL1000 · босоо тэнхлэгт салхин сэнс\nДалавч 1.1M · дугуй 0.52M · 12–48V\nЭхлэх хурд 1.5m/s · нэрлэсэн 12m/s', sample: 0, moq: 0 },
+    { cat: 'wind', icon: 'nophoto', name: 'Салхин савлуур 2kW', desc: 'RX-TL2000 · босоо тэнхлэгт салхин сэнс\nДалавч 1.7M · дугуй 1.0M · 24–96V\nЭхлэх хурд 2.0m/s · нэрлэсэн 12m/s', sample: 0, moq: 0 },
+    { cat: 'wind', icon: 'nophoto', name: 'Салхин савлуур 3kW', desc: 'RX-TL3000 · босоо тэнхлэгт салхин сэнс\nДалавч 1.7M · дугуй 1.0M · 24–96V\nЭхлэх хурд 2.0m/s · нэрлэсэн 12m/s', sample: 0, moq: 0 },
+    { cat: 'wind', icon: 'nophoto', name: 'Салхин савлуур 5kW', desc: 'RX-TL5000 · босоо тэнхлэгт салхин сэнс\nДалавч 2.0M · дугуй 1.2M · 24–220V\nЭхлэх хурд 2.0m/s · нэрлэсэн 12m/s', sample: 0, moq: 0 },
+    { cat: 'wind', icon: 'nophoto', name: 'Салхин савлуур 10kW', desc: 'RX-TL10K · босоо тэнхлэгт салхин сэнс\nДалавч 2.0M · дугуй 1.2M · 48–380V\nЭхлэх хурд 2.0m/s · нэрлэсэн 12m/s', sample: 0, moq: 0 },
+    // --- 2026-09-03 price list: outdoor IP54 high-voltage battery cabinets ---
+    { cat: 'batteriesHV', icon: 'nophoto', name: 'HV Аккумулятор 62kWh (Outdoor IP54)', desc: 'Гадаа байрлуулах IP54 шүүгээ · LFP\n62 кВт.ц · өндөр хүчдэлт\nҮнийн жагсаалт 2026-09-03', sample: 9350, moq: 9350 },
+    { cat: 'batteriesHV', icon: 'nophoto', name: 'HV Аккумулятор 108kWh (Outdoor IP54)', desc: 'Гадаа байрлуулах IP54 шүүгээ · LFP\n108 кВт.ц · өндөр хүчдэлт\nҮнийн жагсаалт 2026-09-03', sample: 12400, moq: 12400 },
+    { cat: 'batteriesHV', icon: 'nophoto', name: 'HV Аккумулятор 241kWh (Outdoor IP54)', desc: 'Гадаа байрлуулах IP54 шүүгээ · LFP\n241 кВт.ц · өндөр хүчдэлт\nҮнийн жагсаалт 2026-09-03', sample: 27000, moq: 27000 },
   ];
 
   const CATEGORY_LABELS = {
     panels: '☀️ Нарны панель',
     brackets: '🔧 Суурь хүрээ',
     inverters: '⚡ Инвертер (Hybrid + Off-grid)',
-    batteries: '🔋 Аккумулятор',
+    batteriesLV: '🔋 Аккумулятор — нам хүчдэл (48V LV)',
+    batteriesHV: '🔋 Аккумулятор — өндөр хүчдэл (HV)',
     bess: '📦 Цогц BESS (All-in-One)',
+    containers: '🚢 Контейнер ESS',
+    chargers: '⚡ Цэнэглэх станц (EV)',
+    wind: '💨 Салхин савлуур',
   };
 
   // ============ SHIPPING DATA (Package1.xlsx — gross / сав баглаатай) ============
@@ -1072,10 +1293,10 @@
   //   batteries LV: 5kWh=24, 10kWh=25, 15kWh=26, 16kWh=27
   //   batteries HV: 31kWh=28, 41kWh=29, 51kWh=30, 62kWh=31, 90kWh=32, 108kWh=33, 144kWh=34, 180kWh=35, 217kWh=36, 241kWh=37
   const PRESETS = {
-    5:   { panelIdx: 3, panelQty: 8,   bracketIdx: 5, bracketQty: 8,   inverterIdx: 6,  inverterQty: 1, batteryIdx: 24, batteryQty: 1, pvCable: 150, mc4: 6,   combinerName: 'PV нэгтгэгч хайрцаг 2 IN 2 OUT' },
-    8:   { panelIdx: 3, panelQty: 12,  bracketIdx: 5, bracketQty: 12,  inverterIdx: 7,  inverterQty: 1, batteryIdx: 25, batteryQty: 1, pvCable: 200, mc4: 8,   combinerName: 'PV нэгтгэгч хайрцаг 2 IN 2 OUT' },
-    10:  { panelIdx: 3, panelQty: 15,  bracketIdx: 5, bracketQty: 15,  inverterIdx: 8,  inverterQty: 1, batteryIdx: 26, batteryQty: 1, pvCable: 250, mc4: 10,  combinerName: 'PV нэгтгэгч хайрцаг 2 IN 2 OUT' },
-    12:  { panelIdx: 3, panelQty: 17,  bracketIdx: 5, bracketQty: 17,  inverterIdx: 9,  inverterQty: 1, batteryIdx: 27, batteryQty: 1, pvCable: 300, mc4: 10,  combinerName: 'PV нэгтгэгч хайрцаг 2 IN 2 OUT' },
+    5:   { panelIdx: 3, panelQty: 8,   bracketIdx: 5, bracketQty: 8,   inverterIdx: 60,  inverterQty: 1, batteryIdx: 24, batteryQty: 1, pvCable: 150, mc4: 6,   combinerName: 'PV нэгтгэгч хайрцаг 2 IN 2 OUT' },
+    8:   { panelIdx: 3, panelQty: 12,  bracketIdx: 5, bracketQty: 12,  inverterIdx: 62,  inverterQty: 1, batteryIdx: 25, batteryQty: 1, pvCable: 200, mc4: 8,   combinerName: 'PV нэгтгэгч хайрцаг 2 IN 2 OUT' },
+    10:  { panelIdx: 3, panelQty: 15,  bracketIdx: 5, bracketQty: 15,  inverterIdx: 63,  inverterQty: 1, batteryIdx: 26, batteryQty: 1, pvCable: 250, mc4: 10,  combinerName: 'PV нэгтгэгч хайрцаг 2 IN 2 OUT' },
+    12:  { panelIdx: 3, panelQty: 17,  bracketIdx: 5, bracketQty: 17,  inverterIdx: 10,  inverterQty: 1, batteryIdx: 27, batteryQty: 1, pvCable: 300, mc4: 10,  combinerName: 'PV нэгтгэгч хайрцаг 2 IN 2 OUT' },
     15:  { panelIdx: 3, panelQty: 22,  bracketIdx: 5, bracketQty: 22,  inverterIdx: 12, inverterQty: 1, batteryIdx: 27, batteryQty: 2, pvCable: 200, mc4: 10,  combinerName: 'PV нэгтгэгч хайрцаг 2 IN 2 OUT' },
     20:  { panelIdx: 3, panelQty: 29,  bracketIdx: 5, bracketQty: 29,  inverterIdx: 13, inverterQty: 1, batteryIdx: 29, batteryQty: 1, pvCable: 400, mc4: 14,  combinerName: 'PV нэгтгэгч хайрцаг 3 IN 3 OUT' },
     25:  { panelIdx: 3, panelQty: 36,  bracketIdx: 5, bracketQty: 36,  inverterIdx: 14, inverterQty: 1, batteryIdx: 30, batteryQty: 1, pvCable: 450, mc4: 16,  combinerName: 'PV нэгтгэгч хайрцаг 3 IN 3 OUT' },
@@ -1143,9 +1364,21 @@
     const container = document.getElementById('catalog');
     container.innerHTML = '';
     const groups = {};
-    allCatalogProducts().forEach(({ p, key }) => { (groups[p.cat] = groups[p.cat] || []).push({ ...p, idx: key }); });
+    const showHidden = !!(document.getElementById('show1ph') || {}).checked;
+    allCatalogProducts().forEach(({ p, key }) => {
+      if (p.hidden && !showHidden) return;
+      (groups[p.cat] = groups[p.cat] || []).push({ ...p, idx: key });
+    });
+    // order every category from smallest to largest (kW / kWh)
+    Object.keys(groups).forEach(k => {
+      groups[k].forEach((p, i) => { p._ord = i; });
+      groups[k].sort((a, b) => {
+        const A = sortValue(a.name), B = sortValue(b.name);
+        return (A[0] - B[0]) || (A[1] - B[1]) || (a._ord - b._ord);
+      });
+    });
 
-    ['panels','brackets','inverters','batteries','bess'].forEach(catKey => {
+    ['panels','brackets','inverters','batteriesLV','batteriesHV','bess','containers','chargers','wind'].forEach(catKey => {
       if (!groups[catKey]) return;
       const block = document.createElement('div');
       block.className = 'category-block';
@@ -1171,11 +1404,15 @@
         <tbody>
           ${groups[catKey].map(p => `
             <tr data-idx="${p.idx}">
-              <td class="img"><div class="icon-box">${renderProductIcon(p)}</div></td>
+              <td class="img"><div class="icon-box clickable" onclick="pickProductPhoto('${p.idx}')" title="${photoOverrides[p.idx] ? 'Зураг солих' : 'Зураг оруулах'}">${renderProductIcon(p)}</div></td>
               <td>
-                <div class="name">${p.name}${p.freeLabel ? ' <span class="pill" style="background:#dcfce7;color:#16a34a;">Бэлэг</span>' : ''}</div>
-                <div class="desc">${(p.desc || '').replace(/\n/g, '<br>')}</div>
-                ${p.cid ? `<div class="cust-actions"><span class="pill cust-pill">Миний нэмсэн</span><button class="ghost tiny" onclick="openProductModal('c:${p.cid}')" title="Засах">✎ Засах</button><button class="ghost tiny" onclick="deleteCustomProduct('${p.cid}')" title="Устгах">× Устгах</button></div>` : ''}
+                <div class="name">${p.name}${p.bv ? ` <span class="pill ${bvClass(p.bv)}">${p.bv}</span>` : ''}${p.freeLabel ? ' <span class="pill" style="background:#dcfce7;color:#16a34a;">Бэлэг</span>' : ''}${(!p.freeLabel && !p.sample) ? ' <span class="pill" style="background:#fef3c7;color:#b45309;">Үнэ оруулаагүй</span>' : ''}${p.hidden ? ' <span class="pill" style="background:#e2e8f0;color:#475569;">Нуугдсан</span>' : ''}</div>
+                <div class="desc" title="${(p.desc || '').replace(/\n/g, ' · ').replace(/"/g, '')}">${(p.desc || '').split('\n').join('<span class="d-sep"> · </span><br class="d-br">')}</div>
+                ${(p.cid || photoOverrides[p.idx]) ? `<div class="cust-actions">
+                  ${p.cid ? `<span class="pill cust-pill">Миний нэмсэн</span>` : ''}
+                  ${photoOverrides[p.idx] ? `<button class="ghost tiny" onclick="event.stopPropagation();clearProductPhoto('${p.idx}')" title="Зургийг арилгах">× зураг</button>` : ''}
+                  ${p.cid ? `<button class="ghost tiny" onclick="openProductModal('c:${p.cid}')" title="Засах">✎ Засах</button><button class="ghost tiny" onclick="deleteCustomProduct('${p.cid}')" title="Устгах">× Устгах</button>` : ''}
+                </div>` : ''}
               </td>
               <td class="price" data-label="Нэгж (USD)"><input type="number" class="price-input-catalog catalog-price-input ${catalogPriceOverrides[p.idx] != null ? 'overridden' : ''}" data-idx="${p.idx}" value="${(catalogPriceOverrides[p.idx] != null ? catalogPriceOverrides[p.idx] : priceFor(p)).toFixed(2)}" step="0.01" min="0" /></td>
               <td class="price unit-mnt" data-label="Нэгж (₮)">${fmtMnt(getCatalogPrice(p) * getRate())}</td>
@@ -1371,6 +1608,7 @@
 
     updateShipping();
     saveSettings();
+    if (typeof updateCustomsPreview === 'function') updateCustomsPreview();
   }
 
   function getLogoSVG() {
@@ -1433,7 +1671,7 @@
       const tr = document.createElement('tr');
       tr.innerHTML = `
         <td>${lineNum++}</td>
-        <td class="img"><div class="item-icon-box">${renderProductIcon(p)}</div></td>
+        <td class="img"><div class="item-icon-box">${renderProductIcon(p, idx)}</div></td>
         <td>
           <div class="item-name">${p.name}</div>
           <div class="item-desc">${p.desc || ''}</div>
@@ -1580,7 +1818,7 @@
 
   let catalogPriceOverrides = {};
   let savedOptions = {};  // {A: snapshot, B: snapshot, C: snapshot}
-  let printMode = 'mn';   // 'mn' | 'en' | 'compare'
+  let printMode = 'mn';   // 'mn' | 'en' | 'compare' | 'customs'
 
   function getCatalogPrice(p, key) {
     const k = (key != null) ? String(key) : ((p && p.idx != null) ? String(p.idx) : productKey(p));
@@ -1852,6 +2090,156 @@
     evt.target.value = '';
   }
 
+  // ==================== ГААЛИЙН ГОРИМ (customs declaration mode) ====================
+  // Тусдаа байдал: энэ горим зөвхөн printQuote('customs') үед ажиллана.
+  const CUSTOMS_KEY = 'meccSolar_v5_customs';
+  const CUSTOMS_DEFAULTS = {
+    enabled: false,
+    label: 'Дагалдах хэрэгсэл',
+    labelEn: 'Accessories',
+    unit: 'иж бүрдэл',
+    keepCats: ['panels', 'inverters', 'batteriesLV', 'batteriesHV'],
+    showList: true,
+    en: false
+  };
+  let customs = JSON.parse(JSON.stringify(CUSTOMS_DEFAULTS));
+
+  function loadCustoms() {
+    try {
+      const raw = localStorage.getItem(CUSTOMS_KEY);
+      if (raw) customs = Object.assign({}, JSON.parse(JSON.stringify(CUSTOMS_DEFAULTS)), JSON.parse(raw));
+    } catch (e) {}
+    if (!Array.isArray(customs.keepCats)) customs.keepCats = CUSTOMS_DEFAULTS.keepCats.slice();
+  }
+  function saveCustoms() { try { localStorage.setItem(CUSTOMS_KEY, JSON.stringify(customs)); } catch (e) {} }
+
+  // Мөрүүдийг хоёр хуваана: тусдаа үлдэх (keep) / нэгтгэх (merged)
+  function customsCollect() {
+    const rate = getRate();
+    const keep = [], merged = [];
+    let mergedUsd = 0;
+    document.querySelectorAll('#catalog tr[data-idx]').forEach(row => {
+      const idx = row.getAttribute('data-idx');
+      const p = resolveProduct(idx);
+      if (!p) return;
+      const qty = parseFloat(row.querySelector('.qty-input').value) || 0;
+      if (qty <= 0) return;
+      const unitUsd = getCatalogPrice(p, idx);
+      if (customs.keepCats.indexOf(p.cat) >= 0) {
+        keep.push({ p: p, idx: idx, qty: qty, unitUsd: unitUsd });
+      } else {
+        if (!p.freeLabel) mergedUsd += unitUsd * qty;
+        merged.push({ name: p.name, qty: qty, unit: p.unit || 'ш', free: !!p.freeLabel });
+      }
+    });
+    additionalItems.forEach(item => {
+      if (item.qty <= 0) return;
+      if (!item.freeLabel) mergedUsd += additionalPrice(item) * item.qty;
+      merged.push({ name: item.name, qty: item.qty, unit: item.unit || 'ш', free: !!item.freeLabel });
+    });
+    return { keep: keep, merged: merged, mergedUsd: mergedUsd, mergedMnt: mergedUsd * rate };
+  }
+
+  // Хэвлэх хүснэгтийг гаалийн хэлбэрээр дахин байгуулна (нийт дүн өөрчлөгдөхгүй)
+  function buildCustomsPrintBody() {
+    const rate = getRate();
+    const en = !!customs.en;
+    const data = customsCollect();
+    const body = document.getElementById('p_itemsBody');
+    body.innerHTML = '';
+    let lineNum = 1;
+    data.keep.forEach(function (r) {
+      const unitMnt = r.unitUsd * rate;
+      const lineMnt = unitMnt * r.qty;
+      const tr = document.createElement('tr');
+      tr.innerHTML = `
+        <td>${lineNum++}</td>
+        <td class="img"><div class="item-icon-box">${renderProductIcon(r.p, r.idx)}</div></td>
+        <td>
+          <div class="item-name">${r.p.name}</div>
+          <div class="item-desc">${r.p.desc || ''}</div>
+        </td>
+        <td class="qty">${r.qty}${r.p.unit ? ' ' + r.p.unit : ''}</td>
+        <td class="num">${r.p.freeLabel ? `<span class="gift-pill">${en ? 'Gift' : 'Бэлэг'}</span>` : fmtMnt(unitMnt)}</td>
+        <td class="num">${r.p.freeLabel ? `<span class="gift-pill">${en ? 'Gift' : 'Бэлэг'}</span>` : fmtMnt(lineMnt)}</td>
+      `;
+      body.appendChild(tr);
+    });
+    if (data.merged.length) {
+      const listTxt = customs.showList
+        ? data.merged.map(function (m) { return m.name + ' × ' + m.qty + (m.unit ? ' ' + m.unit : ''); }).join(' · ')
+        : (en ? 'Complete set of installation accessories' : 'Системийн дагалдах хэрэгслийн иж бүрдэл');
+      const nameTxt = en ? (customs.labelEn || 'Accessories') : (customs.label || 'Дагалдах хэрэгсэл');
+      const unitTxt = en ? 'set' : (customs.unit || 'иж бүрдэл');
+      const tr = document.createElement('tr');
+      tr.innerHTML = `
+        <td>${lineNum++}</td>
+        <td class="img"><div class="item-icon-box">${renderIcon('custom')}</div></td>
+        <td>
+          <div class="item-name">${nameTxt}</div>
+          <div class="item-desc">${listTxt}</div>
+        </td>
+        <td class="qty">1 ${unitTxt}</td>
+        <td class="num">${fmtMnt(data.mergedMnt)}</td>
+        <td class="num">${fmtMnt(data.mergedMnt)}</td>
+      `;
+      body.appendChild(tr);
+    }
+  }
+
+  // ---------- гаалийн горимын UI ----------
+  function onCustomsToggle() {
+    customs.enabled = document.getElementById('customsEnabled').checked;
+    document.getElementById('customsOpts').style.display = customs.enabled ? '' : 'none';
+    saveCustoms();
+    updateCustomsPreview();
+  }
+  function onCustomsChange() {
+    customs.label = document.getElementById('customsLabel').value;
+    customs.labelEn = document.getElementById('customsLabelEn').value;
+    customs.unit = document.getElementById('customsUnit').value;
+    customs.showList = document.getElementById('customsShowList').checked;
+    customs.en = document.getElementById('customsEn').checked;
+    customs.keepCats = Array.prototype.slice.call(document.querySelectorAll('#customsCats input[type=checkbox]'))
+      .filter(function (c) { return c.checked; })
+      .map(function (c) { return c.getAttribute('data-cat'); });
+    saveCustoms();
+    updateCustomsPreview();
+  }
+  function buildCustomsCats() {
+    const wrap = document.getElementById('customsCats');
+    if (!wrap) return;
+    wrap.innerHTML = Object.keys(CATEGORY_LABELS).map(function (c) {
+      const on = customs.keepCats.indexOf(c) >= 0 ? ' checked' : '';
+      return '<label class="small" style="display:flex; align-items:center; gap:6px; cursor:pointer">'
+        + '<input type="checkbox" data-cat="' + c + '"' + on + ' onchange="onCustomsChange()"> ' + CATEGORY_LABELS[c] + '</label>';
+    }).join('');
+  }
+  function updateCustomsPreview() {
+    const box = document.getElementById('customsPreview');
+    if (!box) return;
+    if (!customs.enabled) { box.innerHTML = ''; return; }
+    const d = customsCollect();
+    const rows = d.keep.length;
+    box.innerHTML = '<div style="background:#fffbeb; border:1px solid #fde68a; border-radius:8px; padding:10px 12px; font-size:12px; color:#78350f">'
+      + '<div style="font-weight:700; margin-bottom:4px">Урьдчилсан байдал</div>'
+      + '<div>Тусдаа мөр: <strong>' + rows + '</strong> → дараа нь нэгтгэсэн "<strong>' + (customs.label || 'Дагалдах хэрэгсэл') + '</strong>" мөр (' + d.merged.length + ' бараа) — <strong>' + fmtMnt(d.mergedMnt) + '</strong></div>'
+      + (d.merged.length ? '<div style="margin-top:6px; opacity:.85">' + d.merged.map(function (m) { return m.name + ' × ' + m.qty; }).join(' · ') + '</div>' : '')
+      + '</div>';
+  }
+  function initCustomsUI() {
+    loadCustoms();
+    document.getElementById('customsEnabled').checked = !!customs.enabled;
+    document.getElementById('customsOpts').style.display = customs.enabled ? '' : 'none';
+    document.getElementById('customsLabel').value = customs.label;
+    document.getElementById('customsLabelEn').value = customs.labelEn;
+    document.getElementById('customsUnit').value = customs.unit;
+    document.getElementById('customsShowList').checked = !!customs.showList;
+    document.getElementById('customsEn').checked = !!customs.en;
+    buildCustomsCats();
+    updateCustomsPreview();
+  }
+
   // ---------- printing with mode ----------
   function printQuote(mode) {
     printMode = mode || 'mn';
@@ -1881,7 +2269,7 @@
     'Захиалагчийн гарын үсэг': 'Customer signature',
   };
   function translatePrint() {
-    if (printMode === 'en') {
+    if (printMode === 'en' || (printMode === 'customs' && customs.en)) {
       document.querySelectorAll('[data-i18n]').forEach(el => {
         const key = el.getAttribute('data-i18n');
         if (i18n_en[key]) el.innerHTML = i18n_en[key];
@@ -1901,6 +2289,7 @@
     untranslatePrint();
     if (printMode === 'en') translatePrint();
     if (printMode === 'compare') buildComparisonPrint();
+    if (printMode === 'customs') { buildCustomsPrintBody(); if (customs.en) translatePrint(); }
   };
 
   function buildComparisonPrint() {
@@ -1946,7 +2335,7 @@
       });
       tr.innerHTML = `
         <td>${n++}</td>
-        <td class="img"><div class="item-icon-box">${renderProductIcon(p)}</div></td>
+        <td class="img"><div class="item-icon-box">${renderProductIcon(p, idx)}</div></td>
         <td><div class="item-name">${p.name}</div><div class="item-desc">${p.desc}</div></td>
         ${cells}
       `;
@@ -2018,26 +2407,8 @@
 
   function pmHandleFile(file) {
     if (!file) return;
-    if (!/^image\//.test(file.type)) { pmErr('Зөвхөн зургийн файл оруулна уу (JPG, PNG).'); return; }
     pmErr('');
-    const reader = new FileReader();
-    reader.onload = ev => {
-      const im = new Image();
-      im.onload = () => {
-        const MAX = 560;
-        let w = im.width, h = im.height;
-        if (w > MAX || h > MAX) { const r = Math.min(MAX / w, MAX / h); w = Math.round(w * r); h = Math.round(h * r); }
-        const c = document.createElement('canvas');
-        c.width = w; c.height = h;
-        const ctx = c.getContext('2d');
-        ctx.fillStyle = '#ffffff'; ctx.fillRect(0, 0, w, h);
-        ctx.drawImage(im, 0, 0, w, h);
-        pmSetImage(c.toDataURL('image/jpeg', 0.82));
-      };
-      im.onerror = () => pmErr('Зургийг уншиж чадсангүй.');
-      im.src = ev.target.result;
-    };
-    reader.readAsDataURL(file);
+    resizeImageFile(file, url => pmSetImage(url));
   }
 
   function openProductModal(key, presetCat) {
@@ -2130,6 +2501,27 @@
     recalc();
   }
 
+  const VIEW_KEY = 'meccSolar_v4_view';
+  function saveView() {
+    try { localStorage.setItem(VIEW_KEY, JSON.stringify({
+      compact: document.getElementById('compactMode').checked,
+      show1ph: document.getElementById('show1ph').checked })); } catch(_) {}
+  }
+  function toggleCompact() {
+    document.getElementById('catalog').classList.toggle('compact', document.getElementById('compactMode').checked);
+    saveView();
+  }
+  function toggleShow1ph() {
+    saveView(); rebuildCatalogKeepQty(); filterCatalog(); recalc();
+  }
+  function loadView() {
+    let v = {};
+    try { v = JSON.parse(localStorage.getItem(VIEW_KEY) || '{}'); } catch(_) {}
+    document.getElementById('compactMode').checked = (v.compact !== false);
+    document.getElementById('show1ph').checked = !!v.show1ph;
+    document.getElementById('catalog').classList.toggle('compact', v.compact !== false);
+  }
+
   function deleteCustomProduct(cid) {
     const p = customProducts.find(x => x.cid === cid);
     if (!p) return;
@@ -2170,6 +2562,8 @@
   document.addEventListener('DOMContentLoaded', () => {
     loadAdditional();
     loadCustomProducts();
+    loadPhotoOverrides();
+    loadView();
     initProductModal();
     try { catalogPriceOverrides = JSON.parse(localStorage.getItem(OVERRIDES_KEY) || '{}'); } catch(_) { catalogPriceOverrides = {}; }
     loadOptions();
@@ -2221,13 +2615,17 @@
 
     // Auto-bump counter and save to history after printing
     window.addEventListener('afterprint', () => {
-      addToHistory();
-      incrementCounter();
-      document.getElementById('quoteNumber').value = nextQuoteNum();
+      if (printMode !== 'customs') {   // гаалийн хэвлэлт түүх/дугаарт нөлөөлөхгүй
+        addToHistory();
+        incrementCounter();
+        document.getElementById('quoteNumber').value = nextQuoteNum();
+      }
       printMode = 'mn'; // reset
       untranslatePrint();
+      buildPrintView();
     });
 
+    initCustomsUI();
     window.addEventListener('beforeprint', buildPrintView);
     recalc();
   });
