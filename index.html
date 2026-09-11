@@ -1357,7 +1357,7 @@
 
   const SETTINGS_KEY = 'meccSolar_v4_settings';
   const ADDITIONAL_KEY = 'meccSolar_v4_additional';
-  const ADDITIONAL_MN_KEY = 'meccSolar_v4_additionalTextMN_2026_09_11';
+  const ADDITIONAL_MN_KEY = 'meccSolar_v4_additionalTextMN_2026_09_11_v2';
   const CUSTOM_KEY = 'meccSolar_v4_customProducts';
 
   // ======== CUSTOM (user-added) PRODUCTS ========
@@ -1932,6 +1932,7 @@
               x.name = d.name; x.desc = d.desc; x.icon = d.icon;
               if (d.unit) x.unit = d.unit;
             });
+            saveAdditional();
             localStorage.setItem(ADDITIONAL_MN_KEY, '1');
           }
         } catch (e) {}
